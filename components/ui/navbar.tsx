@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './button'
+import { Plus } from "lucide-react";
 
 const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
     const { isLoaded, isSignedIn, user } = useUser();
@@ -13,7 +14,13 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
             <div className='px-2 py-2 md:py-4 mx-auto max-w-7xl flex flex-row items-center justify-between relative'>
                 {org_dashboard ?
                     <>
-                        <Button>Add</Button>
+                        <div className="flex items-center">
+                            <Link href="/" className='flex items-center'>
+                                <Image src="/logo-new.png" width={55} height={55} alt='Taskify logo'></Image>
+                            </Link>
+                            <Button><Plus /></Button>
+                        </div>
+
                         <div className="flex items-center">
                             <OrganizationSwitcher hidePersonal></OrganizationSwitcher>
                             <UserButton></UserButton>
@@ -32,7 +39,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                             </>
                             }
                             {isSignedIn && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organizations</Button></Link>}
-                            {isSignedIn && <span className="ml-2 flex items-center"><UserButton afterSignOutUrl="/"></UserButton></span>}
+                            {isSignedIn && <span className="ml-2 flex items-center"><UserButton afterSignOutUrl="/" userProfileMode="navigation" userProfileUrl="/user-profile"></UserButton></span>}
                         </div>
                     </>}
             </div>

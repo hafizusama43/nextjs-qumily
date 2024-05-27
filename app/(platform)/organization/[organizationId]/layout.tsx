@@ -11,7 +11,6 @@ const OrgLayout = ({ children, }: Readonly<{ children: React.ReactNode; }>) => {
             <main className="mt-40 md:mt-40 mx-auto max-w-7xl">
                 {children}
             </main>
-            <Footer />
         </>
     )
 }
