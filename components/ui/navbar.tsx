@@ -2,12 +2,19 @@
 import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from './button'
 import { Plus } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
     const { isLoaded, isSignedIn, user } = useUser();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        console.log(pathname)
+    }, [])
+
 
     return (
         <div className='shadow-md fixed top-0 w-full backdrop-blur z-10 bg-white'>
