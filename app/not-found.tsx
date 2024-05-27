@@ -1,13 +1,17 @@
-import BackButton from '@/components/ui/backButton'
+"use client"
+import { Button } from '@/components/ui/button';
 import Image from 'next/image'
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 const Error = () => {
-    // const router = useRouter();
+    const router = useRouter();
     return (
         <div className='flex justify-center items-center flex-col'>
-            <Image src={"/not-found.png"} width={600} height={600} alt='error.png'></Image>
-            <BackButton></BackButton>
+            <div className='bg-white p-10 rounded-3xl'>
+                <Image src={"/not-found.png"} width={600} height={600} alt='error.png'></Image>
+                <Button className='w-full' onClick={() => { router.back() }}>Go Back</Button>
+            </div>
         </div>
     )
 }

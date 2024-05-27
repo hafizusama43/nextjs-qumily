@@ -12,7 +12,7 @@ const Navbar = () => {
                     <span className='font-bold'>Taskify</span>
                 </Link>
                 <div>
-                    <Link href="/sign-up"><Button className='mr-4' variant="secondary">Login</Button></Link>
+                    <Link href="/sign-in"><Button className='mr-4' variant="secondary">Login</Button></Link>
                     <Link href="join-taskify"><Button className=''>Get Taskify for free</Button></Link>
                 </div>
             </div>
