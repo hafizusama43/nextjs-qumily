@@ -8,7 +8,7 @@ const Error = () => {
     const router = useRouter();
     return (
         <div className='flex justify-center items-center flex-col'>
-            <div className='bg-white p-10 rounded-3xl'>
+            <div className='bg-white p-10 rounded-3xl shadow-4xl'>
                 <Image src={"/not-found.png"} width={400} height={400} alt='error.png'></Image>
                 <Button className='w-full' onClick={() => { router.back() }}>Go Back</Button>
             </div>

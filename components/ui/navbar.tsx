@@ -17,8 +17,12 @@ const Navbar = () => {
                 </Link>
                 <div className="flex items-center">
 
-                    {!isSignedIn && <Link href="/sign-in"><Button className='mr-4' variant="secondary">Login</Button></Link>}
-                    <Link href="join-taskify"><Button className=''>Get Taskify for free</Button></Link>
+                    {!isSignedIn && <>
+                        <Link href="/sign-in"><Button className='mr-4' variant="secondary">Login</Button></Link>
+                        <Link href="join-taskify"><Button className=''>Get Taskify for free</Button></Link>
+                    </>
+                    }
+                    {isSignedIn && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organizations</Button></Link>}
                     {isSignedIn && <span className="ml-2 flex items-center"><UserButton afterSignOutUrl="/"></UserButton></span>}
                 </div>
             </div>
