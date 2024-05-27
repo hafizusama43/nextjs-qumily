@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/ui/navbar";
 import Footer from "@/components/ui/footer";
 import { siteConfig } from "@/config/site";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,17 +28,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="fle">
-      <body className={inter.className}>
-        <nav>
-          <Navbar />
-        </nav>
-        <main className="mt-40 md:mt-40">
-          {children}
-        </main>
-        <footer>
-          <Footer />
-        </footer>
-      </body>
+      <ClerkProvider>
+        <body className={inter.className}>
+          <nav>
+            <Navbar />
+          </nav>
+          <main className="mt-40 md:mt-40">
+            {children}
+          </main>
+          <footer>
+            <Footer />
+          </footer>
+        </body>
+      </ClerkProvider>
     </html>
   );
 }

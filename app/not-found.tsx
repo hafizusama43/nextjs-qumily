@@ -9,7 +9,7 @@ const Error = () => {
     return (
         <div className='flex justify-center items-center flex-col'>
             <div className='bg-white p-10 rounded-3xl'>
-                <Image src={"/not-found.png"} width={600} height={600} alt='error.png'></Image>
+                <Image src={"/not-found.png"} width={400} height={400} alt='error.png'></Image>
                 <Button className='w-full' onClick={() => { router.back() }}>Go Back</Button>
             </div>
         </div>
