@@ -1,12 +1,18 @@
+import Footer from '@/components/ui/footer';
 import Navbar from '@/components/ui/navbar';
 import React from 'react'
 
 const OrgLayout = ({ children, }: Readonly<{ children: React.ReactNode; }>) => {
     return (
-        <main className="mt-140 md:mt-">
-            <Navbar org_dashboard></Navbar>
-            {children}
-        </main>
+        <>
+            <nav>
+                <Navbar org_dashboard></Navbar>
+            </nav>
+            <main className="mt-40 md:mt-40 mx-auto max-w-7xl">
+                {children}
+            </main>
+            <Footer />
+        </>
     )
 }
 
