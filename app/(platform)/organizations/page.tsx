@@ -1,5 +1,11 @@
 import React from 'react'
 import { OrganizationList } from "@clerk/nextjs";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Organizations',
+    description: 'All you organizations in one place',
+};
 
 const page = () => {
     return (

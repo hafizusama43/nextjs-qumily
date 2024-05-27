@@ -21,11 +21,7 @@ export const metadata: Metadata = {
   ]
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en" className="fle">
       <ClerkProvider>
@@ -33,7 +29,7 @@ export default function RootLayout({
           <nav>
             <Navbar />
           </nav>
-          <main className="mt-40 md:mt-40">
+          <main className="mt-40 md:mt-40 mx-auto max-w-7xl">
             {children}
           </main>
           <footer>
