@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -29,7 +29,7 @@ const FormSchema = z.object({
 })
 
 const InputForm = () => {
-    const [pending, setPending] = useState(true);
+    const [pending, setPending] = useState(false);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -41,10 +41,11 @@ const InputForm = () => {
         try {
             setPending(true)
             const res = await axios.get('/api/template');
+            // if(res.)
             setPending(false)
         } catch (error) {
             setPending(false)
-            console.log(error)
+            toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
     }
 

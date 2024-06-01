@@ -14,7 +14,7 @@ const spinVariants = cva(
             },
             size: {
                 default: "w-14 h-14 border-4",
-                sm: "w-6 h-6 border-2",
+                sm: "w-4 h-4 border-2",
                 lg: "w-40 h-40 border-12",
             },
         },
