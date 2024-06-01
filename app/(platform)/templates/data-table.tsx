@@ -20,6 +20,7 @@ import { EyeIcon, PencilLine, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import TemplateTooltip from "./_tooltip";
 import Link from "next/link";
+import ConfirmDialog from "@/components/ui/confirmDialog";
 
 // Define the type for your data
 interface MyData {
@@ -46,15 +47,19 @@ export function DataTable<TData extends MyData, TValue>({
             header: 'Actions',
             cell: ({ row }) => (
                 <div className="flex gap-3">
-                    <TemplateTooltip title={"Delete template"} >
-                        <Trash2 role="button" color="red" onClick={() => handleDelete(row.original.campaign_templates_id)} />
+                    <TemplateTooltip title={"Delete template"}>
+                        <ConfirmDialog confirmAction={() => handleDelete(row.original.campaign_templates_id, row.original.slug)}>
+                            <Trash2 role="button" color="red" />
+                        </ConfirmDialog>
                     </TemplateTooltip>
                     <TemplateTooltip title={"Edit template"} >
-                        <PencilLine role="button" color="green" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                        <Link href={`/templates/${row.original.slug}/edit`}>
+                            <PencilLine role="button" color="green" />
+                        </Link>
                     </TemplateTooltip>
                     <TemplateTooltip title={"View template"} >
                         <Link href={`/templates/${row.original.slug}`}>
-                            <EyeIcon role="button" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                            <EyeIcon role="button" />
                         </Link>
 
                     </TemplateTooltip>
@@ -69,15 +74,9 @@ export function DataTable<TData extends MyData, TValue>({
         getCoreRowModel: getCoreRowModel(),
     })
 
-    // Handlers for edit and delete actions
-    const handleEdit = (id: string) => {
+    const handleDelete = (id: string, slug: string) => {
         console.log('Edit id:', id)
-        // Your edit logic here
-    }
-
-    const handleDelete = (id: string) => {
-        console.log('Delete id:', id)
-        // Your delete logic here
+        console.log('Edit slug:', slug)
     }
 
     return (
