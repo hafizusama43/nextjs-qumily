@@ -44,10 +44,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, message: 'Template name is required.' }, { status: 404 })
     }
     try {
+        const slug = template_name.toLowerCase().split(" ").join("-");
         // RETURNING * gives the inserted row
         const res = await sql`
-      INSERT INTO campaign_templates (camping_name,created_by)
-      VALUES (${template_name}, ${userId})
+      INSERT INTO campaign_templates (camping_name, slug, created_by)
+      VALUES (${template_name}, ${slug}, ${userId})
       RETURNING *
     `;
         return NextResponse.json({ success: true, message: 'Template created successfully.', data: res.rows }, { status: 200 })

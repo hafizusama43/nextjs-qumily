@@ -31,6 +31,7 @@ const FormSchema = z.object({
 interface createdRowType {
     campaign_templates_id: number;
     camping_name: string;
+    slug: string;
     created_by: string;
     created_at: string;
 }
@@ -97,7 +98,7 @@ const InputForm = () => {
                     <RocketIcon className="h-4 w-4" />
                     <AlertTitle>Template created!</AlertTitle>
                     <AlertDescription>
-                        Template <b>&qout;{createdRow.camping_name}&qout;</b> is created successfully. Click <Link href={`/templates/edit/${createdRow.campaign_templates_id}`}><b>here</b></Link> to edit the template.
+                        Template &quot;<b>{createdRow.camping_name}</b>&quot; is created successfully. Click <Link href={`/templates/edit/${createdRow.slug}`}><b>here</b></Link> to edit the template.
                     </AlertDescription>
                 </Alert>
             }

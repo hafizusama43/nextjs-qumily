@@ -5,7 +5,8 @@ async function createCampaignTable(client) {
         const createTable = await client.sql`
         CREATE TABLE IF NOT EXISTS campaign_templates (
             campaign_templates_id SERIAL PRIMARY KEY, 
-            camping_name VARCHAR(255) NOT NULL, 
+            camping_name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL, 
             created_by VARCHAR(255) NOT NULL,
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

@@ -16,9 +16,10 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Spin } from "@/components/ui/spin"
-import { PencilLine, Trash2 } from "lucide-react";
+import { EyeIcon, PencilLine, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import TemplateTooltip from "./_tooltip";
+import Link from "next/link";
 
 // Define the type for your data
 interface MyData {
@@ -50,6 +51,12 @@ export function DataTable<TData extends MyData, TValue>({
                     </TemplateTooltip>
                     <TemplateTooltip title={"Edit template"} >
                         <PencilLine role="button" color="green" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                    </TemplateTooltip>
+                    <TemplateTooltip title={"View template"} >
+                        <Link href={`/templates/${row.original.slug}`}>
+                            <EyeIcon role="button" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                        </Link>
+
                     </TemplateTooltip>
                 </div>
             ),
