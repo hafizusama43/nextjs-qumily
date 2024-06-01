@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const page = () => {
     return (
-        <div className='flex justify-center items-center flex-col'>
+        <div className='mt-20 flex justify-center items-center flex-col'>
             <SignIn />
         </div>
     );

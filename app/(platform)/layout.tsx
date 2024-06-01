@@ -16,7 +16,7 @@ export default function RootLayout({
       <nav>
         <Navbar />
       </nav>
-      <main className="mt-40 md:mt-40 mx-auto max-w-7xl">
+      <main className="pt-20 mx-auto max-w-7xl bg-white h-[100vh]">
         {children}
       </main>
       <footer>

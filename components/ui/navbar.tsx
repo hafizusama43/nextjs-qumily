@@ -17,7 +17,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
 
 
     return (
-        <div className='shadow-md fixed top-0 w-full backdrop-blur z-10 bg-white'>
+        <div className='border-b-2 border-b-gray-200 fixed top-0 w-full backdrop-blur z-10 bg-white'>
             <div className='px-2 py-2 md:py-4 mx-auto max-w-7xl flex flex-row items-center justify-between relative'>
                 {org_dashboard ?
                     <>
@@ -45,7 +45,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                                 <Link href="join-taskify"><Button className=''>Get Taskify for free</Button></Link>
                             </>
                             }
-                            {isSignedIn && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organizations</Button></Link>}
+                            {isSignedIn && <Link href="/templates"><Button className='mr-4' variant="secondary">Templates</Button></Link>}
                             {isSignedIn && <span className="ml-2 flex items-center"><UserButton afterSignOutUrl="/" userProfileMode="navigation" userProfileUrl="/user-profile"></UserButton></span>}
                         </div>
                     </>}

@@ -84,4 +84,27 @@ body {
 
 .cl-userProfile-root .cl-cardBox {
   width: 100% !important;
+  box-shadow: none !important;
+  border-radius: unset !important;
+}
+
+.cl-userProfile-root .cl-cardBox .cl-scrollBox {
+  box-shadow: none !important;
+  border-radius: unset !important;
+  border-left: 0.5px solid lightgray !important;
+}
+
+.cl-userProfile-root .cl-cardBox .cl-navbar{
+  background: white !important;
+  border-right: 2px solid gray;
+}
+
+.cl-signUp-root .cl-cardBox{
+  box-shadow: none !important;
+  border: 1px solid lightgray;
+}
+
+.cl-signIn-root .cl-cardBox{
+  box-shadow: none !important;
+  border: 1px solid lightgray;
 }
