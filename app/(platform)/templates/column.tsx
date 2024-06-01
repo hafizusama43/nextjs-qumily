@@ -28,4 +28,8 @@ export const columns: ColumnDef<Templates>[] = [
         accessorKey: "created_at",
         header: "Created at",
     },
+    // {
+    //     accessorKey: "actions",
+    //     header: "Actions",
+    // },
 ]

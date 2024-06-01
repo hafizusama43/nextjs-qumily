@@ -16,6 +16,13 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Spin } from "@/components/ui/spin"
+import { PencilLine, Trash2 } from "lucide-react";
+
+// Define the type for your data
+interface MyData {
+    id: string;
+    // other fields...
+}
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -23,16 +30,42 @@ interface DataTableProps<TData, TValue> {
     pending: boolean,
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends MyData, TValue>({
     pending,
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+    // Add the actions column
+    const extendedColumns = [
+        ...columns,
+        {
+            id: 'actions',
+            header: 'Actions',
+            cell: ({ row }) => (
+                <div className="flex gap-3">
+                    <Trash2 role="button" color="red" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                    <PencilLine role="button" color="green" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                </div>
+            ),
+        }
+    ]
+
     const table = useReactTable({
         data,
-        columns,
+        columns: extendedColumns,
         getCoreRowModel: getCoreRowModel(),
     })
+
+    // Handlers for edit and delete actions
+    const handleEdit = (id: string) => {
+        console.log('Edit id:', id)
+        // Your edit logic here
+    }
+
+    const handleDelete = (id: string) => {
+        console.log('Delete id:', id)
+        // Your delete logic here
+    }
 
     return (
         <div className="rounded-md border">
@@ -72,7 +105,7 @@ export function DataTable<TData, TValue>({
                     ) : (
                         <TableRow>
                             <TableCell colSpan={columns.length} className="h-24 text-center">
-                                {pending ? <Spin className="m-auto" size="default"></Spin> : ' No results.'}
+                                {pending ? <Spin className="m-auto" variant="light" size="default"></Spin> : 'No results.'}
                             </TableCell>
                         </TableRow>
                     )}

@@ -1,51 +1,13 @@
 "use client"
 
 import React, { Suspense, useEffect, useState } from 'react'
-import { columns, Payment } from './column'
+import { columns } from './column'
 import { DataTable } from './data-table'
 import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import axios from 'axios'
 import { toast } from '@/components/ui/use-toast'
-
-
-// async function getData(): Promise<Payment[]> {
-//     // Fetch data from your API here.
-//     return [
-//         {
-//             id: "728ed52f",
-//             amount: 100,
-//             status: "pending",
-//             email: "m@example.com",
-//         },
-//         {
-//             id: "728ed52f",
-//             amount: 100,
-//             status: "pending",
-//             email: "m@example.com",
-//         },
-//         {
-//             id: "728ed52f",
-//             amount: 100,
-//             status: "pending",
-//             email: "m@example.com",
-//         },
-//         {
-//             id: "728ed52f",
-//             amount: 100,
-//             status: "pending",
-//             email: "m@example.com",
-//         },
-//         {
-//             id: "728ed52f",
-//             amount: 100,
-//             status: "pending",
-//             email: "m@example.com",
-//         },
-//         // ...
-//     ]
-// }
 
 const Templates = () => {
     const [pending, setPending] = useState(false);
