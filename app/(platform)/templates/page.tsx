@@ -1,6 +1,6 @@
 // "use client"
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { columns, Payment } from './column'
 import { DataTable } from './data-table'
 import { Label } from "@/components/ui/label"
@@ -56,7 +56,10 @@ const Templates = async () => {
                 <Label>All templates</Label>
                 <Link href="/templates/add"><Button size='sm'>Add new template</Button></Link>
             </h1>
-            <DataTable columns={columns} data={data} />
+            <Suspense fallback={<>Loading</>}>
+                <DataTable columns={columns} data={data} />
+            </Suspense>
+
         </div>
     )
 }
