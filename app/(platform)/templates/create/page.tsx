@@ -40,8 +40,10 @@ const InputForm = () => {
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         try {
             setPending(true)
-            const res = await axios.get('/api/template');
-            // if(res.)
+            const res = await axios.post('/api/template', {}, {});
+            console.log(res.data)
+            form.reset()
+            toast({ description: res.data.message })
             setPending(false)
         } catch (error) {
             setPending(false)
@@ -53,6 +55,7 @@ const InputForm = () => {
         <React.Fragment>
             <TemplateHeader>
                 <Label>Add new template</Label>
+                <Link href="/templates"><Button size='sm'>All templates</Button></Link>
             </TemplateHeader>
             <Alert className="my-5">
                 <RocketIcon className="h-4 w-4" />
