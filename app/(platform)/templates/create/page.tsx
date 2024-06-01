@@ -22,13 +22,14 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { RocketIcon } from "lucide-react"
+import { Spin } from "@/components/ui/spin";
 
 const FormSchema = z.object({
     template_name: z.string().min(1, { message: "Template name is required" }).min(5, { message: "Template name should contain at least \"5\" characters." }),
 })
 
 const InputForm = () => {
-    const [pending, setPending] = useState(false);
+    const [pending, setPending] = useState(true);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -56,7 +57,7 @@ const InputForm = () => {
                 <RocketIcon className="h-4 w-4" />
                 <AlertTitle>Heads up!</AlertTitle>
                 <AlertDescription>
-                    To create a template enter a template name (eg. &lsquo;Summer paid campign&lsquo;) and later edit this template to add template data.
+                    To create a template enter a template name (eg. &lsquo;Summer paid campaign&lsquo;) and later edit this template to add template data.
                 </AlertDescription>
             </Alert>
             <Form {...form}>
@@ -74,7 +75,7 @@ const InputForm = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit">Submit</Button>
+                    <Button className="p-5" disabled={pending} type="submit">{pending && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Submit </Button>
                 </form>
             </Form>
         </React.Fragment>
