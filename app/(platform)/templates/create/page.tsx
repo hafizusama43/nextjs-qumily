@@ -98,7 +98,7 @@ const InputForm = () => {
                     <RocketIcon className="h-4 w-4" />
                     <AlertTitle>Template created!</AlertTitle>
                     <AlertDescription>
-                        Template &quot;<b>{createdRow.camping_name}</b>&quot; is created successfully. Click <Link href={`/templates/edit/${createdRow.slug}`}><b>here</b></Link> to edit the template.
+                        Template &quot;<b>{createdRow.camping_name}</b>&quot; is created successfully. Click <Link href={`/templates/${createdRow.slug}/edit`}><b>here</b></Link> to edit the template.
                     </AlertDescription>
                 </Alert>
             }
