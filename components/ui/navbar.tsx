@@ -9,12 +9,6 @@ import { usePathname } from "next/navigation";
 
 const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
     const { isLoaded, isSignedIn, user } = useUser();
-    const pathname = usePathname();
-
-    useEffect(() => {
-        console.log(pathname)
-    }, [])
-
 
     return (
         <div className='border-b-2 border-b-gray-200 fixed top-0 w-full backdrop-blur z-10 bg-white'>

@@ -1,5 +1,7 @@
 import Footer from "@/components/ui/footer"
 import Navbar from "@/components/ui/navbar"
+import TemplatesBreadcrumb from "./_breadcrum"
+
 
 export const metadata = {
   title: 'Next.js',
@@ -16,7 +18,8 @@ export default function RootLayout({
       <nav>
         <Navbar />
       </nav>
-      <main className="pt-20 mx-auto max-w-7xl bg-white h-[100vh]">
+      <main className="pt-20 px-10 mx-auto max-w-7xl bg-white h-[100vh]">
+        <TemplatesBreadcrumb />
         {children}
       </main>
       <footer>
