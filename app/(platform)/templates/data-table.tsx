@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/table"
 import { Spin } from "@/components/ui/spin"
 import { PencilLine, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import TemplateTooltip from "./_tooltip";
 
 // Define the type for your data
 interface MyData {
@@ -43,8 +45,14 @@ export function DataTable<TData extends MyData, TValue>({
             header: 'Actions',
             cell: ({ row }) => (
                 <div className="flex gap-3">
-                    <Trash2 role="button" color="red" onClick={() => handleEdit(row.original.campaign_templates_id)} />
-                    <PencilLine role="button" color="green" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                    <TemplateTooltip title={"Delete template"} >
+                        <Trash2 role="button" color="red" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                    </TemplateTooltip>
+                    <TemplateTooltip title={"Edit template"} >
+                        <PencilLine role="button" color="green" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                    </TemplateTooltip>
+
+
                 </div>
             ),
         }
