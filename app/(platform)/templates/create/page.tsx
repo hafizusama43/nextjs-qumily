@@ -40,7 +40,7 @@ const InputForm = () => {
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         try {
             setPending(true)
-            const res = await axios.post('/api/template', {}, {});
+            const res = await axios.post('/api/template', { ...data });
             console.log(res.data)
             form.reset()
             toast({ description: res.data.message })
