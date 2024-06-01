@@ -1,18 +1,27 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 // Define routes that should be protected
-const isProtectedRoute = createRouteMatcher([
-    new RegExp('^/organizations(/.*)?$'),
-    new RegExp('^/organization(/.*)?$'),
-    new RegExp('^/user-profile(/.*)?$')
-]);
+// const isProtectedRoute = createRouteMatcher([
+//     new RegExp('^/organizations(/.*)?$'),
+//     new RegExp('^/organization(/.*)?$'),
+//     new RegExp('^/user-profile(/.*)?$'),
+//     new RegExp('^/templates(/.*)?$')
+// ]);
+
+// Or only protect these routes
+const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)']);
+
 // Update clerkMiddleware to manually protect routes
-export default clerkMiddleware((auth, req) => {
-    if (isProtectedRoute(req) && !auth().userId) {
-        auth().protect(); // Protect the route if it matches the defined criteria
-        // return NextResponse.redirect(new URL("/sign-in",req.url));
+export default clerkMiddleware((auth, req: NextRequest) => {
+    console.log(auth().userId)
+    if (req.url.includes('api') && !auth().userId) {
+        return NextResponse.json({ message: "Unauthenticated" }, { status: 401 })
+    }
+    if (!isPublicRoute(req) && !req.url.includes('api')) {
+        auth().protect();
     }
 });
+
 export const config = {
     matcher: ["/((?!.+.[w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

@@ -46,13 +46,11 @@ export function DataTable<TData extends MyData, TValue>({
             cell: ({ row }) => (
                 <div className="flex gap-3">
                     <TemplateTooltip title={"Delete template"} >
-                        <Trash2 role="button" color="red" onClick={() => handleEdit(row.original.campaign_templates_id)} />
+                        <Trash2 role="button" color="red" onClick={() => handleDelete(row.original.campaign_templates_id)} />
                     </TemplateTooltip>
                     <TemplateTooltip title={"Edit template"} >
                         <PencilLine role="button" color="green" onClick={() => handleEdit(row.original.campaign_templates_id)} />
                     </TemplateTooltip>
-
-
                 </div>
             ),
         }
@@ -112,7 +110,7 @@ export function DataTable<TData extends MyData, TValue>({
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={columns.length} className="h-24 text-center">
+                            <TableCell colSpan={extendedColumns.length} className="h-24 text-center">
                                 {pending ? <Spin className="m-auto" variant="light" size="default"></Spin> : 'No results.'}
                             </TableCell>
                         </TableRow>
