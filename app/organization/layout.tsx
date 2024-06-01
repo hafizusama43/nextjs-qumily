@@ -2,6 +2,7 @@
 
 import Footer from "@/components/ui/footer"
 import OrgNavbar from "@/components/ui/OrgNavbar"
+import { Toaster } from "@/components/ui/toaster"
 import { useOrganizationList } from "@clerk/nextjs"
 import { useParams } from "next/navigation"
 import { useEffect } from "react"

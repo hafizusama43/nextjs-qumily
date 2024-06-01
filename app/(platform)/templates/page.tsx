@@ -54,7 +54,7 @@ const Templates = async () => {
         <div>
             <h1 className='rounded mb-5 bg-gray-100 p-3 flex items-center justify-between'>
                 <Label>All templates</Label>
-                <Link href="/templates/add"><Button size='sm'>Add new template</Button></Link>
+                <Link href="/templates/create"><Button size='sm'>Add new template</Button></Link>
             </h1>
             <Suspense fallback={<>Loading</>}>
                 <DataTable columns={columns} data={data} />
