@@ -1,9 +1,13 @@
 import React from 'react'
+import TemplateHeader from '../_header'
+import { Label } from '@/components/ui/label'
 
 const page = () => {
     return (
         <div>
-            Add
+            <TemplateHeader>
+                <Label>Add template</Label>
+            </TemplateHeader>
         </div>
     )
 }
