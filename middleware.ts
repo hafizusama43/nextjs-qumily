@@ -13,7 +13,6 @@ const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)']);
 
 // Update clerkMiddleware to manually protect routes
 export default clerkMiddleware((auth, req: NextRequest) => {
-    console.log(auth().userId)
     if (req.url.includes('api') && !auth().userId) {
         return NextResponse.json({ message: "Unauthenticated" }, { status: 401 })
     }

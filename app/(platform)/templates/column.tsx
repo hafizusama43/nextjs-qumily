@@ -1,4 +1,5 @@
 "use client"
+import { format } from "date-fns"
 
 import { ColumnDef } from "@tanstack/react-table"
 
@@ -7,7 +8,7 @@ import { ColumnDef } from "@tanstack/react-table"
 export type Templates = {
     campaign_templates_id: string | number
     camping_name: string
-    created_by: string | number
+    username: string | number
     created_at: string
 }
 
@@ -21,12 +22,13 @@ export const columns: ColumnDef<Templates>[] = [
         header: "Campaign name",
     },
     {
-        accessorKey: "created_by",
+        accessorKey: "username",
         header: "Created by",
     },
     {
         accessorKey: "created_at",
         header: "Created at",
+        cell: ({ cell }) => format(new Date(cell.getValue() as string), 'MM/dd/yyyy'), // Format date here
     },
     // {
     //     accessorKey: "actions",

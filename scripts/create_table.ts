@@ -6,7 +6,7 @@ async function createCampaignTable(client) {
         CREATE TABLE IF NOT EXISTS campaign_templates (
             campaign_templates_id SERIAL PRIMARY KEY, 
             camping_name VARCHAR(255) NOT NULL, 
-            created_by INTEGER NOT NULL DEFAULT 0,
+            created_by VARCHAR(255) NOT NULL,
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         );`;
