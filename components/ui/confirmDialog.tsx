@@ -1,6 +1,7 @@
 import React, { cloneElement, forwardRef, ReactElement, ReactNode, useState } from 'react'
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -34,12 +35,15 @@ const ConfirmDialog = forwardRef<HTMLButtonElement, ConfirmDialogProps>(({ child
                 <DialogHeader>
                     <DialogTitle>Are you absolutely sure?</DialogTitle>
                     <DialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
+                        This action cannot be undone. This will permanently delete template
+                        and all its data.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <div className="flex justify-end mt-4">
+                    <div className="flex justify-end mt-4 gap-3">
+                        <Button type="button" variant="secondary" onClick={() => { setIsOpen(false) }}>
+                            Close
+                        </Button>
                         <Button
                             onClick={handleConfirm}
                         >
