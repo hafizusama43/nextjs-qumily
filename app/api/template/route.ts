@@ -17,7 +17,7 @@ export async function GET() {
 
         const createdByArray = templates.rows.map(item => item.created_by);
 
-        // Get all users from clec
+        // Get all users from clerk
         const { data } = await clerkClient.users.getUserList({ userId: createdByArray });
         const userMap = data.reduce((acc, user) => {
             acc[user.id] = user.fullName;
@@ -41,17 +41,17 @@ export async function POST(request: NextRequest) {
     const { userId } = auth();
 
     if (!template_name) {
-        return NextResponse.json({ success: true, message: 'Template name is required.' }, { status: 404 })
+        return NextResponse.json({ success: false, message: 'Template name is required.' }, { status: 404 })
     }
     try {
-        await sql`
+        // RETURNING * gives the inserted row
+        const res = await sql`
       INSERT INTO campaign_templates (camping_name,created_by)
       VALUES (${template_name}, ${userId})
+      RETURNING *
     `;
+        return NextResponse.json({ success: true, message: 'Template created successfully.', data: res.rows }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: true, message: 'Database Error: Failed to create record.', }, { status: 200 })
+        return NextResponse.json({ success: false, message: 'Database Error: Failed to create record.', }, { status: 200 })
     }
-
-    // const data = await res.json()
-    return NextResponse.json({ success: true, message: 'Template created successfully.' }, { status: 200 })
 }

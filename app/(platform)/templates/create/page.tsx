@@ -28,8 +28,16 @@ const FormSchema = z.object({
     template_name: z.string().min(1, { message: "Template name is required" }).min(5, { message: "Template name should contain at least \"5\" characters." }),
 })
 
+interface createdRowType {
+    campaign_templates_id: number;
+    camping_name: string;
+    created_by: string;
+    created_at: string;
+}
+
 const InputForm = () => {
     const [pending, setPending] = useState(false);
+    const [createdRow, setCreatedRow] = useState<createdRowType>();
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -41,7 +49,9 @@ const InputForm = () => {
         try {
             setPending(true)
             const res = await axios.post('/api/template', { ...data });
-            console.log(res.data)
+            if (res.data.success) {
+                setCreatedRow(res.data.data[0])
+            }
             form.reset()
             toast({ description: res.data.message })
             setPending(false)
@@ -82,6 +92,16 @@ const InputForm = () => {
                     <Button className="p-5" disabled={pending} type="submit">{pending && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Submit </Button>
                 </form>
             </Form>
+            {createdRow &&
+                <Alert className="my-10">
+                    <RocketIcon className="h-4 w-4" />
+                    <AlertTitle>Template created!</AlertTitle>
+                    <AlertDescription>
+                        Template <b>&qout;{createdRow.camping_name}&qout;</b> is created successfully. Click <Link href={`/templates/edit/${createdRow.campaign_templates_id}`}><b>here</b></Link> to edit the template.
+                    </AlertDescription>
+                </Alert>
+            }
+
         </React.Fragment>
 
     )
