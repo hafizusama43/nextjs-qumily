@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     try {
 
         // TODO For now we have table for one category of template campings table we need to check based on template_category from which table to read 
-        // default data from and in which to insert
+        // default data from and in which to insert to make it generic to insert templates
 
         const slug = template_name.toLowerCase().split(" ").join("-");
         // RETURNING * gives the inserted row so we can return data and check which category is inserted
@@ -64,7 +64,6 @@ export async function POST(request: NextRequest) {
         // Exclude first index as it is primary key
         const insert_cols = col_names.rows.slice(1).map(item => item.column_name).join(', ');
         let insert_str = `INSERT INTO campaign_templates_data (${insert_cols}) VALUES `
-        console.log(insert_str)
 
         // Get default template data
         const cols_to_fetch = col_names.rows.slice(2).map(item => item.column_name).join(', ');
