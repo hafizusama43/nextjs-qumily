@@ -69,12 +69,8 @@ async function getCols() {
             }
         }
     });
-
     query_str += ')';
-
-
     await client.end();
-
     return query_str;
 }
 async function insertrecord(query_str) {
