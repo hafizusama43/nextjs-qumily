@@ -10,12 +10,11 @@ const EditableCell = ({ id, value, field, editableCell, onChange, onBlur }) => {
                 <Textarea
                     rows={5}
                     cols={220}
+                    value={value}
                     onChange={(e) => onChange(e, id, field)}
                     onBlur={onBlur}
                     autoFocus // Automatically focus on the input field
-                >
-                    {value}
-                </Textarea>
+                ></Textarea>
             ) : (
                 value
             )}

@@ -25,6 +25,7 @@ import EditableCell from './_editable';
 const EditTemp = () => {
     const params = useParams<{ slug: string }>();
     const [pending, setPending] = useState(false);
+    const [pendingSave, setPendingSave] = useState(false);
     const [data, setData] = useState([])
     const [editableCell, setEditableCell] = useState(null);
 
@@ -64,13 +65,37 @@ const EditTemp = () => {
         );
     };
 
+    // Handle handleSaveChanges
+    const handleSaveChanges = async () => {
+        setPendingSave(true);
+        console.log(params.slug)
+        setTimeout(() => {
+            setPendingSave(false);
+        }, 3000);
+
+        try {
+            console.log('Updating template data')
+            setPendingSave(true)
+            const res = await axios.put(`/api/template-data?slug=${params.slug}`);
+            if (res.data.success) {
+                setData(res.data.data)
+            }
+            setPendingSave(false)
+            toast({ description: res.data.message })
+        } catch (error) {
+            setPendingSave(false)
+            toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
+        }
+
+    }
+
     const excludedKeys = ["campaign_templates_data_id", "template_id"];
 
     return (
         <div>
             <TemplateHeader>
                 <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; template</Label>
-                <Button size='sm'>Save changes</Button>
+                <Button disabled={pendingSave} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button>
             </TemplateHeader>
             <ZoomControl></ZoomControl>
             <Table className='mb-40 border rounded custom-template-table'>
