@@ -14,9 +14,7 @@ const TemplatesBreadcrumb = () => {
     const path = usePathname();
 
     useEffect(() => {
-        console.log(path);
         const arr = path.split("/");
-        console.log(arr);
     }, [path]);
 
     const generateBreadcrumbs = () => {

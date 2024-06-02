@@ -6,9 +6,10 @@ const { db } = require('@vercel/postgres');
 async function main() {
     const client = await db.connect();
 
-    const { createCampaignTable } = tables;
+    const { createCampaignTable, createCampaignTemplateDataTable } = tables;
 
     await createCampaignTable(client);
+    await createCampaignTemplateDataTable(client);
     // await seedCustomers(client);
     // await seedInvoices(client);
     // await seedRevenue(client);

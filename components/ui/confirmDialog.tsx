@@ -1,7 +1,6 @@
 import React, { cloneElement, forwardRef, ReactElement, ReactNode, useState } from 'react'
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
