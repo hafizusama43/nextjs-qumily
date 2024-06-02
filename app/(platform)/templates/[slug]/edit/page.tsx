@@ -49,8 +49,6 @@ const EditTemp = () => {
 
     // Function to handle cell double-click
     const handleCellDoubleClick = (id, field) => {
-        console.log(id)
-        console.log(field)
         setEditableCell({ id, field });
     };
 
