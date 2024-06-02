@@ -20,6 +20,7 @@ import {
 import { Spin } from '@/components/ui/spin';
 import ZoomControl from './_zoom';
 import TemplateHeader from '../../_header';
+import EditableCell from './_editable';
 
 const EditTemp = () => {
     const params = useParams<{ slug: string }>();
@@ -53,11 +54,25 @@ const EditTemp = () => {
         setEditableCell({ id, field });
     };
 
+    // Function to handle cell value change
+    const handleCellValueChange = (e, id, field) => {
+        setData(prevData =>
+            prevData.map(item => {
+                if (item.campaign_templates_data_id === id) {
+                    return { ...item, [field]: e.target.value };
+                }
+                return item;
+            })
+        );
+    };
+
+    const excludedKeys = ["campaign_templates_data_id", "template_id"];
+
     return (
         <div>
             <TemplateHeader>
-                <Label>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</Label>
-                <Link href={`/templates/${params.slug}/edit`}><Button size='sm'>Edit template</Button></Link>
+                <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; template</Label>
+                <Button size='sm'>Save changes</Button>
             </TemplateHeader>
             <ZoomControl></ZoomControl>
             <Table className='mb-40 border rounded custom-template-table'>
@@ -70,31 +85,20 @@ const EditTemp = () => {
                     {data.length > 0 ? <>{data.map((item, index) => {
                         return (
                             <TableRow key={index}>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'product')}>{item.product}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'entity')}>{item.entity}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'operation')}>{item.operation}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'campaign_id')}>{item.campaign_id}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'ad_group_id')}>{item.ad_group_id}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'portfolio_id')}>{item.portfolio_id}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'ad_id')}>{item.ad_id}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'keyword_id')}>{item.keyword_id}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'product_targeting_id')}>{item.product_targeting_id}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'campaign_name')}>{item.campaign_name}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'ad_group_name')}>{item.ad_group_name}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'start_date')}>{item.start_date}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'end_date')}>{item.end_date}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'targeting_type')}>{item.targeting_type}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'state')}>{item.state}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'daily_budget')}>{item.daily_budget}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'sku')}>{item.sku}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'ad_group_default_bid')}>{item.ad_group_default_bid}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'bid')}>{item.bid}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'keyword_text')}>{item.keyword_text}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'match_type')}>{item.match_type}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'bidding_strategy')}>{item.bidding_strategy}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'placement')}>{item.placement}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'percentage')}>{item.percentage}</TableCell>
-                                <TableCell onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, 'product_targeting_expression')}>{item.product_targeting_expression}</TableCell>
+                                {Object.keys(item).filter(key => !excludedKeys.includes(key)).map((item_inner, index_inner) => {
+                                    return (
+                                        <TableCell key={item_inner + "_" + index_inner} onDoubleClick={() => handleCellDoubleClick(item.campaign_templates_data_id, item_inner)}>
+                                            <EditableCell
+                                                id={item.campaign_templates_data_id}
+                                                value={item[item_inner]}
+                                                field={item_inner}
+                                                editableCell={editableCell}
+                                                onChange={handleCellValueChange}
+                                                onBlur={() => setEditableCell(null)}
+                                            />
+                                        </TableCell>
+                                    )
+                                })}
                             </TableRow>
                         )
                     })}</> : <TableRow ><TableCell className="text-center" colSpan={Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).length}>
