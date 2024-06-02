@@ -76,10 +76,12 @@ const EditTemp = () => {
         try {
             console.log('Updating template data')
             setPendingSave(true)
-            const res = await axios.put(`/api/template-data?slug=${params.slug}`);
-            if (res.data.success) {
-                setData(res.data.data)
-            }
+            const res = await axios.put(`/api/template-data?slug=${params.slug}`, {
+                data: data
+            });
+            // if (res.data.success) {
+            //     setData(res.data.data)
+            // }
             setPendingSave(false)
             toast({ description: res.data.message })
         } catch (error) {
