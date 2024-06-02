@@ -88,46 +88,50 @@ const InputForm = () => {
             </Alert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                    <div className="  items-center">
-                        <FormField
-                            control={form.control}
-                            name="template_name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Template name</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="template_category"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <div className="block md:flex gap-5">
+                        <div className='basis-1/2 w-full'>
+                            <FormField
+                                control={form.control}
+                                name="template_name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Template name</FormLabel>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select a verified email to display" />
-                                            </SelectTrigger>
+                                            <Input {...field} />
                                         </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="none">None</SelectItem>
-                                            {Object.keys(TEMPLATE_CATEGORY).map((item, index) => <SelectItem
-                                                key={index}
-                                                value={item}>
-                                                {TEMPLATE_CATEGORY[item]}
-                                            </SelectItem>
-                                            )}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className='basis-1/2 w-full mt-5 md:mt-0'>
+                            <FormField
+                                control={form.control}
+                                name="template_category"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Template category</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a template category" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="none">None</SelectItem>
+                                                {Object.keys(TEMPLATE_CATEGORY).map((item, index) => <SelectItem
+                                                    key={index}
+                                                    value={item}>
+                                                    {TEMPLATE_CATEGORY[item]}
+                                                </SelectItem>
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
                     <Button className="p-5" disabled={pending} type="submit">{pending && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Submit </Button>
                 </form>

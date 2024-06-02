@@ -18,7 +18,7 @@ export default function RootLayout({
       <nav>
         <Navbar />
       </nav>
-      <main className="pt-20 px-10 mx-auto max-w-7xl bg-white h-[100vh]">
+      <main className="pt-20 px-5 md:px-10 mx-auto max-w-7xl bg-white h-[100vh]">
         <TemplatesBreadcrumb />
         {children}
       </main>

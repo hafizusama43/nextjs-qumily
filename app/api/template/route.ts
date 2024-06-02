@@ -37,22 +37,23 @@ export async function GET() {
 // Get all templates
 export async function POST(request: NextRequest) {
 
-    const { template_name } = await request.json();
+    const { template_name, template_category } = await request.json();
     const { userId } = auth();
 
-    if (!template_name) {
-        return NextResponse.json({ success: false, message: 'Template name is required.' }, { status: 404 })
+    if (!template_name || !template_category) {
+        return NextResponse.json({ success: false, message: 'Please provide required fields.' }, { status: 404 })
     }
     try {
         const slug = template_name.toLowerCase().split(" ").join("-");
         // RETURNING * gives the inserted row
         const res = await sql`
-      INSERT INTO campaign_templates (camping_name, slug, created_by)
-      VALUES (${template_name}, ${slug}, ${userId})
+      INSERT INTO campaign_templates (template_name, template_category, slug, created_by)
+      VALUES (${template_name}, ${template_category},${slug}, ${userId})
       RETURNING *
     `;
         return NextResponse.json({ success: true, message: 'Template created successfully.', data: res.rows }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, message: 'Database Error: Failed to create record.', }, { status: 200 })
+        console.log(error)
+        return NextResponse.json({ success: false, message: 'Database Error: Failed to create record.', }, { status: 500 })
     }
 }

@@ -3,6 +3,7 @@ import { format } from "date-fns"
 
 import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
+import { TEMPLATE_CATEGORY } from "@/lib/helpers"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -20,8 +21,13 @@ export const columns: ColumnDef<Templates>[] = [
         // cell: ({ cell }) => <Link href={"/"}>{format(new Date(cell.getValue() as string), 'MM/dd/yyyy')}</Link>, // Format date here
     },
     {
-        accessorKey: "camping_name",
-        header: "Campaign name",
+        accessorKey: "template_name",
+        header: "Template name",
+    },
+    {
+        accessorKey: "template_category",
+        header: "Template category",
+        cell: ({ cell }) => TEMPLATE_CATEGORY[cell.getValue() as string], // Format date here
     },
     {
         accessorKey: "username",
