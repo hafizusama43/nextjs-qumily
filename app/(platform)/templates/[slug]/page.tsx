@@ -43,9 +43,6 @@ const EditTemplate = () => {
         getData()
     }, [getData])
 
-
-
-
     return (
         <div>
             <TemplateHeader>
