@@ -2,6 +2,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 
 const results = [];
+const str = '';
 
 const file_name = './data_new.csv';
 console.log('\x1b[32mExecuting csv reader.\x1b[0m'); // \x1b[32m sets color to green, \x1b[0m resets color
@@ -21,10 +22,15 @@ fs.access('./data_new.csv', fs.constants.F_OK, (err) => {
             .on('end', () => {
                 console.log('\x1b[34mtotal rows : ' + results.length + '\x1b[0m');
                 results.forEach((element, index) => {
+
+
                     if (index === 0) {
                         const obj = Object.values(element)
                         obj.forEach((ele) => {
-                            console.log(ele)
+                            // Last index
+                            if (index === obj.length - 1) {
+
+                            }
                         })
                     }
                 });

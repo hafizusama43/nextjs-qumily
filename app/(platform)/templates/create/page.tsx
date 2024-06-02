@@ -14,6 +14,14 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import React, { useState } from "react"
@@ -23,9 +31,11 @@ import Link from "next/link"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { RocketIcon } from "lucide-react"
 import { Spin } from "@/components/ui/spin";
+import { TEMPLATE_CATEGORY } from "@/lib/helpers";
 
 const FormSchema = z.object({
     template_name: z.string().min(1, { message: "Template name is required" }).min(5, { message: "Template name should contain at least \"5\" characters." }),
+    template_category: z.string().min(1, { message: "Template category is required" }),
 })
 
 interface createdRowType {
@@ -43,6 +53,7 @@ const InputForm = () => {
         resolver: zodResolver(FormSchema),
         defaultValues: {
             template_name: "",
+            template_category: ""
         },
     })
 
@@ -77,19 +88,47 @@ const InputForm = () => {
             </Alert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                    <FormField
-                        control={form.control}
-                        name="template_name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Template name</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    <div className="  items-center">
+                        <FormField
+                            control={form.control}
+                            name="template_name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Template name</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="template_category"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a verified email to display" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="none">None</SelectItem>
+                                            {Object.keys(TEMPLATE_CATEGORY).map((item, index) => <SelectItem
+                                                key={index}
+                                                value={item}>
+                                                {TEMPLATE_CATEGORY[item]}
+                                            </SelectItem>
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
                     <Button className="p-5" disabled={pending} type="submit">{pending && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Submit </Button>
                 </form>
             </Form>
