@@ -49,7 +49,9 @@ const EditTemplate = () => {
                 <Label>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</Label>
                 <Link href={`/templates/${params.slug}/edit`}><Button size='sm'>Edit template</Button></Link>
             </TemplateHeader>
-            <ZoomControl></ZoomControl>
+            <div className='flex justify-end'>
+                <ZoomControl></ZoomControl>
+            </div>
             <Table className='mb-40 border rounded custom-template-table'>
                 <TableHeader>
                     <TableRow>

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { capitalizeFirstLetter, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers';
 import axios from 'axios';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { toast } from '@/components/ui/use-toast';
 import {
     Table,
@@ -21,6 +22,7 @@ import { Spin } from '@/components/ui/spin';
 import ZoomControl from './_zoom';
 import TemplateHeader from '../../_header';
 import EditableCell from './_editable';
+import { InfoIcon } from 'lucide-react';
 
 const EditTemp = () => {
     const params = useParams<{ slug: string }>();
@@ -99,7 +101,16 @@ const EditTemp = () => {
                 <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; template</Label>
                 <Button disabled={pendingSave} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button>
             </TemplateHeader>
-            <ZoomControl></ZoomControl>
+            <div className='flex gap-5'>
+                <Alert className="my-5">
+                    <InfoIcon className="h-4 w-4" />
+                    <AlertTitle>Heads up!</AlertTitle>
+                    <AlertDescription>
+                        To edit a cell <b>Double Click</b> on it and after editing click any where to close cell editor. Make sure to click <b>Save Changes</b> button to save all changes.
+                    </AlertDescription>
+                </Alert>
+                <ZoomControl></ZoomControl>
+            </div>
             <Table className='mb-40 border rounded custom-template-table'>
                 <TableHeader>
                     <TableRow>
