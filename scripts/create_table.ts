@@ -60,9 +60,9 @@ async function createCampaignTemplateDataTable(client) {
 
         console.log(`Created "campaign_templates_data" table`);
 
-        console.log(`Seeding "campaign_templates_data" table`);
-        const seedTable = await client.sql`INSERT INTO campaign_templates_data (template_id) VALUES (0)`;
-        console.log(`Seeded "campaign_templates_data" table`);
+        // console.log(`Seeding "campaign_templates_data" table`);
+        // const seedTable = await client.sql`INSERT INTO campaign_templates_data (template_id) VALUES (0)`;
+        // console.log(`Seeded "campaign_templates_data" table`);
 
         return createTable;
 
