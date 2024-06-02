@@ -100,17 +100,18 @@
 }
 
 .custom-template-table {
-  border: 1px solid lightgray;
-  border-collapse: collapse !important;
+  border-collapse: separate; /* Ensure borders are separate to round the corners */
+  border-radius: 10px; /* Apply rounded corners */
+  overflow: hidden; /* Ensure content does not overflow the rounded corners */
+  /* width: 100%; */
+  border: 1.5px solid lightgray;
 }
 .custom-template-table > thead > tr > th {
   border: 1px solid lightgray;
-  border-collapse: collapse;
 }
 
 .custom-template-table > tbody > tr > td {
   border: 1px solid lightgray;
-  border-collapse: collapse;
 }
 
 @layer base {
