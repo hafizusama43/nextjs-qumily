@@ -12,7 +12,6 @@ import { toast } from '@/components/ui/use-toast';
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -21,13 +20,10 @@ import {
 import { Spin } from '@/components/ui/spin';
 import ZoomControl from './_zoom';
 
-
 const EditTemplate = () => {
     const params = useParams<{ slug: string }>();
     const [pending, setPending] = useState(false);
     const [data, setData] = useState([])
-    // const data = await getData()
-    // const route = useRouter()
     const getData = useCallback(async () => {
         try {
             console.log('Fetching template data')
@@ -35,7 +31,6 @@ const EditTemplate = () => {
             const res = await axios.get(`/api/template-data?slug=${params.slug}`);
             if (res.data.success) {
                 setData(res.data.data)
-
             }
             setPending(false)
         } catch (error) {
@@ -65,41 +60,38 @@ const EditTemplate = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.length > 0 ? <>
-                        {data.map((item, index) => {
-                            return (
-                                <TableRow key={index}>
-                                    <TableCell>{item.product}</TableCell>
-                                    <TableCell>{item.entity}</TableCell>
-                                    <TableCell>{item.operation}</TableCell>
-                                    <TableCell>{item.campaign_id}</TableCell>
-                                    <TableCell>{item.ad_group_id}</TableCell>
-                                    <TableCell>{item.portfolio_id}</TableCell>
-                                    <TableCell>{item.ad_id}</TableCell>
-                                    <TableCell>{item.keyword_id}</TableCell>
-                                    <TableCell>{item.product_targeting_id}</TableCell>
-                                    <TableCell>{item.campaign_name}</TableCell>
-                                    <TableCell>{item.ad_group_name}</TableCell>
-                                    <TableCell>{item.start_date}</TableCell>
-                                    <TableCell>{item.end_date}</TableCell>
-                                    <TableCell>{item.targeting_type}</TableCell>
-                                    <TableCell>{item.state}</TableCell>
-                                    <TableCell>{item.daily_budget}</TableCell>
-                                    <TableCell>{item.sku}</TableCell>
-                                    <TableCell>{item.ad_group_default_bid}</TableCell>
-                                    <TableCell>{item.bid}</TableCell>
-                                    <TableCell>{item.keyword_text}</TableCell>
-                                    <TableCell>{item.match_type}</TableCell>
-                                    <TableCell>{item.bidding_strategy}</TableCell>
-                                    <TableCell>{item.placement}</TableCell>
-                                    <TableCell>{item.percentage}</TableCell>
-                                    <TableCell>{item.product_targeting_expression}</TableCell>
-                                </TableRow>
-                            )
-                        })}
-                    </> : <TableRow className='min-h-40'> <TableCell className="text-center min-h-40" colSpan={Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).length}>
-                        {pending ? <Spin className="m-auto" variant="light" size="default"></Spin> : 'No results.'}
-                    </TableCell></TableRow>}
+                    {data.length > 0 ? <>{data.map((item, index) => {
+                        return (
+                            <TableRow key={index}>
+                                <TableCell>{item.product}</TableCell>
+                                <TableCell>{item.entity}</TableCell>
+                                <TableCell>{item.operation}</TableCell>
+                                <TableCell>{item.campaign_id}</TableCell>
+                                <TableCell>{item.ad_group_id}</TableCell>
+                                <TableCell>{item.portfolio_id}</TableCell>
+                                <TableCell>{item.ad_id}</TableCell>
+                                <TableCell>{item.keyword_id}</TableCell>
+                                <TableCell>{item.product_targeting_id}</TableCell>
+                                <TableCell>{item.campaign_name}</TableCell>
+                                <TableCell>{item.ad_group_name}</TableCell>
+                                <TableCell>{item.start_date}</TableCell>
+                                <TableCell>{item.end_date}</TableCell>
+                                <TableCell>{item.targeting_type}</TableCell>
+                                <TableCell>{item.state}</TableCell>
+                                <TableCell>{item.daily_budget}</TableCell>
+                                <TableCell>{item.sku}</TableCell>
+                                <TableCell>{item.ad_group_default_bid}</TableCell>
+                                <TableCell>{item.bid}</TableCell>
+                                <TableCell>{item.keyword_text}</TableCell>
+                                <TableCell>{item.match_type}</TableCell>
+                                <TableCell>{item.bidding_strategy}</TableCell>
+                                <TableCell>{item.placement}</TableCell>
+                                <TableCell>{item.percentage}</TableCell>
+                                <TableCell>{item.product_targeting_expression}</TableCell>
+                            </TableRow>
+                        )
+                    })}</> : <TableRow ><TableCell className="text-center" colSpan={Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).length}>
+                        {pending ? <Spin className="m-auto" variant="light" size="default"></Spin> : 'No results.'}</TableCell></TableRow>}
                 </TableBody>
             </Table>
         </div>

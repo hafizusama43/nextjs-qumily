@@ -11,9 +11,9 @@ const ZoomControl: React.FC = () => {
         // const currentZoom = Math.round(window.devicePixelRatio * 100);
         const element = document.querySelector('.custom-template-table') as HTMLElement;
         if (element) {
-            element.style.zoom = `${90}%`;
+            element.style.zoom = `${80}%`;
         }
-        setZoomLevel(90);
+        setZoomLevel(80);
 
     }, []);
 

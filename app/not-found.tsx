@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const Error = () => {
     return (
         <div className='h-[100vh] flex justify-center items-center flex-col'>
-            <div className='bg-white p-10 rounded-3xl shadow-4xl'>
+            <div className='bg-white p-10 rounded-3xl border border-gray-300'>
                 <Image src={"/not-found.png"} width={400} height={400} alt='error.png'></Image>
                 <BackButton></BackButton>
             </div>
