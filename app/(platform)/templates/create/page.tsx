@@ -35,7 +35,7 @@ import { TEMPLATE_CATEGORY } from "@/lib/helpers";
 
 const FormSchema = z.object({
     template_name: z.string().min(1, { message: "Template name is required" }).min(5, { message: "Template name should contain at least \"5\" characters." }),
-    template_category: z.string().min(1, { message: "Template category is required" }),
+    template_category: z.string().min(5, { message: "Template category is required" }),
 })
 
 interface createdRowType {
@@ -111,7 +111,7 @@ const InputForm = () => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Template category</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Select a template category" />
