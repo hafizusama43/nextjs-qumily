@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { capitalizeFirstLetter, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers';
 import axios from 'axios';
 import { toast } from '@/components/ui/use-toast';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
     Table,
     TableBody,
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/table"
 import { Spin } from '@/components/ui/spin';
 import ZoomControl from './_zoom';
+import { InfoIcon } from 'lucide-react';
 
 const EditTemplate = () => {
     const params = useParams<{ slug: string }>();
@@ -47,9 +49,19 @@ const EditTemplate = () => {
         <div>
             <TemplateHeader>
                 <Label>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</Label>
-                <Link href={`/templates/${params.slug}/edit`}><Button size='sm'>Edit template</Button></Link>
+                <div className=''>
+                    <Link href={`/templates/${params.slug}/create-campaign`}><Button size='sm'>Create campaign</Button></Link>
+                    <Link className='ml-2' href={`/templates/${params.slug}/edit`}><Button size='sm'>Edit template</Button></Link>
+                </div>
             </TemplateHeader>
-            <div className='flex justify-end'>
+            <div className='flex gap-5'>
+                <Alert className="my-5">
+                    <InfoIcon className="h-4 w-4" />
+                    <AlertTitle>Heads up!</AlertTitle>
+                    <AlertDescription>
+                        This table shows template data copied from a default template. Please review this data, you can edit this template using <b>Edit template</b> button before creating a campaign.
+                    </AlertDescription>
+                </Alert>
                 <ZoomControl></ZoomControl>
             </div>
             <Table className='mb-40 border rounded custom-template-table'>

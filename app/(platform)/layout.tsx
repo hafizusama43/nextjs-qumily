@@ -18,6 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const params = useParams<{ slug: string }>();
+  const pathname = usePathname();
 
   return (
     <>
@@ -26,7 +27,7 @@ export default function RootLayout({
       </nav>
       <main className={clsx('pt-20 px-5 md:px-10 mx-auto  bg-white h-[100vh]', {
         '': params.slug,
-        'max-w-7xl': !params.slug
+        'max-w-7xl': !params.slug || pathname.includes(`${params.slug}/create-campaign`)
       })}>
         <TemplatesBreadcrumb />
         {children}

@@ -99,7 +99,10 @@ const EditTemp = () => {
         <div>
             <TemplateHeader>
                 <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; template</Label>
-                <Button disabled={pendingSave} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button>
+                <div>
+                    <Link href={`/templates/${params.slug}/create-campaign`}><Button size='sm'>Create campaign</Button></Link>
+                    <Button className='ml-2' disabled={pendingSave} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button>
+                </div>
             </TemplateHeader>
             <div className='flex gap-5'>
                 <Alert className="my-5">
