@@ -15,6 +15,9 @@ const Footer = () => {
                     <Link href="/privacy-policy"><Button variant="link">Privacy Policy</Button></Link>
                 </div>
             </div>
+            <div className='text-center bg-black text-white'>
+                <small>Copyright &copy; {new Date().getFullYear()} | Created by : <Link target="_blank" passHref={true} href={"https://www.linkedin.com/in/abdur-rehman-7a8324169"}>Abdur Rehman</Link></small>
+            </div>
         </div>
     )
 }

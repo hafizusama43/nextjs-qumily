@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { PencilLine, RocketIcon, Trash2 } from 'lucide-react'
+import { AlertTriangle, PencilLine, RocketIcon, Trash2 } from 'lucide-react'
 import TemplateHeader from '../../_header'
 import { useParams } from 'next/navigation'
 import { v4 as uuidv4 } from 'uuid';
@@ -96,7 +96,7 @@ const CreateCampaign = () => {
                 <Link href={`/templates/${params.slug}`}><Button size='sm'>View template</Button></Link>
             </TemplateHeader>
             <Alert className="my-5">
-                <RocketIcon className="h-4 w-4" />
+                <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Heads up!</AlertTitle>
                 <AlertDescription>
                     To create a campaign enter values for <b>Campaign id</b> which will be used to create multiple campaigns using the template by replacing <b>%campaign_id%</b>. To adjust other same values for all campaigns like Product name or Entity please edit template.<br></br>
