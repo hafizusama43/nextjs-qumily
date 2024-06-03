@@ -9,7 +9,8 @@ import { AlertTriangle, PencilLine, RocketIcon, Trash2 } from 'lucide-react'
 import TemplateHeader from '../../_header'
 import { useParams } from 'next/navigation'
 import { v4 as uuidv4 } from 'uuid';
-import { capitalizeFirstLetter } from '@/lib/helpers'
+import { capitalizeFirstLetter, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import * as XLSX from "xlsx";
 import {
     Form,
     FormControl,
@@ -27,7 +28,6 @@ import { z } from 'zod'
 import { toast } from '@/components/ui/use-toast'
 import { Spin } from '@/components/ui/spin'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Separator } from '@/components/ui/separator'
 
 
 const FormSchema = z.object({
@@ -51,25 +51,11 @@ const CreateCampaign = () => {
     })
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data)
         const id = uuidv4();
         // Add the id to the new object
         const objectWithId = { ...data, id: id };
         setProdData((prevState) => [...prevState, objectWithId]);
         form.reset()
-        // try {
-        //     setPending(true)
-        //     const res = await axios.post('/api/template', { ...data });
-        //     if (res.data.success) {
-        //         // setCreatedRow(res.data.data[0])
-        //     }
-        //     form.reset()
-        //     toast({ description: res.data.message })
-        //     setPending(false)
-        // } catch (error) {
-        //     setPending(false)
-        //     toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
-        // }
     }
 
     const handleClearBtn = () => {
@@ -82,11 +68,34 @@ const CreateCampaign = () => {
         ));
     }
 
-    const handleGenerateBtn = () => {
-        setPending(true)
-        setTimeout(() => {
+    const handleGenerateBtn = async () => {
+        try {
+            setPending(true)
+            const res = await axios.post(`/api/campaigns?slug=${params.slug}`, { data: prodData });
+            console.log(res.data.data)
+
+
+            const worksheet = XLSX.utils.json_to_sheet(res.data.data.map(item => {
+                const mappedItem = {};
+                for (const key in item) {
+                    if (Object.prototype.hasOwnProperty.call(item, key)) {
+                        mappedItem[SPONSORED_PRODUCTS_CAMPAIGNS[key]] = item[key];
+                    }
+                }
+                return mappedItem;
+            }));
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sponsored Products Data');
+            XLSX.writeFile(workbook, 'sponsored_products_data.xlsx');
+
+            form.reset()
+            // toast({ description: res.data.message })
             setPending(false)
-        }, 3000);
+        } catch (error) {
+            setPending(false)
+            toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
+        }
     }
 
     return (
