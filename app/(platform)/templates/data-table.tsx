@@ -61,7 +61,6 @@ export function DataTable<TData extends MyData, TValue>({
                         <Link href={`/templates/${row.original.slug}`}>
                             <EyeIcon role="button" />
                         </Link>
-
                     </TemplateTooltip>
                 </div>
             ),

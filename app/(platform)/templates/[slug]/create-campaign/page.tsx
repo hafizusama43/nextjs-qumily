@@ -81,10 +81,12 @@ const CreateCampaign = () => {
             prevState.filter((item) => item.id !== id)
         ));
     }
-    const handleEditBtn = (id: string) => {
-        const filteredData = prodData.filter((ele) => ele.id === id);
-        console.log(filteredData)
 
+    const handleGenerateBtn = () => {
+        setPending(true)
+        setTimeout(() => {
+            setPending(false)
+        }, 3000);
     }
 
     return (
@@ -97,7 +99,8 @@ const CreateCampaign = () => {
                 <RocketIcon className="h-4 w-4" />
                 <AlertTitle>Heads up!</AlertTitle>
                 <AlertDescription>
-                    To create a template enter a template name (eg. &lsquo;Summer paid campaign&lsquo;) and later edit this template to add template data.
+                    To create a campaign enter values for <b>Campaign id</b> which will be used to create multiple campaigns using the template by replacing <b>%campaign_id%</b>. To adjust other same values for all campaigns like Product name or Entity please edit template.<br></br>
+                    To add other dynamic values if you want them change for every campaign then edit template and use <b>%keyword%</b> for Keyword and <b>%bid%</b> for Bid.
                 </AlertDescription>
             </Alert>
             <Form {...form}>
@@ -149,9 +152,12 @@ const CreateCampaign = () => {
                             />
                         </div>
                     </div>
-                    <div className='flex gap-3'>
-                        <Button className="p-5" disabled={pending} type="submit">{pending && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Add row </Button>
-                        <Button className="p-5" onClick={() => { handleClearBtn() }} disabled={pending} type="button" variant="secondary">{pending && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Clear </Button>
+                    <div className='flex justify-between'>
+                        <div className='flex gap-3'>
+                            <Button className="p-5" disabled={pending} type="submit"> Add row </Button>
+                            <Button className="p-5" onClick={() => { handleClearBtn() }} disabled={pending} type="button" variant="secondary"> Clear </Button>
+                        </div>
+                        <Button className="p-5" onClick={() => { handleGenerateBtn() }} disabled={pending || prodData.length === 0} type="button">{pending && <><Spin variant="light" size="sm"></Spin> &nbsp;</>} Generate campaign </Button>
                     </div>
                 </form>
             </Form>
@@ -175,7 +181,6 @@ const CreateCampaign = () => {
                                 <TableCell>
                                     <div className='flex gap-1'>
                                         <Trash2 onClick={() => handleDeleteBtn(item.id)} role="button" color="red" />
-                                        <PencilLine role="button" color="green" onClick={() => handleEditBtn(item.id)} />
                                     </div>
                                 </TableCell>
                             </TableRow>
