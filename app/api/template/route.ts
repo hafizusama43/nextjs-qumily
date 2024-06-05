@@ -29,7 +29,7 @@ export async function GET() {
 
         return NextResponse.json({ success: true, message: 'Templates fetched successfully.', data: templatesData }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, message: 'Database Error:', error }, { status: 500 })
+        return NextResponse.json({ success: false, message: 'Database Error: Failed to fetch templates', error }, { status: 500 })
     }
 
 }
