@@ -1,6 +1,7 @@
 const fs = require('fs');
 const csv = require('csv-parser');
-const { db } = require('@vercel/postgres');
+const DbConnectPg = require('./db.ts');
+// const { db } = require('@vercel/postgres');
 // import { sql } from '@vercel/postgres';
 
 const results = [];
@@ -30,21 +31,21 @@ fs.access('./data_new.csv', fs.constants.F_OK, (err) => {
                 .on('end', () => {
                     console.log('\x1b[34mtotal rows : ' + results.length + '\x1b[0m');
                     results.forEach((element, index) => {
-                            value_str = '(0,'
-                            const obj = Object.values(element)
-                            obj.forEach((ele,ele_inde) => {
-                                // Last index
-                                value_str += ele ? "'" + ele + "'" : null;
-                                if (ele_inde !== obj.length - 1) {
-                                    value_str += ', '
-                                }
-                            })
-
-                            value_str += ')'
-                            if (index !== results.length - 1) {
+                        value_str = '(0,'
+                        const obj = Object.values(element)
+                        obj.forEach((ele, ele_inde) => {
+                            // Last index
+                            value_str += ele ? "'" + ele + "'" : null;
+                            if (ele_inde !== obj.length - 1) {
                                 value_str += ', '
                             }
-                            insert_str += value_str;
+                        })
+
+                        value_str += ')'
+                        if (index !== results.length - 1) {
+                            value_str += ', '
+                        }
+                        insert_str += value_str;
                     });
                     insertrecord(insert_str);
 
@@ -55,11 +56,11 @@ fs.access('./data_new.csv', fs.constants.F_OK, (err) => {
 
 async function getCols() {
     let query_str = 'INSERT INTO campaign_templates_data (';
-    const client = await db.connect();
-    const cols = await client.sql`SELECT *
+    const client = await DbConnectPg();
+    const cols = await client.query(`SELECT *
     FROM information_schema.columns
     WHERE table_name = 'campaign_templates_data'
-    ;`;
+    ;`, []);
 
     cols.rows.forEach((element, index) => {
         if (element.column_name !== 'campaign_templates_data_id') {
@@ -74,9 +75,9 @@ async function getCols() {
     return query_str;
 }
 async function insertrecord(query_str) {
-    const client = await db.connect();
+    const client = await DbConnectPg();
     try {
-        const cols = await client.query(query_str,[]);
+        const cols = await client.query(query_str, []);
     } catch (error) {
         console.log(error)
     }

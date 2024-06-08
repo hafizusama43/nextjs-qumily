@@ -1,14 +1,12 @@
-// const DbConnect = require('../config/db.ts');
-// const { createCampaignTable, createCampaignTemplateDataTable } = require('./create_table.ts');
-
-import DbConnect from "@/config/db";
+const DbConnect = require('./db.ts');
+const { createCampaignTable, createCampaignTemplateDataTable } = require('./create_table.ts');
 
 async function main() {
     try {
         const client = await DbConnect();
 
-        // await createCampaignTable(client);
-        // await createCampaignTemplateDataTable(client);
+        await createCampaignTable(client);
+        await createCampaignTemplateDataTable(client);
 
         await client.end();
     } catch (err) {
