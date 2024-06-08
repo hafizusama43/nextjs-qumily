@@ -11,11 +11,17 @@ export async function GET() {
 
 
     try {
-        const templates = await queryDatabase(`SELECT
+        let templates;
+        try {
+            templates = await queryDatabase(`SELECT
         campaign_templates.*
         FROM campaign_templates
         ORDER BY campaign_templates.campaign_templates_id DESC
         LIMIT ${ITEMS_PER_PAGE}`, [])
+        } catch (error) {
+            return NextResponse.json({ success: false, message: 'Database Error: Failed to fetch templates', error }, { status: 500 })
+        }
+
 
         console.log(templates.rows)
 
