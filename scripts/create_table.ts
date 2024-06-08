@@ -1,8 +1,8 @@
-async function createCampaignTable(client) {
+const createCampaignTable = async (client) => {
     try {
 
         // -- Create templates table
-        const createTable = await client.sql`
+        const createTable = await client.query(`
         CREATE TABLE IF NOT EXISTS campaign_templates (
             campaign_templates_id SERIAL PRIMARY KEY, 
             template_name VARCHAR(255) NOT NULL,
@@ -11,7 +11,7 @@ async function createCampaignTable(client) {
             created_by VARCHAR(255) NOT NULL,
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );`;
+        );`, []);
 
         console.log(`Created "campaign_templates" table`);
 
@@ -23,11 +23,11 @@ async function createCampaignTable(client) {
     }
 }
 
-async function createCampaignTemplateDataTable(client) {
+const createCampaignTemplateDataTable = async (client) => {
     try {
 
         // -- Create templates table
-        const createTable = await client.sql`
+        const createTable = await client.query(`
         CREATE TABLE IF NOT EXISTS campaign_templates_data (
             campaign_templates_data_id SERIAL PRIMARY KEY,
             template_id INT,
@@ -56,7 +56,7 @@ async function createCampaignTemplateDataTable(client) {
             placement VARCHAR(255) NULL,
             percentage VARCHAR(255) NULL,
             product_targeting_expression VARCHAR(255) NULL
-        );`;
+        );`, []);
 
         console.log(`Created "campaign_templates_data" table`);
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sql } from '@vercel/postgres';
+// import { sql } from '@vercel/postgres';
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import queryDatabase from "@/lib/queryHelper";
 
 
 // Get all templates
@@ -8,12 +9,15 @@ export async function GET() {
     const ITEMS_PER_PAGE = 20;
     // const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
+
     try {
-        const templates = await sql<any>`SELECT
+        const templates = await queryDatabase(`SELECT
         campaign_templates.*
         FROM campaign_templates
         ORDER BY campaign_templates.campaign_templates_id DESC
-        LIMIT ${ITEMS_PER_PAGE}`
+        LIMIT ${ITEMS_PER_PAGE}`, [])
+
+        console.log(templates.rows)
 
         const createdByArray = templates.rows.map(item => item.created_by);
 
