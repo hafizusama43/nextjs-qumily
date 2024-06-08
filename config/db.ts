@@ -3,7 +3,7 @@ import { db } from '@vercel/postgres'; // Import the Vercel Postgres client
 
 const DbConnect = async () => {
     let client;
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NEXT_ENV === 'development') {
         client = new Client({
             user: 'postgres',
             password: 'postgres',
@@ -17,10 +17,11 @@ const DbConnect = async () => {
 
     try {
         await client.connect();
-        console.log(`Connected to ${process.env.NODE_ENV === 'development' ? 'local' : 'Vercel'} PostgreSQL database`);
+        console.log(`Connected to ${process.env.NEXT_ENV === 'development' ? 'local' : 'Vercel'} PostgreSQL database`);
         return client;
     } catch (err) {
-        console.error(`Error connecting to ${process.env.NODE_ENV === 'development' ? 'local' : 'Vercel'} PostgreSQL database`, err);
+        console.error(`Error connecting to ${process.env.NEXT_ENV
+            === 'development' ? 'local' : 'Vercel'} PostgreSQL database`, err);
         throw err;
     }
 };

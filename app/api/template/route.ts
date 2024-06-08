@@ -22,9 +22,7 @@ export async function GET() {
             return NextResponse.json({ success: false, message: 'Database Error: Failed to fetch templates', error }, { status: 500 })
         }
 
-
-        console.log(templates.rows)
-
+        
         const createdByArray = templates.rows.map(item => item.created_by);
 
         // Get all users from clerk
