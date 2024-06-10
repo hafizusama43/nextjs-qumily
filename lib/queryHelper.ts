@@ -1,22 +1,32 @@
 import DbConnect from "@/config/db";
+import { sql } from "@vercel/postgres";
 
 
 const queryDatabase = async (query: string, params: any[], keepAlive = false) => {
-    const client = await DbConnect();
     let result;
 
     try {
-        result = await client.query(query, params);
-    } catch (err) {
-        console.error('Error executing query:', err);
-        throw err;
-    } finally {
-        if (!keepAlive) {
-            await client.end();
+        console.log('first')
+        console.log(query)
+
+        if (process.env.NEXT_ENV === 'development') {
+            // Using local db for dev env and vercel posgres for prod
+            const client = await DbConnect();
+            result = await client.query(query, params);
         }
+        else {
+            result = await sql.query(query, params);
+        }
+
+
+        return result;
+
+    } catch (err) {
+        // console.error('Error executing query:', err);
+        throw err;
     }
 
-    return result;
+
 };
 
 export default queryDatabase;

@@ -2,6 +2,8 @@ import { Client } from 'pg';
 import { db } from '@vercel/postgres'; // Import the Vercel Postgres client
 
 const DbConnect = async () => {
+    
+
     let client;
     if (process.env.NEXT_ENV === 'development') {
         client = new Client({
@@ -12,7 +14,14 @@ const DbConnect = async () => {
             database: 'taskify',
         });
     } else {
-        client = db; // Use the imported Vercel Postgres client options
+        // Add prod db config here
+        //  client = new Client({
+        //     user: 'postgres',
+        //     password: 'postgres',
+        //     host: 'localhost',
+        //     port: 5432,
+        //     database: 'taskify',
+        // });
     }
 
     try {
