@@ -54,7 +54,7 @@ const page = () => {
             <Table className='mb-40 border rounded custom-template-table'>
                 <TableHeader>
                     <TableRow>
-                        {Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item, index) => <TableHead key={item}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
+                        {Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
                     </TableRow>
                 </TableHeader>
                 <TableBody>

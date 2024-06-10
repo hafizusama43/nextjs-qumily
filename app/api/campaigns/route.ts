@@ -5,9 +5,6 @@ import { NextResponse } from "next/server";
 // Get all templates
 export async function GET() {
   const ITEMS_PER_PAGE = 20;
-  // const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-
-
   try {
     let campaigns;
 
@@ -16,8 +13,6 @@ export async function GET() {
       FROM campaigns
       ORDER BY campaigns.campaign_id DESC
       LIMIT ${ITEMS_PER_PAGE}`, [])
-
-
 
     const createdByArray = campaigns.rows.map(item => item.created_by);
 
