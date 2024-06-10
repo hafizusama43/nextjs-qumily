@@ -34,8 +34,7 @@ const ConfirmDialog = forwardRef<HTMLButtonElement, ConfirmDialogProps>(({ child
                 <DialogHeader>
                     <DialogTitle>Are you absolutely sure?</DialogTitle>
                     <DialogDescription>
-                        This action cannot be undone. This will permanently delete template
-                        and all its data.
+                        This action cannot be undone. This will permanently delete all data.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>

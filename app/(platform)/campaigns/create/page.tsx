@@ -17,8 +17,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const FormSchema = z.object({
-    template_name: z.string().min(1, { message: "Template name is required" }).min(5, { message: "Template name should contain at least \"5\" characters." }),
-    template_category: z.string().min(5, { message: "Template category is required" }),
+    campaign_name: z.string().min(1, { message: "Campaign name is required" }).min(5, { message: "Template name should contain at least \"5\" characters." }),
+    campaign_category: z.string().min(5, { message: "Campaign category is required" }),
 })
 
 const CreateCampaign = () => {
@@ -27,8 +27,8 @@ const CreateCampaign = () => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            template_name: "",
-            template_category: ""
+            campaign_name: "",
+            campaign_category: ""
         },
     })
 
@@ -60,10 +60,10 @@ const CreateCampaign = () => {
                         <div className='basis-1/2 w-full'>
                             <FormField
                                 control={form.control}
-                                name="template_name"
+                                name="campaign_name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Template name</FormLabel>
+                                        <FormLabel>Campaign name</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -75,14 +75,14 @@ const CreateCampaign = () => {
                         <div className='basis-1/2 w-full mt-5 md:mt-0'>
                             <FormField
                                 control={form.control}
-                                name="template_category"
+                                name="campaign_category"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Template category</FormLabel>
+                                        <FormLabel>Campaign category</FormLabel>
                                         <Select onValueChange={field.onChange} value={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select a template category" />
+                                                    <SelectValue placeholder="Select a campaign category" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>

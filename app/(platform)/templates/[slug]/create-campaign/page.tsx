@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertTriangle, PencilLine, RocketIcon, Trash2 } from 'lucide-react'
-import TemplateHeader from '../../_header'
 import { useParams } from 'next/navigation'
 import { v4 as uuidv4 } from 'uuid';
 import { capitalizeFirstLetter, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
@@ -28,6 +27,7 @@ import { z } from 'zod'
 import { toast } from '@/components/ui/use-toast'
 import { Spin } from '@/components/ui/spin'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import TemplateHeader from '@/components/ui/_header'
 
 
 const FormSchema = z.object({

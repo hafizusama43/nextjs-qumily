@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 
-    const { template_name, template_category } = await request.json();
+    const { campaign_name, campaign_category } = await request.json();
     const { userId } = auth();
 
-    if (!template_name || !template_category) {
+    if (!campaign_name || !campaign_category) {
         return NextResponse.json({ success: false, message: 'Please provide required fields.' }, { status: 404 })
     }
     try {
@@ -15,11 +15,11 @@ export async function POST(request: NextRequest) {
         // TODO For now we have table for one category of template campings table we need to check based on template_category from which table to read 
         // default data from and in which to insert to make it generic to insert templates
 
-        const slug = template_name.toLowerCase().split(" ").join("-");
+        const slug = campaign_name.toLowerCase().split(" ").join("-");
         // RETURNING * gives the inserted row so we can return data and check which category is inserted
         const res = await queryDatabase(`
         INSERT INTO campaigns (campaign_name, campaign_category, slug, created_by)
-        VALUES ('${template_name}', '${template_category}', '${slug}', '${userId}')
+        VALUES ('${campaign_name}', '${campaign_category}', '${slug}', '${userId}')
         RETURNING * `, []);
 
 

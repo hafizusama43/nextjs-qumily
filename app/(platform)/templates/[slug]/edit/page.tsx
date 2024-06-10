@@ -20,9 +20,9 @@ import {
 } from "@/components/ui/table"
 import { Spin } from '@/components/ui/spin';
 import ZoomControl from './_zoom';
-import TemplateHeader from '../../_header';
 import EditableCell from './_editable';
 import { InfoIcon } from 'lucide-react';
+import TemplateHeader from '@/components/ui/_header';
 
 const EditTemp = () => {
     const params = useParams<{ slug: string }>();
