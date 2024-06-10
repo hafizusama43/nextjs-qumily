@@ -1,4 +1,5 @@
-import { sql } from '@vercel/postgres';
+// import { sql } from '@vercel/postgres';
+import queryDatabase from '@/lib/queryHelper';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -11,7 +12,7 @@ export async function GET(request: NextRequest) {
         campaign_templates.campaign_templates_id
         FROM campaign_templates
         WHERE campaign_templates.slug = '${slug}' ;`;
-        const template = await sql.query(query, []);
+        const template = await queryDatabase(query, []);
         if (template.rows.length == 0) {
             return NextResponse.json({ success: false, message: 'Invalid template id' }, { status: 500 });
         }
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
         WHERE template_id = ${template.rows[0].campaign_templates_id}
         ORDER BY campaign_templates_data.campaign_templates_data_id ASC ;`;
 
-        const template_data = await sql.query(query, []);
+        const template_data = await queryDatabase(query, []);
 
         return NextResponse.json({ success: true, message: 'Templates fetched successfully.', data: template_data.rows }, { status: 200 })
     } catch (error) {
@@ -71,11 +72,7 @@ async function updateCampaignTemplateData(data, template_id, campaign_templates_
             WHERE campaign_templates_data_id = $1 AND template_id = $2
         `;
 
-        console.log('Updating  campaign_templates_data_id :' + campaign_templates_data_id)
-        const res = await sql.query(
-            queryString,
-            [campaign_templates_data_id, template_id, ...Object.values(data)]
-        );
+        const res = await queryDatabase(queryString, [campaign_templates_data_id, template_id, ...Object.values(data)]);
     } catch (error) {
         throw new Error(`Failed to update row: ${error.message}`);
     }

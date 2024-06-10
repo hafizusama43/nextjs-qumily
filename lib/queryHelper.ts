@@ -6,8 +6,7 @@ const queryDatabase = async (query: string, params: any[], keepAlive = false) =>
     let result;
 
     try {
-        console.log('first')
-        console.log(query)
+        console.log('\x1b[33m%s\x1b[0m', query);
 
         if (process.env.NEXT_ENV === 'development') {
             // Using local db for dev env and vercel posgres for prod

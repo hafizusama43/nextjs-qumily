@@ -22,7 +22,7 @@ export async function GET() {
             return NextResponse.json({ success: false, message: 'Database Error: Failed to fetch templates', error }, { status: 500 })
         }
 
-        
+
         const createdByArray = templates.rows.map(item => item.created_by);
 
         // Get all users from clerk
@@ -59,16 +59,16 @@ export async function POST(request: NextRequest) {
 
         const slug = template_name.toLowerCase().split(" ").join("-");
         // RETURNING * gives the inserted row so we can return data and check which category is inserted
-        const res = await sql`
+        const res = await queryDatabase(`
         INSERT INTO campaign_templates (template_name, template_category, slug, created_by)
-        VALUES (${template_name}, ${template_category},${slug}, ${userId})
-        RETURNING * `;
+        VALUES ('${template_name}', '${template_category}', '${slug}', '${userId}')
+        RETURNING * `, []);
 
         // Create insert query
         // Get col names to insert by default sorting
-        const col_names = await sql`SELECT column_name
+        const col_names = await queryDatabase(`SELECT column_name
         FROM information_schema.columns
-        WHERE table_name = 'campaign_templates_data' order by ordinal_position ;`;
+        WHERE table_name = 'campaign_templates_data' order by ordinal_position ;`, []);
 
         // Exclude first index as it is primary key
         const insert_cols = col_names.rows.slice(1).map(item => item.column_name).join(', ');
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
 
         // Get default template data
         const cols_to_fetch = col_names.rows.slice(2).map(item => item.column_name).join(', ');
-        const defaultTemplateData = await sql.query(`
+        const defaultTemplateData = await queryDatabase(`
         SELECT ${cols_to_fetch} FROM campaign_templates_data
         WHERE template_id = 0 ;`, []);
         defaultTemplateData.rows.forEach((element, index) => {
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         });
 
         //  May be handle here if template_data not inserted then delete then delete template ? 
-        const insertDefaultTemplate = await sql.query(insert_str, []);
+        const insertDefaultTemplate = await queryDatabase(insert_str, []);
 
         return NextResponse.json({ success: true, message: 'Template created successfully.', data: res.rows }, { status: 200 })
     } catch (error) {
