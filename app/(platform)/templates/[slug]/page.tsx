@@ -2,7 +2,6 @@
 
 import { useParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
-import TemplateHeader from '../_header';
 import { Label } from '@radix-ui/react-label';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -21,6 +20,7 @@ import {
 import { Spin } from '@/components/ui/spin';
 import ZoomControl from './_zoom';
 import { InfoIcon } from 'lucide-react';
+import TemplateHeader from '@/components/ui/_header';
 
 const EditTemplate = () => {
     const params = useParams<{ slug: string }>();

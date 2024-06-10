@@ -3,7 +3,7 @@ const { db } = require('@vercel/postgres');
 
 const DbConnect = async () => {
     let client;
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NEXT_ENV === 'development') {
         client = new Client({
             user: 'postgres',
             password: 'postgres',

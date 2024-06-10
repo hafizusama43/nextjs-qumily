@@ -1,4 +1,4 @@
-const createCampaignTable = async (client) => {
+const createCampaignTemplateTable = async (client) => {
     try {
 
         // -- Create templates table
@@ -19,6 +19,31 @@ const createCampaignTable = async (client) => {
 
     } catch (error) {
         console.error('Error creating "campaign_templates" table.:', error);
+        throw error;
+    }
+}
+
+const createCampaignTable = async (client) => {
+    try {
+
+        // -- Create templates table
+        const createTable = await client.query(`
+        CREATE TABLE IF NOT EXISTS campaigns (
+            campaign_id SERIAL PRIMARY KEY, 
+            campaign_name VARCHAR(255) NOT NULL,
+            campaign_category VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL, 
+            created_by VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );`, []);
+
+        console.log(`Created "campaigns" table`);
+
+        return createTable;
+
+    } catch (error) {
+        console.error('Error creating "campaigns" table.:', error);
         throw error;
     }
 }
@@ -73,6 +98,7 @@ const createCampaignTemplateDataTable = async (client) => {
 }
 
 module.exports = {
+    createCampaignTemplateTable,
     createCampaignTable,
     createCampaignTemplateDataTable
 }

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import axios from 'axios'
 import { toast } from '@/components/ui/use-toast'
+import TemplateHeader from '@/components/ui/_header'
 
 const Templates = () => {
     const [pending, setPending] = useState(false);
@@ -35,10 +36,10 @@ const Templates = () => {
 
     return (
         <div>
-            <h1 className='rounded mb-5 bg-gray-100 p-3 flex items-center justify-between'>
+            <TemplateHeader>
                 <Label>All templates</Label>
                 <Link href="/templates/create"><Button size='sm'>Add new template</Button></Link>
-            </h1>
+            </TemplateHeader>
             <Suspense fallback={<>Loading</>}>
                 <DataTable columns={columns} data={data} pending={pending} />
             </Suspense>

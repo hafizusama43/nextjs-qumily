@@ -1,10 +1,11 @@
 const DbConnect = require('./db.ts');
-const { createCampaignTable, createCampaignTemplateDataTable } = require('./create_table.ts');
+const { createCampaignTemplateTable, createCampaignTable, createCampaignTemplateDataTable } = require('./create_table.ts');
 
 async function main() {
     try {
         const client = await DbConnect();
 
+        await createCampaignTemplateTable(client)
         await createCampaignTable(client);
         await createCampaignTemplateDataTable(client);
 

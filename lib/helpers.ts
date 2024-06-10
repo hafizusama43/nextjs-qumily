@@ -1,7 +1,7 @@
 export const TEMPLATE_CATEGORY = {
-    "sponsored_products_campaigns": "Sponsored Products Campaigns",
-    "sponsored_display_campaigns": "Sponsored Display Campaigns",
-    "sponsored_brands_campaigns": "Sponsored Brands Campaigns",
+    "sponsored-products-campaigns": "Sponsored Products Campaigns",
+    "sponsored-display-campaigns": "Sponsored Display Campaigns",
+    "sponsored-brands-campaigns": "Sponsored Brands Campaigns",
 }
 
 export const SPONSORED_PRODUCTS_CAMPAIGNS = {

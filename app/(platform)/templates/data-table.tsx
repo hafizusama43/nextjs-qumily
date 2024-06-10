@@ -18,9 +18,9 @@ import {
 import { Spin } from "@/components/ui/spin"
 import { EyeIcon, PencilLine, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import TemplateTooltip from "./_tooltip";
 import Link from "next/link";
 import ConfirmDialog from "@/components/ui/confirmDialog";
+import TemplateTooltip from "@/components/ui/_tooltip";
 
 // Define the type for your data
 interface MyData {

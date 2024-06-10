@@ -27,7 +27,7 @@ export default function RootLayout({
       </nav>
       <main className={clsx('pt-20 px-5 md:px-10 mx-auto  bg-white h-[100vh]', {
         '': params.slug,
-        'max-w-7xl': !params.slug || pathname.includes(`${params.slug}/create-campaign`)
+        'max-w-7xl': !params.slug || pathname.includes(`${params.slug}/create-campaign`)|| pathname.includes(`campaigns/create/${params.slug}`)
       })}>
         <TemplatesBreadcrumb />
         {children}
