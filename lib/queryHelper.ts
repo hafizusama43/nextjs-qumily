@@ -17,7 +17,6 @@ const queryDatabase = async (query: string, params: any[], keepAlive = false) =>
             result = await sql.query(query, params);
         }
 
-
         return result;
 
     } catch (err) {
