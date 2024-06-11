@@ -39,8 +39,6 @@ const FormSchema = z.object({
 
 
 const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
-    const [pending, setPending] = useState(false);
-    // const [createdRow, setCreatedRow] = useState<createdRowType>();
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -59,8 +57,7 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
     })
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data)
-
+        handleNextStep(data, 'campaign')
     }
 
     return (
@@ -116,7 +113,7 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
                     </div>
                     <Separator className='my-3'></Separator>
                     <div className='flex justify-end gap-4 mt-10'>
-                        <Button disabled={step < 2} onClick={handlePrevStep}>Previous {step > 1 && "=> " + STEPS[step - 1]}</Button>
+                        <Button type="button" disabled={step < 2} onClick={handlePrevStep}>Previous {step > 1 && "=> " + STEPS[step - 1]}</Button>
                         <Button disabled={step >= 5}>Next {step < 5 && "=> " + STEPS[step + 1]}</Button>
                     </div>
                 </form>
@@ -204,7 +201,6 @@ const RenderSelect = ({ form, name, label, options }) => {
                             </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                            {/* <SelectItem value="none">None</SelectItem> */}
                             {Object.keys(options).map((item, index) => <SelectItem
                                 key={index}
                                 value={item}>
