@@ -7,6 +7,7 @@ import Step2 from './_step2'
 import Step3 from './_step3'
 import Step4 from './_step4'
 import Step5 from './_step5'
+import { getSpecificKeyValues } from '@/lib/helpers'
 
 const STEPS = {
     1: "Campaign",
@@ -104,7 +105,7 @@ const Products = () => {
                 case 'bidding-adjustment':
                     // Get existsing campaign object to retain values in next object
                     var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-                    const specificValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
+                    const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
 
                     const { placementArray, percentageArray } = transformObject(data);
 
@@ -113,7 +114,7 @@ const Products = () => {
                         console.log('Object found Bidding Adjustment : Updating')
                         const updatedObj = {
                             ...initialState,
-                            ...specificValues,
+                            ...campaignObjValues,
                             'entity': STEPS[step],
                             ['placement']: placementArray,
                             ['percentage']: percentageArray
@@ -125,7 +126,7 @@ const Products = () => {
                         console.log('Object not found Bidding Adjustment : Creating')
                         const updatedObj = {
                             ...initialState,
-                            ...specificValues,
+                            ...campaignObjValues,
                             'entity': STEPS[step],
                             ['placement']: placementArray,
                             ['percentage']: percentageArray
@@ -174,18 +175,6 @@ const Products = () => {
             return { placementArray, percentageArray };
         }
     };
-
-    // Function to fetch specific key values from an object
-    const getSpecificKeyValues = (obj, keys) => {
-        const result = {};
-        keys.forEach(key => {
-            if (key in obj) {
-                result[key] = obj[key];
-            }
-        });
-        return result;
-    };
-
 
     return (
         <div className='border border-gray-300 p-5 rounded-lg'>

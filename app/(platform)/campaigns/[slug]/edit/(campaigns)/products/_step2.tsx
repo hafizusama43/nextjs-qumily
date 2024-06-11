@@ -34,25 +34,13 @@ const Step2 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
         },
     })
 
-    // useEffect(() => {
-    //     console.log(biddingData)
-    //     const { placementArray, percentageArray } = transformObject(biddingData);
-
-    //     console.log(placementArray)
-    //     console.log(percentageArray)
-    // }, [biddingData])
-
-
     const onSubmit = (data) => {
         const id = uuidv4();
         const objectWithId = { ...data, id: id };
-        // transformObject(objectWithId)
         setBiddingData((prevState) => [...prevState, objectWithId]);
-
         form.reset()
     }
 
-    // Function to reverse the transformation and get the original object back
     // Function to reverse the transformation for arrays
     const reverseTransformArray = (placementArray, percentageArray) => {
         return placementArray.map((placementObj, index) => {

@@ -58,3 +58,14 @@ export const capitalizeFirstLetter = (string) => {
     if (!string) return string;
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
+
+// Function to fetch specific key values from an object
+export const getSpecificKeyValues = (obj, keys) => {
+    const result = {};
+    keys.forEach(key => {
+        if (key in obj) {
+            result[key] = obj[key];
+        }
+    });
+    return result;
+};
