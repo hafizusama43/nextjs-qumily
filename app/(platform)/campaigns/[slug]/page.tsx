@@ -18,7 +18,7 @@ import { useParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
 import { Spin } from '@/components/ui/spin';
 
-const page = () => {
+const Campaigns = () => {
     const params = useParams<{ slug: string }>();
     const [pending, setPending] = useState(false);
     const [data, setData] = useState([])
@@ -96,4 +96,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Campaigns

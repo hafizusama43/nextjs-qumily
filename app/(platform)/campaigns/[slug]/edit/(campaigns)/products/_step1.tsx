@@ -107,10 +107,10 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
                             <RenderInput name={"product"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product}></RenderInput>
                         </div>
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"entity"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.entity}></RenderInput>
+                            <RenderInput disabled name={"entity"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.entity}></RenderInput>
                         </div>
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"operation"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.operation}></RenderInput>
+                            <RenderInput disabled name={"operation"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.operation}></RenderInput>
                         </div>
                     </div>
 
@@ -143,7 +143,7 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
     )
 }
 
-const RenderInput = ({ form, name, label }) => {
+const RenderInput = ({ form, name, label, disabled = false }) => {
     return (
         <FormField
             control={form.control}
@@ -152,7 +152,7 @@ const RenderInput = ({ form, name, label }) => {
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                        <Input {...field} />
+                        <Input disabled={disabled} {...field} />
                     </FormControl>
                     <FormMessage />
                 </FormItem>

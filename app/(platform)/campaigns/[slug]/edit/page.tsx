@@ -7,20 +7,17 @@ import { toast } from '@/components/ui/use-toast';
 import { capitalizeFirstLetter } from '@/lib/helpers';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
-import Brands from './(campaigns)/brands';
-import Display from './(campaigns)/display';
+import React, { useCallback, useEffect, useState } from 'react'
+import Brands from './(campaigns)/brands/brands';
+import Display from './(campaigns)/display/display';
 import Products from './(campaigns)/products/products';
 
-const page = () => {
+const EditCampaign = () => {
     const params = useParams<{ slug: string }>();
     const [pending, setPending] = useState(false);
     const [data, setData] = useState([])
-    useEffect(() => {
-        getData()
-    }, [])
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         try {
             setPending(true)
             const res = await axios.get(`/api/campaigns/${params.slug}`);
@@ -33,7 +30,13 @@ const page = () => {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }
+    }, [params.slug])
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+
 
 
     return (
@@ -58,4 +61,4 @@ const page = () => {
     )
 }
 
-export default page
+export default EditCampaign
