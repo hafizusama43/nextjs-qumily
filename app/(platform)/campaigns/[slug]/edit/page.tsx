@@ -3,24 +3,19 @@ import TemplateHeader from '@/components/ui/_header';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { Spin } from '@/components/ui/spin';
 import { toast } from '@/components/ui/use-toast';
 import { capitalizeFirstLetter } from '@/lib/helpers';
 import axios from 'axios';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react'
-import Products from './(campaigns)/products';
+import React, { useEffect, useState } from 'react'
 import Brands from './(campaigns)/brands';
 import Display from './(campaigns)/display';
+import Products from './(campaigns)/products/products';
 
 const page = () => {
     const params = useParams<{ slug: string }>();
-
     const [pending, setPending] = useState(false);
     const [data, setData] = useState([])
-    // const data = await getData()
-    // const route = useRouter()
     useEffect(() => {
         getData()
     }, [])
@@ -53,14 +48,13 @@ const page = () => {
             </TemplateHeader>
             {pending ? <Skeleton className="h-[400px] w-[100%] rounded-xl" /> :
                 <React.Fragment>
+                    {/* Need to mount the form according to campaign category */}
                     {data[0] && data[0].campaign_category === "sponsored-products-campaigns" && <Products></Products>}
                     {data[0] && data[0].campaign_category === "sponsored-display-campaigns" && <Display></Display>}
                     {data[0] && data[0].campaign_category === "sponsored-brands-campaigns" && <Brands></Brands>}
                 </React.Fragment>
             }
         </div>
-
-
     )
 }
 

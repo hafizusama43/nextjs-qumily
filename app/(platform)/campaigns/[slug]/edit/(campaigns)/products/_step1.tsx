@@ -1,27 +1,19 @@
 "use client"
-
-import TemplateHeader from '@/components/ui/_header'
-import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Spin } from '@/components/ui/spin'
-import { toast } from '@/components/ui/use-toast'
-import { TEMPLATE_CATEGORY } from '@/lib/helpers'
-import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
-import Link from 'next/link'
 import React, { useState } from 'react'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { Input } from '@/components/ui/input'
 
 const FormSchema = z.object({
     campaign_name: z.string().min(1, { message: "Campaign name is required" }).min(5, { message: "Template name should contain at least \"5\" characters." }),
     campaign_category: z.string().min(5, { message: "Campaign category is required" }),
 })
 
-const CreateCampaign = () => {
+const Step1 = () => {
     const [pending, setPending] = useState(false);
     // const [createdRow, setCreatedRow] = useState<createdRowType>();
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -33,27 +25,23 @@ const CreateCampaign = () => {
     })
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
-        try {
-            setPending(true)
-            const res = await axios.post('/api/campaigns/create', { ...data });
-            // if (res.data.success) {
-            //     setCreatedRow(res.data.data[0])
-            // }
-            form.reset()
-            toast({ description: res.data.message })
-            setPending(false)
-        } catch (error) {
-            setPending(false)
-            toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
-        }
+        // try {
+        //     setPending(true)
+        //     const res = await axios.post('/api/campaigns/create', { ...data });
+        //     // if (res.data.success) {
+        //     //     setCreatedRow(res.data.data[0])
+        //     // }
+        //     form.reset()
+        //     toast({ description: res.data.message })
+        //     setPending(false)
+        // } catch (error) {
+        //     setPending(false)
+        //     toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
+        // }
     }
 
     return (
         <div>
-            <TemplateHeader>
-                <Label>Create new campaign</Label>
-                <Link href="/campaigns"><Button size='sm'>All campaigns</Button></Link>
-            </TemplateHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className="block md:flex gap-5">
@@ -67,7 +55,7 @@ const CreateCampaign = () => {
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage />_
                                     </FormItem>
                                 )}
                             />
@@ -108,4 +96,4 @@ const CreateCampaign = () => {
     )
 }
 
-export default CreateCampaign
+export default Step1
