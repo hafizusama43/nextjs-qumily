@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import React from 'react'
+import { CalendarIcon, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 
 const Step3 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
     const onSubmit = () => {
@@ -8,8 +9,8 @@ const Step3 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
     return (
         <form onSubmit={(onSubmit)}>
             <div className='flex justify-end gap-4 mt-10'>
-                <Button type="button" disabled={step < 2} onClick={handlePrevStep}>Previous {step > 1 && "<= " + STEPS[step - 1]}</Button>
-                <Button disabled={step >= 5}>Next {step < 5 && "=> " + STEPS[step + 1]}</Button>
+                <Button type="button" disabled={step < 2} onClick={handlePrevStep}><CircleArrowLeft /> &nbsp; {step > 1 && STEPS[step - 1]}</Button>
+                <Button disabled={step >= 5}>{step < 5 && STEPS[step + 1]} &nbsp; <CircleArrowRight /></Button>
             </div>
         </form>
     )

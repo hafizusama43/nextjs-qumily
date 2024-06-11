@@ -15,7 +15,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { format } from "date-fns"
 import { Separator } from '@/components/ui/separator'
 
@@ -113,8 +113,8 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
                     </div>
                     <Separator className='my-3'></Separator>
                     <div className='flex justify-end gap-4 mt-10'>
-                        <Button type="button" disabled={step < 2} onClick={handlePrevStep}>Previous {step > 1 && "=> " + STEPS[step - 1]}</Button>
-                        <Button disabled={step >= 5}>Next {step < 5 && "=> " + STEPS[step + 1]}</Button>
+                        <Button type="button" disabled={step < 2} onClick={handlePrevStep}><CircleArrowLeft /> &nbsp; {step > 1 && STEPS[step - 1]}</Button>
+                        <Button disabled={step >= 5}>{step < 5 && STEPS[step + 1]} &nbsp; <CircleArrowRight /></Button>
                     </div>
                 </form>
             </Form>
