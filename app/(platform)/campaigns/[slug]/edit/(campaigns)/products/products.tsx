@@ -15,11 +15,67 @@ const STEPS = {
     4: "Product Ad",
     5: "Keywords",
 }
+
+const initialState = {
+    product: '',
+    entity: '',
+    operation: '',
+    campaign_id: '',
+    ad_group_id: '',
+    portfolio_id: '',
+    ad_id: '',
+    keyword_id: '',
+    product_targeting_id: '',
+    campaign_name: '',
+    ad_group_name: '',
+    start_date: '',
+    end_date: '',
+    targeting_type: '',
+    state: '',
+    daily_budget: 0,
+    sku: '',
+    ad_group_default_bid: '',
+    bid: '',
+    keyword_text: '',
+    match_type: '',
+    bidding_strategy: '',
+    placement: '',
+    percentage: '',
+    product_targeting_expression: ''
+}
+
 const Products = () => {
     const [step, setStep] = useState(1)
+    const [campaignData, setCampaignData] = useState([])
 
-    const handleNextStep = useCallback((data, currStepName) => {
+    const handleNextStep = useCallback((data: any, currStepName: string) => {
         if (step < 5) {
+            switch (currStepName) {
+                case 'campaign':
+                    const updatedObj = {
+                        ...initialState,
+                        ...data
+                    };
+
+                    console.log(updatedObj)
+                    // Update the campaignData state with the new object
+                    setCampaignData(prevData => [...prevData, updatedObj]);
+                    break;
+                case 'bidding-adjustment':
+
+                    break;
+                case 'ad-group':
+
+                    break;
+                case 'product-ad':
+
+                    break;
+                case 'keywords':
+
+                    break;
+                default:
+                    break;
+            }
             console.log(currStepName)
             console.log(data)
             setStep(step + 1)

@@ -4,7 +4,7 @@ import { CalendarIcon, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 
 const Step4 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
     const onSubmit = () => {
-        handleNextStep({}, 'Bidding Adjustment')
+        handleNextStep({}, 'product-ad')
     }
     return (
         <form onSubmit={(onSubmit)}>
