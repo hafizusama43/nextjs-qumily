@@ -43,23 +43,63 @@ const initialState = {
     percentage: '',
     product_targeting_expression: ''
 }
+interface InitialState {
+    product: string;
+    entity: string;
+    operation: string;
+    campaign_id: string;
+    ad_group_id: string;
+    portfolio_id: string;
+    ad_id: string;
+    keyword_id: string;
+    product_targeting_id: string;
+    campaign_name: string;
+    ad_group_name: string;
+    start_date: string;
+    end_date: string;
+    targeting_type: string;
+    state: string;
+    daily_budget: number;
+    sku: string;
+    ad_group_default_bid: string;
+    bid: string;
+    keyword_text: string;
+    match_type: string;
+    bidding_strategy: string;
+    placement: string;
+    percentage: string;
+    product_targeting_expression: string;
+}
+
 
 const Products = () => {
     const [step, setStep] = useState(1)
-    const [campaignData, setCampaignData] = useState([])
+    const [campaignData, setCampaignData] = useState<InitialState[]>([])
 
     const handleNextStep = useCallback((data: any, currStepName: string) => {
         if (step < 5) {
             switch (currStepName) {
                 case 'campaign':
-                    const updatedObj = {
-                        ...initialState,
-                        ...data
-                    };
-
-                    console.log(updatedObj)
-                    // Update the campaignData state with the new object
-                    setCampaignData(prevData => [...prevData, updatedObj]);
+                    console.log('Current step : ', currStepName)
+                    const objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+                    console.log(objExists)
+                    if (objExists.length > 0) {
+                        console.log('Object found : Updating')
+                        const updatedObj = {
+                            ...objExists[0],
+                            ...data
+                        };
+                        setCampaignData(prevData =>
+                            prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+                        );
+                    } else {
+                        console.log('Object not found : Creating')
+                        const updatedObj = {
+                            ...initialState,
+                            ...data
+                        };
+                        setCampaignData(prevData => [...prevData, updatedObj]);
+                    }
                     break;
                 case 'bidding-adjustment':
 
@@ -76,11 +116,14 @@ const Products = () => {
                 default:
                     break;
             }
-            console.log(currStepName)
-            console.log(data)
             setStep(step + 1)
         }
-    }, [step])
+    }, [campaignData, step])
+
+    useEffect(() => {
+        console.log(campaignData)
+    }, [campaignData])
+
 
     const handlePrevStep = useCallback(() => {
         if (step > 1) {

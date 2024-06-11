@@ -1,23 +1,16 @@
 "use client"
-import React, { useState } from 'react'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import React from 'react'
+import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Input } from '@/components/ui/input'
-import { BIDDING_STRATEGY, CAMPAIGN_STATE, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE, TEMPLATE_CATEGORY } from '@/lib/helpers'
-import { Calendar } from '@/components/ui/calender'
-import { cn } from "@/lib/utils"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { CalendarIcon, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
-import { format } from "date-fns"
+import { BIDDING_STRATEGY, CAMPAIGN_STATE, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE } from '@/lib/helpers'
+import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import { RenderInput } from '../_renderInput'
+import { RenderDatePicker } from '../_renderDatePicker'
+import { RenderSelect } from '../_renderSelect'
 
 const FormSchema = z.object({
     product: z.string().min(1, { message: "Product is required" }).default('Sponsored Products'),
@@ -122,97 +115,5 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
     )
 }
 
-const RenderInput = ({ form, name, label, disabled = false, type = "text" }) => {
-    return (
-        <FormField
-            control={form.control}
-            name={name}
-            render={({ field }) => (
-                <FormItem>
-                    <FormLabel>{label}</FormLabel>
-                    <FormControl>
-                        <Input type={type === 'number' ? "number" : "text"} disabled={disabled} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
-            )}
-        />
-    )
-}
 
-const RenderDatePicker = ({ form, name, label }) => {
-    return (
-        <FormField
-            control={form.control}
-            name={name}
-            render={({ field }) => (
-                <FormItem className="flex flex-col">
-                    <FormLabel>{label}</FormLabel>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <FormControl>
-                                <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                        "h-10  pl-3 text-left font-normal",
-                                        !field.value && "text-muted-foreground"
-                                    )}
-                                >
-                                    {field.value ? (
-                                        format(field.value, "PPP")
-                                    ) : (
-                                        <span>Pick a date</span>
-                                    )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                </Button>
-                            </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                                mode="single"
-                                selected={field.value}
-                                onSelect={field.onChange}
-                                disabled={(date) =>
-                                    date > new Date() || date < new Date("1900-01-01")
-                                }
-                                initialFocus
-                            />
-                        </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                </FormItem>
-            )}
-        />
-    )
-}
-
-const RenderSelect = ({ form, name, label, options }) => {
-    return (
-        <FormField
-            control={form.control}
-            name={name}
-            render={({ field }) => (
-                <FormItem>
-                    <FormLabel>{label}</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a campaign category" />
-                            </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                            {Object.keys(options).map((item, index) => <SelectItem
-                                key={index}
-                                value={item}>
-                                {options[item]}
-                            </SelectItem>
-                            )}
-                        </SelectContent>
-                    </Select>
-                    <FormMessage />
-                </FormItem>
-            )}
-        />
-    )
-}
 export default Step1
