@@ -32,7 +32,9 @@ export default function RootLayout({
         <TemplatesBreadcrumb />
         {children}
       </main>
-      <footer>
+      <footer className={clsx('block', {
+        'hidden': params.slug,
+      })}>
         <Footer />
       </footer>
     </>

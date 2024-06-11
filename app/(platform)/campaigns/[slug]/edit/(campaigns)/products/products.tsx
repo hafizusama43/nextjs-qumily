@@ -26,7 +26,7 @@ const Products = () => {
         }
     }, [step])
     return (
-        <React.Fragment>
+        <div className='border border-gray-300 p-5 rounded-lg'>
             <strong><h5>{STEPS[step]}</h5></strong>
             <Separator className='mt-3 mb-3'></Separator>
             {step === 1 && <Step1 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step1>}
@@ -34,7 +34,7 @@ const Products = () => {
                 <Button disabled={step < 2} onClick={handlePrevStep}>Previous {step > 1 && "=> " + STEPS[step - 1]}</Button>
                 <Button disabled={step >= 5} onClick={handleNextStep}>Next {step < 5 && "=> " + STEPS[step + 1]}</Button>
             </div> */}
-        </React.Fragment>
+        </div>
     )
 }
 

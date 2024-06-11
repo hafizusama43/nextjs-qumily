@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Input } from '@/components/ui/input'
-import { SPONSORED_PRODUCTS_CAMPAIGNS, TEMPLATE_CATEGORY } from '@/lib/helpers'
+import { BIDDING_STRATEGY, CAMPAIGN_STATE, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE, TEMPLATE_CATEGORY } from '@/lib/helpers'
 import { Calendar } from '@/components/ui/calender'
 import { cn } from "@/lib/utils"
 import {
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/popover"
 import { CalendarIcon } from 'lucide-react'
 import { format } from "date-fns"
+import { Separator } from '@/components/ui/separator'
 
 const FormSchema = z.object({
     product: z.string(),
@@ -34,7 +35,7 @@ const FormSchema = z.object({
     end_date: z.date(),
     targeting_type: z.string(),
     state: z.string(),
-    daily_budget: z.string(),
+    daily_budget: z.number(),
     sku: z.string(),
     ad_group_default_bid: z.string(),
     bid: z.string(),
@@ -57,45 +58,19 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
             entity: 'Campaign',
             operation: 'Create',
             campaign_id: 'Campaign Id',
-            ad_group_id: 'Ad Group Id',
-            portfolio_id: 'Portfolio Id',
-            ad_id: 'Ad Id',
-            keyword_id: 'Keyword Id',
-            product_targeting_id: 'Product Targeting Id',
             campaign_name: 'Campaign Name',
-            ad_group_name: 'Ad Group Name',
             start_date: new Date(),
             end_date: new Date(),
-            targeting_type: 'Targeting Type',
-            state: 'State',
-            daily_budget: 'Daily Budget',
-            sku: 'SKU',
-            ad_group_default_bid: 'Ad Group Default Bid',
-            bid: 'Bid',
-            keyword_text: 'Keyword Text',
-            match_type: 'Match Type',
-            bidding_strategy: 'Bidding Strategy',
-            placement: 'Placement',
-            percentage: 'Percentage',
-            product_targeting_expression: 'Product Targeting Expression'
+            targeting_type: 'Auto',
+            state: 'Enabled',
+            daily_budget: 10,
+            bidding_strategy: 'Fixed bid',
         },
     })
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         console.log(data)
-        // try {
-        //     setPending(true)
-        //     const res = await axios.post('/api/campaigns/create', { ...data });
-        //     // if (res.data.success) {
-        //     //     setCreatedRow(res.data.data[0])
-        //     // }
-        //     form.reset()
-        //     toast({ description: res.data.message })
-        //     setPending(false)
-        // } catch (error) {
-        //     setPending(false)
-        //     toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
-        // }
+
     }
 
     return (
@@ -132,18 +107,35 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
                         </div>
                     </div>
 
+                    <div className="block md:flex gap-5">
+                        <div className='basis-1/2 w-full'>
+                            <RenderSelect name={"targeting_type"} form={form} options={TARGETING_TYPE} label={SPONSORED_PRODUCTS_CAMPAIGNS.targeting_type}></RenderSelect>
+                        </div>
+                        <div className='basis-1/2 w-full'>
+                            <RenderSelect name={"state"} form={form} options={CAMPAIGN_STATE} label={SPONSORED_PRODUCTS_CAMPAIGNS.state}></RenderSelect>
+                        </div>
+                        <div className='basis-1/2 w-full'>
+                            <RenderInput name={"daily_budget"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.daily_budget} type={"number"}></RenderInput>
+                        </div>
+                    </div>
+
+                    <div className="block md:flex gap-5">
+                        <div className='basis-1/2 w-full'>
+                            <RenderSelect name={"bidding_strategy"} form={form} options={BIDDING_STRATEGY} label={SPONSORED_PRODUCTS_CAMPAIGNS.bidding_strategy}></RenderSelect>
+                        </div>
+                    </div>
+                    <Separator className='my-3'></Separator>
                     <div className='flex justify-end gap-4 mt-10'>
                         <Button disabled={step < 2} onClick={handlePrevStep}>Previous {step > 1 && "=> " + STEPS[step - 1]}</Button>
                         <Button disabled={step >= 5}>Next {step < 5 && "=> " + STEPS[step + 1]}</Button>
                     </div>
-                    {/* <Button className="p-5" disabled={pending} type="submit">{pending && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Submit </Button> */}
                 </form>
             </Form>
         </div >
     )
 }
 
-const RenderInput = ({ form, name, label, disabled = false }) => {
+const RenderInput = ({ form, name, label, disabled = false, type = "text" }) => {
     return (
         <FormField
             control={form.control}
@@ -152,7 +144,7 @@ const RenderInput = ({ form, name, label, disabled = false }) => {
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                        <Input disabled={disabled} {...field} />
+                        <Input type={type === 'number' ? "number" : "text"} disabled={disabled} {...field} />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -200,6 +192,37 @@ const RenderDatePicker = ({ form, name, label }) => {
                             />
                         </PopoverContent>
                     </Popover>
+                    <FormMessage />
+                </FormItem>
+            )}
+        />
+    )
+}
+
+const RenderSelect = ({ form, name, label, options }) => {
+    return (
+        <FormField
+            control={form.control}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>{label}</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select a campaign category" />
+                            </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            {/* <SelectItem value="none">None</SelectItem> */}
+                            {Object.keys(options).map((item, index) => <SelectItem
+                                key={index}
+                                value={item}>
+                                {options[item]}
+                            </SelectItem>
+                            )}
+                        </SelectContent>
+                    </Select>
                     <FormMessage />
                 </FormItem>
             )}

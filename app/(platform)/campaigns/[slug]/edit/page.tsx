@@ -40,7 +40,7 @@ const EditCampaign = () => {
 
 
     return (
-        <div>
+        <div className='mb-20'>
             <TemplateHeader>
                 <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; campaign</Label>
                 <div className='flex gap-2'>
