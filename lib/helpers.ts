@@ -19,6 +19,11 @@ export const BIDDING_STRATEGY = {
     "Open bid": "Open bid",
 }
 
+export const PLACEMENT = {
+    "Placement Product Page": "Placement Product Page",
+    "Placement Top": "Placement Top",
+}
+
 export const SPONSORED_PRODUCTS_CAMPAIGNS = {
     product: 'Product',
     entity: 'Entity',
