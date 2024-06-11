@@ -20,31 +20,21 @@ import { format } from "date-fns"
 import { Separator } from '@/components/ui/separator'
 
 const FormSchema = z.object({
-    product: z.string(),
-    entity: z.string(),
-    operation: z.string(),
-    campaign_id: z.string(),
-    ad_group_id: z.string(),
-    portfolio_id: z.string(),
-    ad_id: z.string(),
-    keyword_id: z.string(),
-    product_targeting_id: z.string(),
-    ad_group_name: z.string(),
-    campaign_name: z.string(),
-    start_date: z.date(),
-    end_date: z.date(),
-    targeting_type: z.string(),
-    state: z.string(),
-    daily_budget: z.number(),
-    sku: z.string(),
-    ad_group_default_bid: z.string(),
-    bid: z.string(),
-    keyword_text: z.string(),
-    match_type: z.string(),
-    bidding_strategy: z.string(),
-    placement: z.string(),
-    percentage: z.string(),
-    product_targeting_expression: z.string(),
+    product: z.string().min(1, { message: "Product is required" }).default('Sponsored Products'),
+    entity: z.string().min(1, { message: "Entity is required" }).default('Campaign'),
+    operation: z.string().min(1, { message: "Operation is required" }).default('Create'),
+    campaign_id: z.string().min(1, { message: "Campaign ID is required" }).default('Campaign Id'),
+    campaign_name: z.string().min(1, { message: "Campaign Name is required" }).default('Campaign Name'),
+    start_date: z.date().default(new Date()).refine(date => date instanceof Date && !isNaN(date.getTime()), {
+        message: 'Start date must be a valid date',
+    }),
+    end_date: z.date().default(new Date()).refine(date => date instanceof Date && !isNaN(date.getTime()), {
+        message: 'End date must be a valid date',
+    }),
+    targeting_type: z.string().min(1, { message: "Targeting Type is required" }).default('Auto'),
+    state: z.string().min(1, { message: "State is required" }).default('Enabled'),
+    daily_budget: z.coerce.number().min(1, 'Daily Budget must be greater then 0').default(10),
+    bidding_strategy: z.string().min(1, { message: "Bidding Strategy is required" }).default('Fixed bid'),
 });
 
 
