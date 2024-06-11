@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { BIDDING_STRATEGY, CAMPAIGN_STATE, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE } from '@/lib/helpers'
+import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE } from '@/lib/helpers'
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { RenderInput } from '../_renderInput'
@@ -24,11 +24,13 @@ const FormSchema = z.object({
     end_date: z.date().default(new Date()).refine(date => date instanceof Date && !isNaN(date.getTime()), {
         message: 'End date must be a valid date',
     }),
-    targeting_type: z.string().min(1, { message: "Targeting Type is required" }).default('Auto'),
+    targeting_type: z.string().min(1, { message: "Targeting Type is required" }),
     state: z.string().min(1, { message: "State is required" }).default('Enabled'),
-    daily_budget: z.coerce.number().min(1, 'Daily Budget must be greater then 0').default(10),
-    bidding_strategy: z.string().min(1, { message: "Bidding Strategy is required" }).default('Fixed bid'),
+    daily_budget: z.coerce.number().min(1, 'Daily Budget must be greater then 0'),
+    bidding_strategy: z.string().min(1, { message: "Bidding Strategy is required" }),
 });
+
+type FormSchemaType = z.infer<typeof FormSchema>;
 
 
 const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) => {
@@ -38,8 +40,8 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
             product: 'Sponsored Products',
             entity: 'Campaign',
             operation: 'Create',
-            campaign_id: 'Campaign Id',
-            campaign_name: 'Campaign Name',
+            campaign_id: '',
+            campaign_name: '',
             start_date: new Date(),
             end_date: new Date(),
             targeting_type: 'Auto',
@@ -50,8 +52,15 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
     })
 
     useEffect(() => {
-        console.log(campaignData)
-    }, [campaignData])
+        console.log('Setting campaign form state')
+        var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+        if (campaignObjExists.length > 0) {
+            const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'campaign_id', 'campaign_name', 'start_date', 'end_date', 'targeting_type', 'state', 'daily_budget', 'bidding_strategy']);
+            Object.entries(campaignObjValues).forEach(([key, value]) => {
+                form.setValue(key as keyof FormSchemaType, value as any);
+            });
+        }
+    }, [campaignData, form])
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         handleNextStep(data, 'campaign')

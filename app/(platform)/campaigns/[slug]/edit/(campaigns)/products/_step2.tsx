@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -33,6 +33,20 @@ const Step2 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
             percentage: 0,
         },
     })
+
+
+    useEffect(() => {
+        console.log('Setting bidding adjustment form state')
+        var biddingObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+        console.log(biddingObjExists)
+        if (biddingObjExists.length > 0) {
+            const biddingObjValues = getSpecificKeyValues(biddingObjExists[0], ['placement', 'percentage']);
+            console.log(biddingObjValues)
+            const { placement, percentage } = biddingObjValues
+            const reverseArray = reverseTransformArray(placement, percentage)
+            setBiddingData(reverseArray)
+        }
+    }, [campaignData, form])
 
     const onSubmit = (data) => {
         const id = uuidv4();
