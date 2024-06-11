@@ -102,7 +102,8 @@ const Products = () => {
                     }
                     break;
                 case 'bidding-adjustment':
-
+                    console.log('Current step : ', currStepName)
+                    console.log(JSON.stringify(data))
                     break;
                 case 'ad-group':
 
@@ -134,9 +135,9 @@ const Products = () => {
         <div className='border border-gray-300 p-5 rounded-lg'>
             <strong><h5>{STEPS[step]}</h5></strong>
             <Separator className='mt-3 mb-3'></Separator>
-            {step === 1 && <Step1 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step1>}
-            {step === 2 && <Step2 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step2>}
-            {step === 3 && <Step3 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step3>}
+            {step === 1 && <Step1 campaignData={campaignData} handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step1>}
+            {step === 2 && <Step2 campaignData={campaignData} handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step2>}
+            {step === 3 && <Step3 campaignData={campaignData} handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step3>}
             {step === 4 && <Step4 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step4>}
             {step === 5 && <Step5 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step5>}
         </div>

@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
@@ -31,7 +31,7 @@ const FormSchema = z.object({
 });
 
 
-const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
+const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -48,6 +48,10 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
             bidding_strategy: 'Fixed bid',
         },
     })
+
+    useEffect(() => {
+        console.log(campaignData)
+    }, [campaignData])
 
     async function onSubmit(data: z.infer<typeof FormSchema>) {
         handleNextStep(data, 'campaign')

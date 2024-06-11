@@ -100,24 +100,37 @@
 }
 
 .custom-template-table {
-  border-collapse: separate; /* Ensure borders are separate to round the corners */
-  border-radius: 10px; /* Apply rounded corners */
-  overflow: hidden; /* Ensure content does not overflow the rounded corners */
+  border-collapse: separate;
+  /* Ensure borders are separate to round the corners */
+  border-radius: 10px;
+  /* Apply rounded corners */
+  overflow: hidden;
+  /* Ensure content does not overflow the rounded corners */
   /* width: 100%; */
   border: 1.5px solid lightgray;
 }
-.custom-template-table > thead > tr > th {
+
+.custom-template-table>thead>tr>th {
   border: 1px solid lightgray;
 }
 
-.custom-template-table > tbody > tr > td {
+.custom-template-table>tbody>tr>td {
   border: 1px solid lightgray;
+}
+
+#placements_table>thead>tr th {
+  text-align: center
+}
+
+#placements_table>tbody>tr td {
+  text-align: center
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import { CalendarIcon, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 
-const Step3 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
+const Step3 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) => {
     const onSubmit = () => {
         handleNextStep({}, 'ad-group')
     }
