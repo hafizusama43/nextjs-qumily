@@ -39,8 +39,8 @@ const initialState = {
     keyword_text: '',
     match_type: '',
     bidding_strategy: '',
-    placement: '',
-    percentage: '',
+    placement: [],
+    percentage: [],
     product_targeting_expression: ''
 }
 interface InitialState {
@@ -66,8 +66,8 @@ interface InitialState {
     keyword_text: string;
     match_type: string;
     bidding_strategy: string;
-    placement: string;
-    percentage: string;
+    placement: any[];
+    percentage: any[];
     product_targeting_expression: string;
 }
 
@@ -81,7 +81,7 @@ const Products = () => {
             switch (currStepName) {
                 case 'campaign':
                     console.log('Current step : ', currStepName)
-                    const objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+                    var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
                     console.log(objExists)
                     if (objExists.length > 0) {
                         console.log('Object found : Updating')
@@ -102,8 +102,36 @@ const Products = () => {
                     }
                     break;
                 case 'bidding-adjustment':
-                    console.log('Current step : ', currStepName)
-                    console.log(JSON.stringify(data))
+                    // Get existsing campaign object to retain values in next object
+                    var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+                    const specificValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
+
+                    const { placementArray, percentageArray } = transformObject(data);
+
+                    var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+                    if (objExists.length > 0) {
+                        console.log('Object found Bidding Adjustment : Updating')
+                        const updatedObj = {
+                            ...initialState,
+                            ...specificValues,
+                            'entity': STEPS[step],
+                            ['placement']: placementArray,
+                            ['percentage']: percentageArray
+                        };
+                        setCampaignData(prevData =>
+                            prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+                        );
+                    } else {
+                        console.log('Object not found Bidding Adjustment : Creating')
+                        const updatedObj = {
+                            ...initialState,
+                            ...specificValues,
+                            'entity': STEPS[step],
+                            ['placement']: placementArray,
+                            ['percentage']: percentageArray
+                        };
+                        setCampaignData(prevData => [...prevData, updatedObj]);
+                    }
                     break;
                 case 'ad-group':
 
@@ -131,6 +159,34 @@ const Products = () => {
             setStep(step - 1)
         }
     }, [step])
+
+    // Transform array of object into seprate arrays of objects
+    const transformObject = (input) => {
+        if (Array.isArray(input)) {
+            const placementArray = [];
+            const percentageArray = [];
+
+            input.forEach(({ id, placement, percentage }) => {
+                placementArray.push({ [`"${id.toString()}"`]: placement });
+                percentageArray.push({ [`"${id.toString()}"`]: percentage });
+            });
+
+            return { placementArray, percentageArray };
+        }
+    };
+
+    // Function to fetch specific key values from an object
+    const getSpecificKeyValues = (obj, keys) => {
+        const result = {};
+        keys.forEach(key => {
+            if (key in obj) {
+                result[key] = obj[key];
+            }
+        });
+        return result;
+    };
+
+
     return (
         <div className='border border-gray-300 p-5 rounded-lg'>
             <strong><h5>{STEPS[step]}</h5></strong>

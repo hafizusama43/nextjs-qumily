@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { bigint, z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
@@ -34,17 +34,34 @@ const Step2 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
         },
     })
 
-    useEffect(() => {
-        console.log(campaignData)
-    }, [campaignData])
+    // useEffect(() => {
+    //     console.log(biddingData)
+    //     const { placementArray, percentageArray } = transformObject(biddingData);
+
+    //     console.log(placementArray)
+    //     console.log(percentageArray)
+    // }, [biddingData])
 
 
     const onSubmit = (data) => {
         const id = uuidv4();
         const objectWithId = { ...data, id: id };
-        console.log(objectWithId)
+        // transformObject(objectWithId)
         setBiddingData((prevState) => [...prevState, objectWithId]);
+
         form.reset()
+    }
+
+    // Function to reverse the transformation and get the original object back
+    // Function to reverse the transformation for arrays
+    const reverseTransformArray = (placementArray, percentageArray) => {
+        return placementArray.map((placementObj, index) => {
+            const id = Object.keys(placementObj)[0];
+            const placement = placementObj[id];
+            const percentage = percentageArray[index][id];
+
+            return { id, placement, percentage };
+        });
     }
 
     const handleDeleteBtn = (id: string) => {
