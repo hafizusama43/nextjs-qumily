@@ -6,9 +6,11 @@ import React from 'react'
 import { useOrganizationList } from "@clerk/nextjs"
 import { useParams, usePathname } from "next/navigation"
 import { useEffect } from "react"
+import { AlignJustify, X } from "lucide-react";
+import { useSidebarStore } from "@/hooks/useMobileSidebar";
+import MobileSidebar from "@/app/organization/_mobileSidebar";
 
 const OrgNavbar = () => {
-
     const params = useParams()
     const { setActive } = useOrganizationList();
     const pathname = usePathname();
@@ -26,6 +28,7 @@ const OrgNavbar = () => {
         <div className='shadow-md fixed top-0 w-full backdrop-blur z-10 bg-white'>
             <div className='px-2 py-2 md:py-4 mx-auto max-w-7xl flex flex-row items-center justify-between relative'>
                 <div className="flex items-center">
+                    <MobileSidebar />
                     <Link href="/" className='flex items-center'>
                         <Image src="/logo-new.png" width={55} height={55} alt='Taskify logo'></Image>
                     </Link>

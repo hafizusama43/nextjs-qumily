@@ -6,7 +6,7 @@ const Orgpage = () => {
 
     return (
         <div>
-            Org id  : {orgId}
+           Home Org id  : {orgId}
         </div>
     )
 }

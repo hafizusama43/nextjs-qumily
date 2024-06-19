@@ -22,7 +22,7 @@ export default function RootLayout({
             <main className="px-2 mt-40 md:mt-40 mx-auto max-w-7xl">
                 <div className="flex gap-x-7">
                     <aside className="w-64 shrink-0 hidden md:block">
-                        <SideBar storageKey={""}></SideBar>
+                        <SideBar></SideBar>
                     </aside>
                     {children}
                 </div>

@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Plus } from 'lucide-react'
+import { Layout, Plus } from 'lucide-react'
 import NavItem from './_navItem'
 
 interface SidebarProps {
-    storageKey: string
+    storageKey?: string
 }
 const SideBar = ({ storageKey = 't-sidebar-state' }: SidebarProps) => {
     const [expanded, setExpanded, removeValue] = useLocalStorage<Record<string, any>>(storageKey, {})
@@ -26,7 +26,7 @@ const SideBar = ({ storageKey = 't-sidebar-state' }: SidebarProps) => {
     useEffect(() => {
         console.log('render')
     }, [])
-
+    
     const defaultValue: string[] = Object.keys(expanded).reduce((arr: string[], key: string) => {
         if (expanded[key]) {
             arr.push(key)
@@ -47,8 +47,8 @@ const SideBar = ({ storageKey = 't-sidebar-state' }: SidebarProps) => {
         <React.Fragment>
             {
                 !isOrgListLoaded || !isOrgLoaded || userMemberships.isLoading ? <Skeleton className="h-[400px] w-[100%] rounded-xl"></Skeleton> :
-                    <div className='border-r border-r-slate-300 min-h-[400px]'>
-                        <div className='flex justify-between items-center p-2'>
+                    <div className='border-r border-r-slate-300 min-h-[400px] max-md:border-none'>
+                        <div className='flex justify-between items-center md:p-2'>
                             <span>Workspaces {userMemberships.count}</span>
                             <Button asChild size="icon" variant="ghost">
                                 <Link href="/organizations">
