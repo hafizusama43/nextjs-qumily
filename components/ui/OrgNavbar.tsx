@@ -3,10 +3,24 @@ import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import { Button } from './button'
-import { Plus } from "lucide-react";
+import { useOrganizationList } from "@clerk/nextjs"
+import { useParams, usePathname } from "next/navigation"
+import { useEffect } from "react"
 
 const OrgNavbar = () => {
+
+    const params = useParams()
+    const { setActive } = useOrganizationList();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        if (!setActive) return;
+
+        console.log('as')
+        setActive({
+            organization: params.organizationId as string
+        })
+    }, [params.organizationId, setActive])
 
     return (
         <div className='shadow-md fixed top-0 w-full backdrop-blur z-10 bg-white'>
@@ -15,11 +29,13 @@ const OrgNavbar = () => {
                     <Link href="/" className='flex items-center'>
                         <Image src="/logo-new.png" width={55} height={55} alt='Taskify logo'></Image>
                     </Link>
-                    <OrganizationSwitcher hidePersonal></OrganizationSwitcher>
+                    <OrganizationSwitcher hidePersonal
+                        afterCreateOrganizationUrl={"/organization/:id"}
+                        afterSelectOrganizationUrl={"/organization/:id"}
+                    ></OrganizationSwitcher>
                 </div>
 
                 <div className="flex items-center">
-                    
                     <UserButton></UserButton>
                 </div>
             </div>

@@ -40,6 +40,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                             </>
                             }
                             {isSignedIn && <Link href="/templates"><Button className='mr-4' variant="secondary">Templates</Button></Link>}
+                            {isSignedIn && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organisations</Button></Link>}
                             {isSignedIn && <span className="ml-2 flex items-center"><UserButton afterSignOutUrl="/" userProfileMode="navigation" userProfileUrl="/user-profile"></UserButton></span>}
                         </div>
                     </>}

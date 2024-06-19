@@ -1,5 +1,9 @@
 const DbConnect = require('./db.ts');
-const { createCampaignTemplateTable, createCampaignTable, createCampaignTemplateDataTable } = require('./create_table.ts');
+const { createCampaignTemplateTable,
+    createCampaignTable,
+    createCampaignTemplateDataTable,
+    createCampaignDataTable,
+} = require('./create_table.ts');
 
 async function main() {
     try {
@@ -8,6 +12,7 @@ async function main() {
         await createCampaignTemplateTable(client)
         await createCampaignTable(client);
         await createCampaignTemplateDataTable(client);
+        await createCampaignDataTable(client)
 
         await client.end();
     } catch (err) {

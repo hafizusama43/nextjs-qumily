@@ -2,10 +2,9 @@
 
 import Footer from "@/components/ui/footer"
 import OrgNavbar from "@/components/ui/OrgNavbar"
-import { Toaster } from "@/components/ui/toaster"
-import { useOrganizationList } from "@clerk/nextjs"
-import { useParams } from "next/navigation"
-import { useEffect } from "react"
+import clsx from "clsx"
+import { useParams, usePathname } from "next/navigation"
+import SideBar from "./_sidebar"
 
 export default function RootLayout({
     children,
@@ -13,25 +12,24 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     const params = useParams()
-    const { setActive } = useOrganizationList();
+    const pathname = usePathname();
 
-    useEffect(() => {
-        if (!setActive) return;
-
-        console.log('as')
-        setActive({
-            organization: params.organizationId as string
-        })
-    }, [params.organizationId, setActive])
     return (
         <>
             <nav>
                 <OrgNavbar />
             </nav>
-            <main className="mt-40 md:mt-40 mx-auto max-w-7xl">
-                {children}
+            <main className="px-2 mt-40 md:mt-40 mx-auto max-w-7xl">
+                <div className="flex gap-x-7">
+                    <aside className="w-64 shrink-0 hidden md:block">
+                        <SideBar storageKey={""}></SideBar>
+                    </aside>
+                    {children}
+                </div>
             </main>
-            <footer>
+            <footer className={clsx('block', {
+                'hidden': params.slug || pathname.includes('organization'),
+            })}>
                 <Footer />
             </footer>
         </>
