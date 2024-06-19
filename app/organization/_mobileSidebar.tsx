@@ -21,10 +21,10 @@ const MobileSidebar = () => {
     }, [pathname, onClose])
 
     return (
-        <div className='block md:'>
+        <div className='block md:hidden'>
             {isOpen ? <X role="button" onClick={() => { onClose() }} /> : <AlignJustify role="button" onClick={() => { onOpen() }} />}
             <Sheet open={isOpen} onOpenChange={onClose}>
-                <SheetContent side="left" className='md:'>
+                <SheetContent side="left" className='md:hidden'>
                     <SideBar storageKey='t-mobile-sidebar'></SideBar>
                 </SheetContent>
             </Sheet>

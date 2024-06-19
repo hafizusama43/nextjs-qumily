@@ -47,7 +47,7 @@ const SideBar = ({ storageKey = 't-sidebar-state' }: SidebarProps) => {
         <React.Fragment>
             {
                 !isOrgListLoaded || !isOrgLoaded || userMemberships.isLoading ? <Skeleton className="h-[400px] w-[100%] rounded-xl"></Skeleton> :
-                    <div className='border-r border-r-slate-300 min-h-[400px] max-md:border-none'>
+                    <div className=' min-h-[400px]'>
                         <div className='flex justify-between items-center md:p-2'>
                             <span>Workspaces {userMemberships.count}</span>
                             <Button asChild size="icon" variant="ghost">

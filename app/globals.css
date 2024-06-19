@@ -89,6 +89,29 @@
   /* padding-left: 0px !important; */
 }
 
+.cl-organizationProfile-root {
+  width: 100% !important;
+}
+
+.cl-organizationProfile-root .cl-cardBox {
+  width: 100% !important;
+  border: 1px solid lightgray;
+  box-shadow: none !important;
+  /* border-radius: unset !important; */
+}
+
+.cl-organizationProfile-root .cl-cardBox .cl-scrollBox {
+  box-shadow: none !important;
+  border-radius: unset !important;
+  border-left: 0.5px solid lightgray !important;
+}
+
+.cl-organizationProfile-root .cl-cardBox .cl-navbar {
+  background: white !important;
+  /* border-right: 2px solid gray; */
+  /* padding-left: 0px !important; */
+}
+
 .cl-signUp-root .cl-cardBox {
   box-shadow: none !important;
   border: 1px solid lightgray;
