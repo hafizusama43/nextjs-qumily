@@ -1,9 +1,9 @@
-const DbConnect = require('./db.ts');
+const DbConnect = require('.');
 const { createCampaignTemplateTable,
     createCampaignTable,
     createCampaignTemplateDataTable,
     createCampaignDataTable,
-} = require('./create_table.ts');
+} = require('./.ts');
 
 async function main() {
     try {

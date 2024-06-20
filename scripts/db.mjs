@@ -1,5 +1,7 @@
-const { Client } = require('pg');
-const { db } = require('@vercel/postgres');
+import { db } from "@vercel/postgres";
+import pkg from 'pg';
+const { Client } = pkg;
+
 
 const DbConnect = async () => {
     let client;
@@ -25,4 +27,4 @@ const DbConnect = async () => {
     }
 };
 
-module.exports = DbConnect;
+export { DbConnect };

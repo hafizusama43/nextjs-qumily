@@ -1,0 +1,67 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL") // uses connection pooling
+}
+
+model campaign {
+  campaign_id       Int      @id @default(autoincrement())
+  campaign_name     String
+  campaign_category String
+  slug              String
+  created_by        String
+  created_at        DateTime @default(now())
+  updated_at        DateTime @default(now()) @updatedAt
+}
+
+model campaign_data {
+  campaign_data_id Int    @id @default(autoincrement())
+  campaign_id      Int
+  key              String
+  value            String
+}
+
+model campaign_template {
+  campaign_templates_id Int      @id @default(autoincrement())
+  template_name         String
+  template_category     String
+  slug                  String
+  created_by            String
+  created_at            DateTime @default(now())
+  updated_at            DateTime @default(now()) @updatedAt
+}
+
+model campaign_templates_data {
+  campaign_templates_data_id   Int     @id @default(autoincrement())
+  template_id                  Int
+  product                      String?
+  entity                       String?
+  operation                    String?
+  campaign_id                  String?
+  ad_group_id                  String?
+  portfolio_id                 String?
+  ad_id                        String?
+  keyword_id                   String?
+  product_targeting_id         String?
+  campaign_name                String?
+  ad_group_name                String?
+  start_date                   String?
+  end_date                     String?
+  targeting_type               String?
+  state                        String?
+  daily_budget                 String?
+  sku                          String?
+  ad_group_default_bid         String?
+  bid                          String?
+  keyword_text                 String?
+  match_type                   String?
+  bidding_strategy             String?
+  placement                    String?
+  percentage                   String?
+  product_targeting_expression String?
+}

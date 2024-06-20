@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 // import { sql } from '@vercel/postgres';
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import queryDatabase from "@/lib/queryHelper";
+import prisma from "@/lib/prisma";
 
 
 // Get all templates
@@ -53,6 +54,12 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, message: 'Please provide required fields.' }, { status: 404 })
     }
     try {
+
+        prisma .create({
+            data: {
+                title: "asdasda"
+            }
+        })
 
         // TODO For now we have table for one category of template campings table we need to check based on template_category from which table to read 
         // default data from and in which to insert to make it generic to insert templates

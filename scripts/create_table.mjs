@@ -118,7 +118,7 @@ const createCampaignDataTable = async (client) => {
     }
 }
 
-module.exports = {
+export {
     createCampaignTemplateTable,
     createCampaignTable,
     createCampaignTemplateDataTable,

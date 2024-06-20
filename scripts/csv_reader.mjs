@@ -1,6 +1,9 @@
-const fs = require('fs');
-const csv = require('csv-parser');
-const DbConnectPg = require('./db.ts');
+// const fs = require('fs');
+import * as fs from 'fs'
+import { DbConnect } from './db.mjs';
+// const csv = require('csv-parser');
+import csv from 'csv-parser'
+// const DbConnectPg = require('./db.mjs');
 // const { db } = require('@vercel/postgres');
 // import { sql } from '@vercel/postgres';
 
@@ -56,7 +59,7 @@ fs.access('./data_new.csv', fs.constants.F_OK, (err) => {
 
 async function getCols() {
     let query_str = 'INSERT INTO campaign_templates_data (';
-    const client = await DbConnectPg();
+    const client = await DbConnect();
     const cols = await client.query(`SELECT *
     FROM information_schema.columns
     WHERE table_name = 'campaign_templates_data'
@@ -75,7 +78,7 @@ async function getCols() {
     return query_str;
 }
 async function insertrecord(query_str) {
-    const client = await DbConnectPg();
+    const client = await DbConnect();
     try {
         const cols = await client.query(query_str, []);
     } catch (error) {
