@@ -11,6 +11,8 @@ import { Separator } from '@/components/ui/separator'
 import { RenderInput } from '../_renderInput'
 import { RenderDatePicker } from '../_renderDatePicker'
 import { RenderSelect } from '../_renderSelect'
+import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { initialState } from './products'
 
 const FormSchema = z.object({
     product: z.string().min(1, { message: "Product is required" }).default('Sponsored Products'),
@@ -33,7 +35,10 @@ const FormSchema = z.object({
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 
-const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) => {
+const Step1 = ({ STEPS, handlePrevStep, handleNextStep }) => {
+
+    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep } = useCampaignsStore()
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -62,8 +67,36 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
         }
     }, [campaignData, form])
 
-    async function onSubmit(data: z.infer<typeof FormSchema>) {
-        handleNextStep(data, 'campaign')
+    function onSubmit(data: z.infer<typeof FormSchema>) {
+        // handleNextStep(data, 'campaign')
+        // console.log('Current step : ', currStepName)
+        var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+        console.log(objExists)
+        if (objExists.length > 0) {
+            console.log('Object found : Updating')
+            const updatedObj = {
+                ...objExists[0],
+                ...data
+            };
+            const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+            setCampaignData(arr)
+            // setCampaignData(prevData =>
+            //     prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+            // );
+            // setCampaignData(arr)
+        } else {
+            console.log('Object not found : Creating')
+            const updatedObj = {
+                ...initialState,
+                ...data
+            };
+            console.log(updatedObj)
+            // const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+            setCampaignData([updatedObj]);
+        }
+
+        console.log(campaignData)
+        setNextStep();
     }
 
     return (
@@ -119,8 +152,8 @@ const Step1 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
                     </div>
                     <Separator className='my-3'></Separator>
                     <div className='flex justify-end gap-4 mt-10'>
-                        <Button type="button" disabled={step < 2} onClick={handlePrevStep}><CircleArrowLeft /> &nbsp; {step > 1 && STEPS[step - 1]}</Button>
-                        <Button disabled={step >= 5}>{step < 5 && STEPS[step + 1]} &nbsp; <CircleArrowRight /></Button>
+                        <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
+                        <Button disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
                     </div>
                 </form>
             </Form>

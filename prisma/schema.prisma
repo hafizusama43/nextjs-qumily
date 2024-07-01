@@ -9,7 +9,7 @@ datasource db {
   url      = env("POSTGRES_URL") // uses connection pooling
 }
 
-model campaign {
+model campaigns {
   campaign_id       Int      @id @default(autoincrement())
   campaign_name     String
   campaign_category String
@@ -26,7 +26,7 @@ model campaign_data {
   value            String
 }
 
-model campaign_template {
+model campaign_templates {
   campaign_templates_id Int      @id @default(autoincrement())
   template_name         String
   template_category     String
@@ -64,4 +64,26 @@ model campaign_templates_data {
   placement                    String?
   percentage                   String?
   product_targeting_expression String?
+}
+
+
+model boards {
+  board_id Int @id @default(autoincrement())
+  created_by String
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
+}
+
+model todos {
+  todo_id Int @id @default(autoincrement())
+  created_by String
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
+}
+
+model activity {
+  activity_id Int @id @default(autoincrement())
+  created_by String
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
 }

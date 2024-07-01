@@ -13,6 +13,10 @@ import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { initialState } from './products'
+import loadJsConfig from 'next/dist/build/load-jsconfig'
+import { Kablammo } from 'next/font/google'
 
 const FormSchema = z.object({
     placement: z.string().min(1, { message: "Placement is required" }).default('Placement Top'),
@@ -24,7 +28,9 @@ interface BiddingData {
     percentage: number;
     id: string
 }
-const Step2 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) => {
+const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
+
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep } = useCampaignsStore()
     const [biddingData, setBiddingData] = useState<BiddingData[]>([])
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -76,7 +82,36 @@ const Step2 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
         if (biddingData.length < 1) {
             form.trigger();
         } else {
-            handleNextStep(biddingData, 'bidding-adjustment')
+            // handleNextStep(biddingData, 'bidding-adjustment')
+            // Get existsing campaign object to retain values in next object
+            var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+            const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
+
+            // const { placementArray, percentageArray } = transformObject(data);
+            console.log(biddingData)
+            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+            // if (objExists.length > 0) {
+            //     console.log('Object found Bidding Adjustment : Updating')
+            //     const updatedObj = {
+            //         ... initialState,
+            //         ...campaignObjValues,
+            //         'entity': STEPS[currentStep],
+            //         ['placement']: placementArray,
+            //         ['percentage']: percentageArray
+            //     };
+            //     // setCampaignData(prevData =>
+            //     //     prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+            //     // );
+            // } else {
+            //     console.log('Object not found Bidding Adjustment : Creating')
+            //     const updatedObj = {
+            //         ...initialState,
+            //         ...campaignObjValues,
+            //         'entity': STEPS[currentStep],
+            //         ['placement']: placementArray,
+            //         ['percentage']: percentageArray
+            //     };
+            // }
         }
     }
 
@@ -101,8 +136,8 @@ const Step2 = ({ step, STEPS, handlePrevStep, handleNextStep, campaignData }) =>
             </Form>
             <Separator className='my-6'></Separator>
             <div className='flex justify-end gap-4'>
-                <Button type="button" disabled={step < 2} onClick={handlePrevStep}><CircleArrowLeft /> &nbsp; {step > 1 && STEPS[step - 1]}</Button>
-                <Button onClick={handleNextStepClick} disabled={step >= 5}>{step < 5 && STEPS[step + 1]} &nbsp; <CircleArrowRight /></Button>
+                <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
+                <Button onClick={handleNextStepClick} disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
             </div>
             <Alert className="my-5">
                 <AlertTriangle className="h-4 w-4" />

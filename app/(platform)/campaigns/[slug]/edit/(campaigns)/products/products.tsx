@@ -8,6 +8,7 @@ import Step3 from './_step3'
 import Step4 from './_step4'
 import Step5 from './_step5'
 import { getSpecificKeyValues } from '@/lib/helpers'
+import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 
 const STEPS = {
     1: "Campaign",
@@ -17,7 +18,7 @@ const STEPS = {
     5: "Keywords",
 }
 
-const initialState = {
+export const initialState = {
     product: '',
     entity: '',
     operation: '',
@@ -44,111 +45,86 @@ const initialState = {
     percentage: [],
     product_targeting_expression: ''
 }
-interface InitialState {
-    product: string;
-    entity: string;
-    operation: string;
-    campaign_id: string;
-    ad_group_id: string;
-    portfolio_id: string;
-    ad_id: string;
-    keyword_id: string;
-    product_targeting_id: string;
-    campaign_name: string;
-    ad_group_name: string;
-    start_date: string;
-    end_date: string;
-    targeting_type: string;
-    state: string;
-    daily_budget: number;
-    sku: string;
-    ad_group_default_bid: string;
-    bid: string;
-    keyword_text: string;
-    match_type: string;
-    bidding_strategy: string;
-    placement: any[];
-    percentage: any[];
-    product_targeting_expression: string;
-}
+
 
 
 const Products = () => {
-    const [step, setStep] = useState(1)
-    const [campaignData, setCampaignData] = useState<InitialState[]>([])
+    // const [step, setStep] = useState(1)
+    // const [campaignData, setCampaignData] = useState<InitialState[]>([])
+    const { campaignData, setCampaignData, currentStep } = useCampaignsStore()
 
     const handleNextStep = useCallback((data: any, currStepName: string) => {
-        if (step < 5) {
-            switch (currStepName) {
-                case 'campaign':
-                    console.log('Current step : ', currStepName)
-                    var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-                    console.log(objExists)
-                    if (objExists.length > 0) {
-                        console.log('Object found : Updating')
-                        const updatedObj = {
-                            ...objExists[0],
-                            ...data
-                        };
-                        setCampaignData(prevData =>
-                            prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-                        );
-                    } else {
-                        console.log('Object not found : Creating')
-                        const updatedObj = {
-                            ...initialState,
-                            ...data
-                        };
-                        setCampaignData(prevData => [...prevData, updatedObj]);
-                    }
-                    break;
-                case 'bidding-adjustment':
-                    // Get existsing campaign object to retain values in next object
-                    var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-                    const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
+        // if (step < 5) {
+        //     switch (currStepName) {
+        //         case 'campaign':
+        //             console.log('Current step : ', currStepName)
+        //             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+        //             console.log(objExists)
+        //             if (objExists.length > 0) {
+        //                 console.log('Object found : Updating')
+        //                 const updatedObj = {
+        //                     ...objExists[0],
+        //                     ...data
+        //                 };
+        //                 // setCampaignData(prevData =>
+        //                 //     prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+        //                 // );
+        //             } else {
+        //                 console.log('Object not found : Creating')
+        //                 const updatedObj = {
+        //                     ...initialState,
+        //                     ...data
+        //                 };
+        //                 // setCampaignData(prevData => [...prevData, updatedObj]);
+        //             }
+        //             break;
+        //         case 'bidding-adjustment':
+        //             // Get existsing campaign object to retain values in next object
+        //             var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+        //             const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
 
-                    const { placementArray, percentageArray } = transformObject(data);
+        //             const { placementArray, percentageArray } = transformObject(data);
 
-                    var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
-                    if (objExists.length > 0) {
-                        console.log('Object found Bidding Adjustment : Updating')
-                        const updatedObj = {
-                            ...initialState,
-                            ...campaignObjValues,
-                            'entity': STEPS[step],
-                            ['placement']: placementArray,
-                            ['percentage']: percentageArray
-                        };
-                        setCampaignData(prevData =>
-                            prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-                        );
-                    } else {
-                        console.log('Object not found Bidding Adjustment : Creating')
-                        const updatedObj = {
-                            ...initialState,
-                            ...campaignObjValues,
-                            'entity': STEPS[step],
-                            ['placement']: placementArray,
-                            ['percentage']: percentageArray
-                        };
-                        setCampaignData(prevData => [...prevData, updatedObj]);
-                    }
-                    break;
-                case 'ad-group':
+        //             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+        //             if (objExists.length > 0) {
+        //                 console.log('Object found Bidding Adjustment : Updating')
+        //                 const updatedObj = {
+        //                     ...initialState,
+        //                     ...campaignObjValues,
+        //                     'entity': STEPS[currentStep],
+        //                     ['placement']: placementArray,
+        //                     ['percentage']: percentageArray
+        //                 };
+        //                 // setCampaignData(prevData =>
+        //                 //     prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+        //                 // );
+        //             } else {
+        //                 console.log('Object not found Bidding Adjustment : Creating')
+        //                 const updatedObj = {
+        //                     ...initialState,
+        //                     ...campaignObjValues,
+        //                     'entity': STEPS[step],
+        //                     ['placement']: placementArray,
+        //                     ['percentage']: percentageArray
+        //                 };
+        //                 // setCampaignData(prevData => [...prevData, updatedObj]);
+        //             }
+        //             break;
+        //         case 'ad-group':
 
-                    break;
-                case 'product-ad':
+        //             break;
+        //         case 'product-ad':
 
-                    break;
-                case 'keywords':
+        //             break;
+        //         case 'keywords':
 
-                    break;
-                default:
-                    break;
-            }
-            setStep(step + 1)
-        }
-    }, [campaignData, step])
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        //     // setStep(step + 1)
+        // }
+    }, [campaignData, currentStep])
 
     useEffect(() => {
         console.log(campaignData)
@@ -156,10 +132,10 @@ const Products = () => {
 
 
     const handlePrevStep = useCallback(() => {
-        if (step > 1) {
-            setStep(step - 1)
-        }
-    }, [step])
+        // if (currentStep > 1) {
+        // setStep(currentStep - 1)
+        // }
+    }, [currentStep])
 
     // Transform array of object into seprate arrays of objects
     const transformObject = (input) => {
@@ -178,13 +154,13 @@ const Products = () => {
 
     return (
         <div className='border border-gray-300 p-5 rounded-lg'>
-            <strong><h5>{STEPS[step]}</h5></strong>
+            <strong><h5>{STEPS[currentStep]}</h5></strong>
             <Separator className='mt-3 mb-3'></Separator>
-            {step === 1 && <Step1 campaignData={campaignData} handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step1>}
-            {step === 2 && <Step2 campaignData={campaignData} handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step2>}
-            {step === 3 && <Step3 campaignData={campaignData} handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step3>}
-            {step === 4 && <Step4 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step4>}
-            {step === 5 && <Step5 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={step} STEPS={STEPS}></Step5>}
+            {currentStep === 1 && <Step1 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={currentStep} STEPS={STEPS}></Step1>}
+            {currentStep === 2 && <Step2 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={currentStep} STEPS={STEPS}></Step2>}
+            {currentStep === 3 && <Step3 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={currentStep} STEPS={STEPS}></Step3>}
+            {currentStep === 4 && <Step4 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={currentStep} STEPS={STEPS}></Step4>}
+            {currentStep === 5 && <Step5 handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} step={currentStep} STEPS={STEPS}></Step5>}
         </div>
     )
 }

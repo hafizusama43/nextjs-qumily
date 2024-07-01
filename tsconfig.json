@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/db.mjs", "scripts/seed.mjs", "scripts/csv_reader.mjs"],, "scripts/create_table.mjs"
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/db.mjs", "scripts/seed.mjs", "scripts/csv_reader.mjs"],
   "exclude": ["node_modules"]
 }
