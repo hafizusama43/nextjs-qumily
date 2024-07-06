@@ -16,7 +16,7 @@ const inter = Inter({ subsets: ["latin"] });
 //   description: siteConfig.description,
 //   icons: [
 //     {
-//       url: "/logo-new.png"
+//       url: "/logoNew.png"
 //     }
 //   ]
 // };

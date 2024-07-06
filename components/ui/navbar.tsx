@@ -17,7 +17,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                     <>
                         <div className="flex items-center">
                             <Link href="/" className='flex items-center'>
-                                <Image src="/logo-new.png" width={55} height={55} alt='Taskify logo'></Image>
+                                <Image src="/logoNew.png" width={55} height={55} alt='asda logo'></Image>
                             </Link>
                             <Button><Plus /></Button>
                         </div>
@@ -29,7 +29,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                     </> :
                     <>
                         <Link href="/" className='flex items-center'>
-                            <Image src="/logo-new.png" width={50} height={50} alt='Taskify logo'></Image>
+                            <Image src="/logoNew.png" width={50} height={50} alt='Taskify logo'></Image>
                             <span className='font-bold'>Taskify</span>
                         </Link>
                         <div className="flex items-center">
