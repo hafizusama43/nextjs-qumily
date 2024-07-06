@@ -19,7 +19,7 @@ const DbConnect = async () => {
 
     try {
         await client.connect();
-        console.log(`Connected to ${process.env.NODE_ENV === 'development' ? 'local' : 'Vercel'} PostgreSQL database`);
+        console.info(`Connected to ${process.env.NODE_ENV === 'development' ? 'local' : 'Vercel'} PostgreSQL database`);
         return client;
     } catch (err) {
         console.error(`Error connecting to ${process.env.NODE_ENV === 'development' ? 'local' : 'Vercel'} PostgreSQL database`, err);

@@ -33,7 +33,7 @@ export default function RootLayout({
         {children}
       </main>
       <footer className={clsx('block', {
-        'hidden': params.slug,
+        'hidden': params.slug || pathname.includes(`sign-up`) || pathname.includes(`sign-in`),
       })}>
         <Footer />
       </footer>

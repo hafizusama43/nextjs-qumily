@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // ]);
 
 // Or only protect these routes
-const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)']);
+const isPublicRoute = createRouteMatcher(['/', '/sign-in(.*)', '/sign-up(.*)', '/privacy-policy', '/terms-conditions']);
 
 // Update clerkMiddleware to manually protect routes
 export default clerkMiddleware((auth, req: NextRequest) => {

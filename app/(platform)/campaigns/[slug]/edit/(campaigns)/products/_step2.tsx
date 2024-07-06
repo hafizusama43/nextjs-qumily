@@ -80,40 +80,38 @@ const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
     }
 
     const handleNextStepClick = () => {
-        if (biddingData.length < 1) {
-            form.trigger();
-        } else {
-            // handleNextStep(biddingData, 'bidding-adjustment')
-            // Get existsing campaign object to retain values in next object
-            var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-            const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
+        // handleNextStep(biddingData, 'bidding-adjustment')
+        // Get existsing campaign object to retain values in next object
+        var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+        const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
 
-            // const { placementArray, percentageArray } = transformObject(data);
-            console.log(biddingData)
-            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
-            // if (objExists.length > 0) {
-            //     console.log('Object found Bidding Adjustment : Updating')
-            //     const updatedObj = {
-            //         ... initialState,
-            //         ...campaignObjValues,
-            //         'entity': STEPS[currentStep],
-            //         ['placement']: placementArray,
-            //         ['percentage']: percentageArray
-            //     };
-            //     // setCampaignData(prevData =>
-            //     //     prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-            //     // );
-            // } else {
-            //     console.log('Object not found Bidding Adjustment : Creating')
-            //     const updatedObj = {
-            //         ...initialState,
-            //         ...campaignObjValues,
-            //         'entity': STEPS[currentStep],
-            //         ['placement']: placementArray,
-            //         ['percentage']: percentageArray
-            //     };
-            // }
-        }
+        // const { placementArray, percentageArray } = transformObject(data);
+        console.log(biddingData)
+        var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+        // if (objExists.length > 0) {
+        //     console.log('Object found Bidding Adjustment : Updating')
+        //     const updatedObj = {
+        //         ... initialState,
+        //         ...campaignObjValues,
+        //         'entity': STEPS[currentStep],
+        //         ['placement']: placementArray,
+        //         ['percentage']: percentageArray
+        //     };
+        //     // setCampaignData(prevData =>
+        //     //     prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+        //     // );
+        // } else {
+        //     console.log('Object not found Bidding Adjustment : Creating')
+        //     const updatedObj = {
+        //         ...initialState,
+        //         ...campaignObjValues,
+        //         'entity': STEPS[currentStep],
+        //         ['placement']: placementArray,
+        //         ['percentage']: percentageArray
+        //     };
+        // }
+
+        setNextStep();
     }
 
 

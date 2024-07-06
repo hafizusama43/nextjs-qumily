@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const page = () => {
   return (
-    <div className='mt-20 flex justify-center items-center flex-col'>
+    <div className='mb-20 flex justify-center items-center flex-col'>
       <SignUp fallbackRedirectUrl={"/"}/>
     </div>
   );

@@ -16,6 +16,8 @@ async function main() {
         await createCampaignDataTable(client)
 
         await client.end();
+        console.info('Database seeding completed.', err);
+
     } catch (err) {
         console.error('An error occurred while attempting to seed the database:', err);
     }
