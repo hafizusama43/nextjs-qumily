@@ -55,11 +55,11 @@ export async function POST(request: NextRequest) {
     }
     try {
 
-        prisma .create({
-            data: {
-                title: "asdasda"
-            }
-        })
+        // prisma .create({
+        //     data: {
+        //         title: "asdasda"
+        //     }
+        // })
 
         // TODO For now we have table for one category of template campings table we need to check based on template_category from which table to read 
         // default data from and in which to insert to make it generic to insert templates

@@ -17,7 +17,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                     <>
                         <div className="flex items-center">
                             <Link href="/" className='flex items-center'>
-                                <Image src="/not-found.png" width={55} height={55} alt='asda logo'></Image>
+                                <Image src="/logoNew.png" width={55} height={55} alt='asda logo'></Image>
                             </Link>
                             <Button><Plus /></Button>
                         </div>
@@ -29,7 +29,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                     </> :
                     <>
                         <Link href="/" className='flex items-center'>
-                            <Image src="/not-found.png" width={50} height={50} alt='Taskify logo'></Image>
+                            <Image src="/logoNew.png" width={50} height={50} alt='Taskify logo'></Image>
                             <span className='font-bold'>Taskify</span>
                         </Link>
                         <div className="flex items-center">
@@ -41,6 +41,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                             }
                             {isSignedIn && <Link href="/templates"><Button className='mr-4' variant="secondary">Templates</Button></Link>}
                             {isSignedIn && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organisations</Button></Link>}
+                            {isSignedIn && <Link href="/campaigns"><Button className='mr-4' variant="secondary">Campaigns</Button></Link>}
                             {isSignedIn && <span className="ml-2 flex items-center"><UserButton afterSignOutUrl="/" userProfileMode="navigation" userProfileUrl="/user-profile"></UserButton></span>}
                         </div>
                     </>}

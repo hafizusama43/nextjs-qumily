@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   icons: [
     {
-      url: "/not-found.png"
+      url: "/logoNew.png"
     }
   ]
 };

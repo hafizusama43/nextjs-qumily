@@ -30,7 +30,7 @@ const OrgNavbar = () => {
                 <div className="flex items-center">
                     <MobileSidebar />
                     <Link href="/" className='flex items-center'>
-                        <Image src="/not-found.png" width={55} height={55} alt='Taskify logo'></Image>
+                        <Image src="/logoNew.png" width={55} height={55} alt='Taskify logo'></Image>
                     </Link>
                     <OrganizationSwitcher hidePersonal
                         afterCreateOrganizationUrl={"/organization/:id"}

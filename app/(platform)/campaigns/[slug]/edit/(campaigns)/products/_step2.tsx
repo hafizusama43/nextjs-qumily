@@ -17,6 +17,7 @@ import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
 import loadJsConfig from 'next/dist/build/load-jsconfig'
 import { Kablammo } from 'next/font/google'
+import { Card } from '@/components/ui/card'
 
 const FormSchema = z.object({
     placement: z.string().min(1, { message: "Placement is required" }).default('Placement Top'),
@@ -119,57 +120,65 @@ const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
 
     return (
         <div>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                    <div className="block md:flex gap-5">
-                        <div className='basis-1/2 w-full'>
-                            <RenderSelect name={"placement"} form={form} options={PLACEMENT} label={SPONSORED_PRODUCTS_CAMPAIGNS.placement}></RenderSelect>
-                        </div>
-                        <div className='basis-1/2 w-full'>
-                            <RenderInput type='number' name={"percentage"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.percentage}></RenderInput>
-                        </div>
-                    </div>
-                    <div className='flex justify-end gap-4 mt-10'>
-                        <Button>Add Placement</Button>
-                    </div>
-                </form>
-            </Form>
-            <Separator className='my-6'></Separator>
-            <div className='flex justify-end gap-4'>
+            <div className='flex flex-row gap-5 mb-5'>
+                <div className='basis-1/2'>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+                            <div className="block md:flex gap-5">
+                                <div className='basis-1/2 w-full'>
+                                    <RenderSelect name={"placement"} form={form} options={PLACEMENT} label={SPONSORED_PRODUCTS_CAMPAIGNS.placement}></RenderSelect>
+                                </div>
+                                <div className='basis-1/2 w-full'>
+                                    <RenderInput type='number' name={"percentage"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.percentage}></RenderInput>
+                                </div>
+                            </div>
+                            <div className='flex justify-end gap-4 mt-10'>
+                                <Button className='block w-full' >Add Placement</Button>
+                            </div>
+                        </form>
+                    </Form>
+                </div>
+                <div className='basis-1/2'>
+                    <Alert className="my-5">
+                        <AlertTriangle className="h-4 w-4" />
+                        <AlertTitle>Heads up!</AlertTitle>
+                        <AlertDescription>
+                            The placements you add will appear in table below. Each placement will be added as a seprate row when creating campaign.
+                        </AlertDescription>
+                    </Alert>
+                    <Card>
+                        <Table className='' id='placements_table'>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Placement</TableHead>
+                                    <TableHead>Percentage</TableHead>
+                                    <TableHead>Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {biddingData.length > 0 ? <>{biddingData.map((item, index) => {
+                                    return (
+                                        <TableRow key={index}>
+                                            <TableCell>{item.placement}</TableCell>
+                                            <TableCell>{item.percentage}</TableCell>
+                                            <TableCell>
+                                                <Trash2 className='m-auto' onClick={() => handleDeleteBtn(item.id)} role="button" color="red" />
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })}</> : <TableRow>
+                                    <TableCell colSpan={3}><p className='text-neutral-400 mt-5 text-center m-auto'>No placements added. Please add placement to continue.</p></TableCell>
+                                </TableRow>}
+                            </TableBody>
+                        </Table>
+                    </Card>
+                </div>
+            </div>
+            <Separator></Separator>
+            <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
                 <Button onClick={handleNextStepClick} disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
             </div>
-            <Alert className="my-5">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Heads up!</AlertTitle>
-                <AlertDescription>
-                    The placements you add will appear in table below. Each placement will be added as a seprate row when creating campaign.
-                </AlertDescription>
-            </Alert>
-            <Table className='mt-10' id='placements_table'>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Placement</TableHead>
-                        <TableHead>Percentage</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {biddingData.length > 0 ? <>{biddingData.map((item, index) => {
-                        return (
-                            <TableRow key={index}>
-                                <TableCell>{item.placement}</TableCell>
-                                <TableCell>{item.percentage}</TableCell>
-                                <TableCell>
-                                    <Trash2 className='m-auto' onClick={() => handleDeleteBtn(item.id)} role="button" color="red" />
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}</> : <TableRow>
-                        <TableCell colSpan={3}><p className='text-neutral-400 mt-5 text-center m-auto'>No placements added. Please add placement to continue.</p></TableCell>
-                    </TableRow>}
-                </TableBody>
-            </Table>
         </div>
     )
 }
