@@ -56,7 +56,6 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     }),
     setNextStep: (step: number) => set((state) => ({ currentStep: state.currentStep + 1 })),
     setPrevStep: (step: number) => set((state) => {
-        console.log('Setting prev step')
         return { currentStep: state.currentStep - 1 }
     })
 })))

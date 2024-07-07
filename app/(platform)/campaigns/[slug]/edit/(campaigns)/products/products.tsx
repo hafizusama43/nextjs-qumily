@@ -45,7 +45,12 @@ export const initialState = {
 */
 
 const Products = () => {
-    const { currentStep } = useCampaignsStore()
+    const { currentStep, campaignData } = useCampaignsStore()
+
+    useEffect(() => {
+        console.log(campaignData)
+    }, [currentStep])
+
 
     return (
         <div className='border border-gray-300 p-5 rounded-lg'>

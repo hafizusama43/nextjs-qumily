@@ -73,8 +73,8 @@ const Step2 = () => {
                     ...initialState,
                     ...campaignObjValues,
                     'entity': STEPS[currentStep],
-                    ['placement']: '%placement',
-                    ['percentage']: '%percentage'
+                    ['placement']: '%placement%',
+                    ['percentage']: '%percentage%'
                 };
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
@@ -84,8 +84,8 @@ const Step2 = () => {
                     ...initialState,
                     ...campaignObjValues,
                     'entity': STEPS[currentStep],
-                    ['placement']: '%placement',
-                    ['percentage']: '%percentage'
+                    ['placement']: '%placement%',
+                    ['percentage']: '%percentage%'
                 };
                 campaignData.push(updatedObj);
                 setCampaignData(campaignData);
