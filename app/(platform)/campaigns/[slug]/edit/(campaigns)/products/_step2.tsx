@@ -80,13 +80,11 @@ const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
     }
 
     const handleNextStepClick = () => {
-        // handleNextStep(biddingData, 'bidding-adjustment')
         // Get existsing campaign object to retain values in next object
         var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
 
         console.log(campaignObjValues)
-        // console.log(campaignData)
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
 
         if (objExists.length > 0) {
