@@ -83,11 +83,13 @@ const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
         // handleNextStep(biddingData, 'bidding-adjustment')
         // Get existsing campaign object to retain values in next object
         var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-        const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
+        const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
 
         // const { placementArray, percentageArray } = transformObject(data);
-        console.log(biddingData)
+        console.log(campaignObjValues)
+        console.log(campaignData)
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+        
         // if (objExists.length > 0) {
         //     console.log('Object found Bidding Adjustment : Updating')
         //     const updatedObj = {
@@ -111,7 +113,7 @@ const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
         //     };
         // }
 
-        setNextStep();
+        // setNextStep();
     }
 
 

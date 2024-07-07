@@ -25,7 +25,7 @@ const FormSchema = z.object({
     }),
     end_date: z.date().default(new Date()).refine(date => date instanceof Date && !isNaN(date.getTime()), {
         message: 'End date must be a valid date',
-    }),
+    }).nullable(),
     targeting_type: z.string().min(1, { message: "Targeting Type is required" }),
     state: z.string().min(1, { message: "State is required" }).default('Enabled'),
     daily_budget: z.coerce.number().min(1, 'Daily Budget must be greater then 0'),
@@ -48,7 +48,7 @@ const Step1 = ({ STEPS, handlePrevStep, handleNextStep }) => {
             campaign_id: '',
             campaign_name: '',
             start_date: new Date(),
-            end_date: new Date(),
+            end_date: null,
             targeting_type: 'Auto',
             state: 'Enabled',
             daily_budget: 10,
@@ -105,7 +105,7 @@ const Step1 = ({ STEPS, handlePrevStep, handleNextStep }) => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className="block md:flex gap-5">
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"product"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product}></RenderInput>
+                            <RenderInput disabled name={"product"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product}></RenderInput>
                         </div>
                         <div className='basis-1/2 w-full'>
                             <RenderInput disabled name={"entity"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.entity}></RenderInput>

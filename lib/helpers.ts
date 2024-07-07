@@ -16,7 +16,8 @@ export const CAMPAIGN_STATE = {
 
 export const BIDDING_STRATEGY = {
     "Fixed bid": "Fixed bid",
-    "Open bid": "Open bid",
+    "Dynamic bids - down only": "Dynamic bids - down only",
+    "Dynamic bids - up and down": " Dynamic bids - up and down"
 }
 
 export const PLACEMENT = {

@@ -13,8 +13,8 @@ interface InitialState {
     product_targeting_id: string;
     campaign_name: string;
     ad_group_name: string;
-    start_date: string;
-    end_date: string;
+    start_date: string | Date;
+    end_date: string | Date | null;
     targeting_type: string;
     state: string;
     daily_budget: number;
@@ -24,8 +24,8 @@ interface InitialState {
     keyword_text: string;
     match_type: string;
     bidding_strategy: string;
-    placement: any[];
-    percentage: any[];
+    placement: string;
+    percentage: string;
     product_targeting_expression: string;
 }
 

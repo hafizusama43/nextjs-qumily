@@ -23,6 +23,7 @@ export async function GET() {
       return acc;
     }, {});
     const templatesData = campaigns.rows.map(item => {
+      console.log(userMap[item.created_by])
       return { ...item, username: userMap[item.created_by] };
     });
 

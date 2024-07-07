@@ -41,8 +41,8 @@ export const initialState = {
     keyword_text: '',
     match_type: '',
     bidding_strategy: '',
-    placement: [],
-    percentage: [],
+    placement: '',
+    percentage: '',
     product_targeting_expression: ''
 }
 
