@@ -20,8 +20,9 @@ import { Kablammo } from 'next/font/google'
 import { Card } from '@/components/ui/card'
 
 const FormSchema = z.object({
-    placement: z.string().min(1, { message: "Placement is required" }).default('Placement Top'),
-    percentage: z.coerce.number().min(1, 'Percentage must be greater then 0').default(0),
+    state: z.string().min(1, { message: "State is required" }).default('Enabled'),
+    bid: z.coerce.number().min(1, 'Bid must be greater then 0').default(0),
+    product_targeting_expression: z.string().min(1, { message: "Product targeting expression is required" }).default('Enabled'),
 });
 
 
@@ -30,8 +31,9 @@ const Step5 = () => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            placement: 'Placement Top',
-            percentage: 0,
+            state: 'Enabled',
+            bid: 0,
+            product_targeting_expression: ''
         },
     })
 
@@ -43,17 +45,6 @@ const Step5 = () => {
         form.reset()
     }
 
-    // Function to reverse the transformation for arrays
-    const reverseTransformArray = (placementArray, percentageArray) => {
-        return placementArray.map((placementObj, index) => {
-            const id = Object.keys(placementObj)[0];
-            const placement = placementObj[id];
-            const percentage = percentageArray[index][id];
-
-            return { id, placement, percentage };
-        });
-    }
-
     const handleDeleteBtn = (id: string) => {
         const updatedData = biddingData.filter((item) => item.id !== id)
         setBiddingData(updatedData);
@@ -63,18 +54,18 @@ const Step5 = () => {
         // Bidding adjustments is optional if not added any then skip 
         if (biddingData.length > 0) {
             // Get existsing campaign object to retain values in next object
-            var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-            const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
-            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
+            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'ad_group_id']);
+            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "product targeting");
 
             if (objExists.length > 0) {
                 console.info(`Object "${STEPS[currentStep]}" found : Updating`)
                 const updatedObj = {
                     ...initialState,
-                    ...campaignObjValues,
-                    'entity': STEPS[currentStep],
-                    ['placement']: '%placement%',
-                    ['percentage']: '%percentage%'
+                    ...adGroupObjValues,
+                    ['state']: '%state%',
+                    ['bid']: '%bid%',
+                    ['product_targeting_expression']: '%product_targeting_expression%'
                 };
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
@@ -82,16 +73,17 @@ const Step5 = () => {
                 console.info(`Object "${STEPS[currentStep]}" not found : Creating`)
                 const updatedObj = {
                     ...initialState,
-                    ...campaignObjValues,
-                    'entity': STEPS[currentStep],
-                    ['placement']: '%placement%',
-                    ['percentage']: '%percentage%'
+                    ...adGroupObjValues,
+                    'entity': 'Product Targeting',
+                    ['state']: '%state%',
+                    ['bid']: '%bid%',
+                    ['product_targeting_expression']: '%product_targeting_expression%'
                 };
                 campaignData.push(updatedObj);
                 setCampaignData(campaignData);
             }
         }
-        setNextStep();
+        // setNextStep();
     }
 
 
@@ -155,7 +147,7 @@ const Step5 = () => {
             <Separator></Separator>
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
-                <Button onClick={()=>{}} type="button"><SaveIcon /> &nbsp; Save changes</Button>
+                <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button>
             </div>
         </div>
     )

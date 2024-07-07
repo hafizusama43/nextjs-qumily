@@ -76,7 +76,7 @@ const Step4 = () => {
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Heads up!</AlertTitle>
                 <AlertDescription>
-                    You can add <b>multiples SKU'S</b> at once, either they should be comma seperated <b>eg. sku1, sku2, sku2....</b> or they should be seperated by space eg. <b>sku1 sku2 sku2....</b>.
+                    You can add <b>multiples SKU&apos;S</b> at once, either they should be comma seperated <b>eg. sku1, sku2, sku2....</b> or they should be seperated by space eg. <b>sku1 sku2 sku2....</b>.
                 </AlertDescription>
             </Alert>
             <Form {...form}>

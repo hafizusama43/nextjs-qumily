@@ -35,12 +35,19 @@ interface BiddingData {
     id: string
 }
 
+interface ProductTargetingExpressionData {
+    state: string;
+    bid: number;
+    product_targeting_expression: string
+}
+
 interface useCampaignsStoreProps {
     campaignData: InitialState[];
     skus: string;
     currentStep: number;
     biddingData: BiddingData[];
     targetingType: string;
+    productTargetingExpressionData: ProductTargetingExpressionData[],
     setCampaignData: (data: InitialState[]) => void;
     setNextStep: (step?: number) => void;
     setPrevStep: (step?: number) => void;
@@ -54,11 +61,15 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     currentStep: 1,
     skus: '',
     targetingType: '',
+    productTargetingExpressionData: [],
     setCampaignData: (data: InitialState[]) => set(() => {
         return { campaignData: data }
     }),
     setBiddingData: (data: BiddingData[]) => set(() => {
         return { biddingData: data }
+    }),
+    setProductTargetingExpressionData: (data: ProductTargetingExpressionData[]) => set(() => {
+        return { productTargetingExpressionData: data }
     }),
     setSkus: (data: string) => set(() => {
         return { skus: data }
