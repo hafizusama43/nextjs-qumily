@@ -39,8 +39,8 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                                 <Link href="join-taskify"><Button className=''>Get Taskify for free</Button></Link>
                             </>
                             }
-                            {isSignedIn && <Link href="/templates"><Button className='mr-4' variant="secondary">Templates</Button></Link>}
-                            {isSignedIn && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organisations</Button></Link>}
+                            {isSignedIn && process.env.NEXT_ENV === 'development' && <Link href="/templates"><Button className='mr-4' variant="secondary">Templates</Button></Link>}
+                            {isSignedIn && process.env.NEXT_ENV === 'development' && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organisations</Button></Link>}
                             {isSignedIn && <Link href="/campaigns"><Button className='mr-4' variant="secondary">Campaigns</Button></Link>}
                             {isSignedIn && <span className="ml-2 flex items-center"><UserButton afterSignOutUrl="/" userProfileMode="navigation" userProfileUrl="/user-profile"></UserButton></span>}
                         </div>

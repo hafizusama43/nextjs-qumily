@@ -37,22 +37,28 @@ interface BiddingData {
 
 interface useCampaignsStoreProps {
     campaignData: InitialState[];
-    setCampaignData: (data: InitialState[]) => void,
+    skus: string;
     currentStep: number;
     biddingData: BiddingData[];
+    setCampaignData: (data: InitialState[]) => void;
     setNextStep: (step?: number) => void;
     setPrevStep: (step?: number) => void;
     setBiddingData: (data: BiddingData[]) => void;
+    setSkus: (data: string) => void;
 }
 export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     campaignData: [],
     biddingData: [],
     currentStep: 1,
+    skus: '',
     setCampaignData: (data: InitialState[]) => set(() => {
         return { campaignData: data }
     }),
     setBiddingData: (data: BiddingData[]) => set(() => {
         return { biddingData: data }
+    }),
+    setSkus: (data: string) => set(() => {
+        return { skus: data }
     }),
     setNextStep: (step: number) => set((state) => ({ currentStep: state.currentStep + 1 })),
     setPrevStep: (step: number) => set((state) => {

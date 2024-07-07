@@ -65,7 +65,7 @@ const Step1 = () => {
                 form.setValue(key as keyof FormSchemaType, value as any);
             });
         }
-    }, [campaignData, form])
+    }, [campaignData, currentStep, form])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");

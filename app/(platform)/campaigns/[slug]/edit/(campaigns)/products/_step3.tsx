@@ -33,15 +33,14 @@ const Step3 = () => {
 
     useEffect(() => {
         console.info(`Setting "${STEPS[currentStep]}" form state`)
-        var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
-        console.log(campaignObjExists)
-        if (campaignObjExists.length > 0) {
-            const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['ad_group_id', 'ad_group_name', 'ad_group_default_bid']);
+        var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
+        if (adGroupObjExists.length > 0) {
+            const campaignObjValues = getSpecificKeyValues(adGroupObjExists[0], ['ad_group_id', 'ad_group_name', 'ad_group_default_bid']);
             Object.entries(campaignObjValues).forEach(([key, value]) => {
                 form.setValue(key as keyof FormSchemaType, value as any);
             });
         }
-    }, [campaignData, form])
+    }, [campaignData, currentStep, form])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");

@@ -1,26 +1,93 @@
+"use client"
 import { Button } from '@/components/ui/button'
-import React from 'react'
-import { CalendarIcon, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { bigint, z } from 'zod'
+import { v4 as uuidv4 } from 'uuid';
+import { Form } from '@/components/ui/form'
+import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
+import { RenderInput } from '../_renderInput'
+import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS, STEPS } from '@/lib/helpers'
+import { RenderSelect } from '../_renderSelect'
+import { Separator } from '@/components/ui/separator'
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
-import { STEPS } from '@/lib/helpers'
+import { initialState } from './products'
+import loadJsConfig from 'next/dist/build/load-jsconfig'
+import { Kablammo } from 'next/font/google'
+import { Card } from '@/components/ui/card'
+import { RenderTextArea } from '../_renderTextInput'
+
+const FormSchema = z.object({
+    sku: z.string().min(1, { message: "Products SKU'S are required" }),
+});
 
 const Step4 = () => {
-    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep } = useCampaignsStore()
-    const onSubmit = () => {
-        // handleNextStep({}, 'product-ad')
-    }
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setSkus, skus } = useCampaignsStore()
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            sku: '',
+        },
+    })
 
-    const handleNextStepClick = () => {
+    useEffect(() => {
+        console.info(`Setting "${STEPS[currentStep]}" form state`)
+        form.setValue("sku", skus);
+    }, [currentStep, form, skus])
+
+    const onSubmit = (data) => {
+        setSkus(data.sku);
+
+        // Get existsing campaign object to retain values in next object
+        var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
+        const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'ad_group_id', 'state']);
+        var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "product ad");
+
+        if (objExists.length > 0) {
+            console.info(`Object "${STEPS[currentStep]}" found : Updating`)
+            const updatedObj = {
+                ...initialState,
+                ...adGroupObjValues,
+                'entity': STEPS[currentStep],
+                'sku': '%sku%'
+            };
+            const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+            setCampaignData(arr)
+        } else {
+            console.info(`Object "${STEPS[currentStep]}" not found : Creating`)
+            const updatedObj = {
+                ...initialState,
+                ...adGroupObjValues,
+                'entity': STEPS[currentStep],
+                'sku': '%sku%'
+            };
+            campaignData.push(updatedObj);
+            setCampaignData(campaignData);
+        }
         setNextStep();
     }
 
     return (
-        <form onSubmit={(onSubmit)}>
-            <div className='flex justify-end gap-4 mt-5'>
-                <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
-                <Button onClick={handleNextStepClick} disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+        <div>
+            <div>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+                        <div className='w-full'>
+                            <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
+                        </div>
+
+                        <Separator className='mt-5'></Separator>
+                        <div className='flex justify-end gap-4 mt-5'>
+                            <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
+                            <Button disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                        </div>
+                    </form>
+                </Form>
             </div>
-        </form>
+        </div>
     )
 }
 
