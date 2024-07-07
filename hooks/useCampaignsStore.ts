@@ -19,7 +19,7 @@ interface InitialState {
     state: string;
     daily_budget: number;
     sku: string;
-    ad_group_default_bid: string;
+    ad_group_default_bid: number;
     bid: string;
     keyword_text: string;
     match_type: string;

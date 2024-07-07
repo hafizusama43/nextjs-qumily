@@ -28,7 +28,7 @@ export const initialState = {
     state: '',
     daily_budget: 0,
     sku: '',
-    ad_group_default_bid: '',
+    ad_group_default_bid: 0,
     bid: '',
     keyword_text: '',
     match_type: '',

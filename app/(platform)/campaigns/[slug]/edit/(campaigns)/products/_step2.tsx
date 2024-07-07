@@ -90,8 +90,8 @@ const Step2 = () => {
                 campaignData.push(updatedObj);
                 setCampaignData(campaignData);
             }
-            setNextStep();
         }
+        setNextStep();
     }
 
 
