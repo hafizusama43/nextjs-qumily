@@ -126,11 +126,6 @@ const Products = () => {
         // }
     }, [campaignData, currentStep])
 
-    useEffect(() => {
-        console.log(campaignData)
-    }, [campaignData])
-
-
     const handlePrevStep = useCallback(() => {
         // if (currentStep > 1) {
         // setStep(currentStep - 1)
