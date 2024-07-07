@@ -71,7 +71,7 @@ const Step1 = ({ STEPS, handlePrevStep, handleNextStep }) => {
         // handleNextStep(data, 'campaign')
         // console.log('Current step : ', currStepName)
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-        console.log(objExists)
+        // console.log(objExists)
         if (objExists.length > 0) {
             console.log('Object found : Updating')
             const updatedObj = {
@@ -90,12 +90,13 @@ const Step1 = ({ STEPS, handlePrevStep, handleNextStep }) => {
                 ...initialState,
                 ...data
             };
-            console.log(updatedObj)
+            // console.log(updatedObj)
             // const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-            setCampaignData([updatedObj]);
+            campaignData.push(updatedObj);
+            setCampaignData(campaignData);
         }
 
-        console.log(campaignData)
+        // console.log(campaignData)
         setNextStep();
     }
 

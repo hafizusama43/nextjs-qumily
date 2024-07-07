@@ -42,18 +42,18 @@ const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
     })
 
 
-    useEffect(() => {
-        console.log('Setting bidding adjustment form state')
-        var biddingObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
-        console.log(biddingObjExists)
-        if (biddingObjExists.length > 0) {
-            const biddingObjValues = getSpecificKeyValues(biddingObjExists[0], ['placement', 'percentage']);
-            console.log(biddingObjValues)
-            const { placement, percentage } = biddingObjValues
-            const reverseArray = reverseTransformArray(placement, percentage)
-            setBiddingData(reverseArray)
-        }
-    }, [campaignData, form])
+    // useEffect(() => {
+    //     console.log('Setting bidding adjustment form state')
+    //     var biddingObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+    //     console.log(biddingObjExists)
+    //     if (biddingObjExists.length > 0) {
+    //         const biddingObjValues = getSpecificKeyValues(biddingObjExists[0], ['placement', 'percentage']);
+    //         console.log(biddingObjValues)
+    //         const { placement, percentage } = biddingObjValues
+    //         const reverseArray = reverseTransformArray(placement, percentage)
+    //         setBiddingData(reverseArray)
+    //     }
+    // }, [campaignData, form])
 
     const onSubmit = (data) => {
         const id = uuidv4();
@@ -85,35 +85,36 @@ const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
         var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
 
-        // const { placementArray, percentageArray } = transformObject(data);
         console.log(campaignObjValues)
-        console.log(campaignData)
+        // console.log(campaignData)
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
-        
-        // if (objExists.length > 0) {
-        //     console.log('Object found Bidding Adjustment : Updating')
-        //     const updatedObj = {
-        //         ... initialState,
-        //         ...campaignObjValues,
-        //         'entity': STEPS[currentStep],
-        //         ['placement']: placementArray,
-        //         ['percentage']: percentageArray
-        //     };
-        //     // setCampaignData(prevData =>
-        //     //     prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-        //     // );
-        // } else {
-        //     console.log('Object not found Bidding Adjustment : Creating')
-        //     const updatedObj = {
-        //         ...initialState,
-        //         ...campaignObjValues,
-        //         'entity': STEPS[currentStep],
-        //         ['placement']: placementArray,
-        //         ['percentage']: percentageArray
-        //     };
-        // }
 
+        if (objExists.length > 0) {
+            console.log('Object found Bidding Adjustment : Updating')
+            const updatedObj = {
+                ...initialState,
+                ...campaignObjValues,
+                'entity': STEPS[currentStep],
+                ['placement']: '%placement',
+                ['percentage']: '%percentage'
+            };
+            const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+            setCampaignData(arr)
+        } else {
+            console.log('Object not found Bidding Adjustment : Creating')
+            const updatedObj = {
+                ...initialState,
+                ...campaignObjValues,
+                'entity': STEPS[currentStep],
+                ['placement']: '%placement',
+                ['percentage']: '%percentage'
+            };
+            campaignData.push(updatedObj);
+            setCampaignData(campaignData);
+        }
         // setNextStep();
+        console.log(campaignData)
+
     }
 
 
