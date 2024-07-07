@@ -72,21 +72,26 @@ const Step4 = () => {
 
     return (
         <div>
-            <div>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                        <div className='w-full'>
-                            <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
-                        </div>
+            <Alert className="my-5">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Heads up!</AlertTitle>
+                <AlertDescription>
+                    You can add <b>multiples SKU'S</b> at once, either they should be comma seperated <b>eg. sku1, sku2, sku2....</b> or they should be seperated by space eg. <b>sku1 sku2 sku2....</b>.
+                </AlertDescription>
+            </Alert>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+                    <div className='w-full'>
+                        <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
+                    </div>
 
-                        <Separator className='mt-5'></Separator>
-                        <div className='flex justify-end gap-4 mt-5'>
-                            <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
-                            <Button disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
-                        </div>
-                    </form>
-                </Form>
-            </div>
+                    <Separator className='mt-5'></Separator>
+                    <div className='flex justify-end gap-4 mt-5'>
+                        <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
+                        <Button disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                    </div>
+                </form>
+            </Form>
         </div>
     )
 }

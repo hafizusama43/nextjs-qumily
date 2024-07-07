@@ -40,17 +40,20 @@ interface useCampaignsStoreProps {
     skus: string;
     currentStep: number;
     biddingData: BiddingData[];
+    targetingType: string;
     setCampaignData: (data: InitialState[]) => void;
     setNextStep: (step?: number) => void;
     setPrevStep: (step?: number) => void;
     setBiddingData: (data: BiddingData[]) => void;
     setSkus: (data: string) => void;
+    setTargetingType: (data: string) => void;
 }
 export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     campaignData: [],
     biddingData: [],
     currentStep: 1,
     skus: '',
+    targetingType: '',
     setCampaignData: (data: InitialState[]) => set(() => {
         return { campaignData: data }
     }),
@@ -59,6 +62,9 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     }),
     setSkus: (data: string) => set(() => {
         return { skus: data }
+    }),
+    setTargetingType: (data: string) => set(() => {
+        return { targetingType: data }
     }),
     setNextStep: (step: number) => set((state) => ({ currentStep: state.currentStep + 1 })),
     setPrevStep: (step: number) => set((state) => {

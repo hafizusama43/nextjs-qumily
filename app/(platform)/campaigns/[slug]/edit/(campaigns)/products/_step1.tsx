@@ -37,7 +37,7 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 
 const Step1 = () => {
 
-    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep } = useCampaignsStore()
+    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep, setTargetingType } = useCampaignsStore()
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -68,6 +68,7 @@ const Step1 = () => {
     }, [campaignData, currentStep, form])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
+        setTargetingType(data.targeting_type)
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         if (objExists.length > 0) {
             console.info(`Object "${STEPS[currentStep]}" found : Updating`)

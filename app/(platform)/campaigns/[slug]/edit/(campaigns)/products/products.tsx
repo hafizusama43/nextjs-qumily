@@ -39,22 +39,22 @@ export const initialState = {
 }
 
 /*
- For sponsered Products campaigns
+ For bulk sponsered Products campaigns
  Refer to amazon adds documentation here : https://advertising.amazon.com/API/docs/en-us/bulksheets/2-0/create-sp-campaign
  Author : Usama Abdur Rehman <hafizusama43@gmail.com>
 */
 
 const Products = () => {
-    const { currentStep, campaignData } = useCampaignsStore()
+    const { currentStep, campaignData, targetingType } = useCampaignsStore()
 
     useEffect(() => {
         console.log(campaignData)
-    }, [currentStep])
+    }, [campaignData, currentStep])
 
 
     return (
         <div className='border border-gray-300 p-5 rounded-lg'>
-            <strong><h5>{STEPS[currentStep]}</h5></strong>
+            <strong><h5>{currentStep && currentStep === 5 && targetingType.toLocaleLowerCase() === "auto" ? "Product Targeting" : STEPS[currentStep]}</h5></strong>
             <Separator className='mt-3 mb-3'></Separator>
             {currentStep === 1 && <Step1 />}
             {currentStep === 2 && <Step2 />}
