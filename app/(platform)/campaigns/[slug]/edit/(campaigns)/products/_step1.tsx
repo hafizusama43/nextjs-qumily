@@ -57,7 +57,7 @@ const Step1 = () => {
     })
 
     useEffect(() => {
-        console.log('Setting campaign form state')
+        console.info(`Setting "${STEPS[currentStep]}" form state`)
         var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         if (campaignObjExists.length > 0) {
             const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'campaign_id', 'campaign_name', 'start_date', 'end_date', 'targeting_type', 'state', 'daily_budget', 'bidding_strategy']);
@@ -68,35 +68,24 @@ const Step1 = () => {
     }, [campaignData, form])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        // handleNextStep(data, 'campaign')
-        // console.log('Current step : ', currStepName)
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-        // console.log(objExists)
         if (objExists.length > 0) {
-            console.log('Object found : Updating')
+            console.info(`Object "${STEPS[currentStep]}" found : Updating`)
             const updatedObj = {
                 ...objExists[0],
                 ...data
             };
             const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
             setCampaignData(arr)
-            // setCampaignData(prevData =>
-            //     prevData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-            // );
-            // setCampaignData(arr)
         } else {
-            console.log('Object not found : Creating')
+            console.info(`Object "${STEPS[currentStep]}" not found : Creating`)
             const updatedObj = {
                 ...initialState,
                 ...data
             };
-            // console.log(updatedObj)
-            // const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
             campaignData.push(updatedObj);
             setCampaignData(campaignData);
         }
-
-        // console.log(campaignData)
         setNextStep();
     }
 

@@ -24,15 +24,9 @@ const FormSchema = z.object({
     percentage: z.coerce.number().min(1, 'Percentage must be greater then 0').default(0),
 });
 
-interface BiddingData {
-    placement: string;
-    percentage: number;
-    id: string
-}
 const Step2 = () => {
 
-    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep } = useCampaignsStore()
-    const [biddingData, setBiddingData] = useState<BiddingData[]>([])
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setBiddingData } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -41,24 +35,11 @@ const Step2 = () => {
         },
     })
 
-
-    // useEffect(() => {
-    //     console.log('Setting bidding adjustment form state')
-    //     var biddingObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
-    //     console.log(biddingObjExists)
-    //     if (biddingObjExists.length > 0) {
-    //         const biddingObjValues = getSpecificKeyValues(biddingObjExists[0], ['placement', 'percentage']);
-    //         console.log(biddingObjValues)
-    //         const { placement, percentage } = biddingObjValues
-    //         const reverseArray = reverseTransformArray(placement, percentage)
-    //         setBiddingData(reverseArray)
-    //     }
-    // }, [campaignData, form])
-
     const onSubmit = (data) => {
         const id = uuidv4();
         const objectWithId = { ...data, id: id };
-        setBiddingData((prevState) => [...prevState, objectWithId]);
+        const updatedData = [...biddingData, objectWithId]
+        setBiddingData(updatedData);
         form.reset()
     }
 
@@ -74,9 +55,8 @@ const Step2 = () => {
     }
 
     const handleDeleteBtn = (id: string) => {
-        setBiddingData((prevState) => (
-            prevState.filter((item) => item.id !== id)
-        ));
+        const updatedData = biddingData.filter((item) => item.id !== id)
+        setBiddingData(updatedData);
     }
 
     const handleNextStepClick = () => {
@@ -85,12 +65,10 @@ const Step2 = () => {
             // Get existsing campaign object to retain values in next object
             var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
             const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
-
-            console.log(campaignObjValues)
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
 
             if (objExists.length > 0) {
-                console.log('Object found Bidding Adjustment : Updating')
+                console.info(`Object "${STEPS[currentStep]}" found : Updating`)
                 const updatedObj = {
                     ...initialState,
                     ...campaignObjValues,
@@ -101,7 +79,7 @@ const Step2 = () => {
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
             } else {
-                console.log('Object not found Bidding Adjustment : Creating')
+                console.info(`Object "${STEPS[currentStep]}" not found : Creating`)
                 const updatedObj = {
                     ...initialState,
                     ...campaignObjValues,
@@ -112,8 +90,7 @@ const Step2 = () => {
                 campaignData.push(updatedObj);
                 setCampaignData(campaignData);
             }
-            // setNextStep();
-            // console.log(campaignData)
+            setNextStep();
         }
     }
 
