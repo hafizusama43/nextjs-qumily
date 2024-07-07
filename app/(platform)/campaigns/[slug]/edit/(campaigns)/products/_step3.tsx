@@ -2,11 +2,12 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import { CalendarIcon, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { STEPS } from '@/lib/helpers'
 
-const Step3 = ({ step, STEPS, handlePrevStep, handleNextStep }) => {
+const Step3 = () => {
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep } = useCampaignsStore()
     const onSubmit = () => {
-        handleNextStep({}, 'ad-group')
+        //     handleNextStep({}, 'ad-group')
     }
 
     const handleNextStepClick = () => {

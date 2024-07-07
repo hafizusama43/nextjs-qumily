@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS, STEPS } from '@/lib/helpers'
 import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -29,7 +29,7 @@ interface BiddingData {
     percentage: number;
     id: string
 }
-const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
+const Step2 = () => {
 
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep } = useCampaignsStore()
     const [biddingData, setBiddingData] = useState<BiddingData[]>([])
@@ -80,39 +80,41 @@ const Step2 = ({ STEPS, handlePrevStep, handleNextStep }) => {
     }
 
     const handleNextStepClick = () => {
-        // Get existsing campaign object to retain values in next object
-        var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-        const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
+        // Bidding adjustments is optional if not added any then skip 
+        if (biddingData.length > 0) {
+            // Get existsing campaign object to retain values in next object
+            var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+            const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
 
-        console.log(campaignObjValues)
-        var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+            console.log(campaignObjValues)
+            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
 
-        if (objExists.length > 0) {
-            console.log('Object found Bidding Adjustment : Updating')
-            const updatedObj = {
-                ...initialState,
-                ...campaignObjValues,
-                'entity': STEPS[currentStep],
-                ['placement']: '%placement',
-                ['percentage']: '%percentage'
-            };
-            const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-            setCampaignData(arr)
-        } else {
-            console.log('Object not found Bidding Adjustment : Creating')
-            const updatedObj = {
-                ...initialState,
-                ...campaignObjValues,
-                'entity': STEPS[currentStep],
-                ['placement']: '%placement',
-                ['percentage']: '%percentage'
-            };
-            campaignData.push(updatedObj);
-            setCampaignData(campaignData);
+            if (objExists.length > 0) {
+                console.log('Object found Bidding Adjustment : Updating')
+                const updatedObj = {
+                    ...initialState,
+                    ...campaignObjValues,
+                    'entity': STEPS[currentStep],
+                    ['placement']: '%placement',
+                    ['percentage']: '%percentage'
+                };
+                const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+                setCampaignData(arr)
+            } else {
+                console.log('Object not found Bidding Adjustment : Creating')
+                const updatedObj = {
+                    ...initialState,
+                    ...campaignObjValues,
+                    'entity': STEPS[currentStep],
+                    ['placement']: '%placement',
+                    ['percentage']: '%percentage'
+                };
+                campaignData.push(updatedObj);
+                setCampaignData(campaignData);
+            }
+            // setNextStep();
+            // console.log(campaignData)
         }
-        // setNextStep();
-        console.log(campaignData)
-
     }
 
 

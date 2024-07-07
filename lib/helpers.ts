@@ -53,6 +53,13 @@ export const SPONSORED_PRODUCTS_CAMPAIGNS = {
     product_targeting_expression: 'Product Targeting Expression'
 };
 
+export const STEPS = {
+    1: "Campaign",
+    2: "Bidding Adjustment",
+    3: "Ad Group",
+    4: "Product Ad",
+    5: "Keywords",
+}
 
 // Helper function to capitalize the first letter of the string
 export const capitalizeFirstLetter = (string) => {

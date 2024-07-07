@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE } from '@/lib/helpers'
+import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, SPONSORED_PRODUCTS_CAMPAIGNS, STEPS, TARGETING_TYPE } from '@/lib/helpers'
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { RenderInput } from '../_renderInput'
@@ -35,7 +35,7 @@ const FormSchema = z.object({
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 
-const Step1 = ({ STEPS, handlePrevStep, handleNextStep }) => {
+const Step1 = () => {
 
     const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep } = useCampaignsStore()
 
