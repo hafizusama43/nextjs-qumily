@@ -62,16 +62,19 @@ const Products = () => {
         //     setPendingSave(false)
         //     toast({ description: 'Changes saved successfully!' })
         // }, 3000);
-        const res = await axios.post('/api/campaigns/campaign-data',
-            { campaignData, targetingType, biddingData, skus, slug: params.slug },
-            {
-                headers: {
-                    "Accept": "application/json"
+        try {
+            const res = await axios.post('/api/campaigns/campaign-data',
+                { campaignData, targetingType, biddingData, skus, slug: params.slug },
+                {
+                    headers: {
+                        "Accept": "application/json"
+                    }
                 }
-            }
-        );
-        setPendingSave(false);
-
+            );
+            setPendingSave(false);
+        } catch (error) {
+            setPendingSave(false);
+        }
     }
 
     useEffect(() => {
