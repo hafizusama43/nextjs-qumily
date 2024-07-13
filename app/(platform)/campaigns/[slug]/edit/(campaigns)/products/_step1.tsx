@@ -62,6 +62,10 @@ const Step1 = () => {
         if (campaignObjExists.length > 0) {
             const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'campaign_id', 'campaign_name', 'start_date', 'end_date', 'targeting_type', 'state', 'daily_budget', 'bidding_strategy']);
             Object.entries(campaignObjValues).forEach(([key, value]) => {
+                // Need to format dates into new Date() when setting for form from store.
+                if ((key === 'start_date' || key === 'end_date') && value) {
+                    value = new Date(value as string);
+                }
                 form.setValue(key as keyof FormSchemaType, value as any);
             });
         }

@@ -21,23 +21,16 @@ export async function GET(request: NextRequest) {
         FROM campaign_data
         WHERE campaign_id = $1 ;`;
         var campaign_data = await queryDatabase(query, [campaign_id]);
-        campaign_data = campaign_data.rows.length > 0 ? parseValues(campaign_data.rows) : []
-
-        console.log(campaign_data);
+        campaign_data = campaign_data.rows.length > 0 ? parseValues(campaign_data.rows) : {}
 
         query = `SELECT
-        campaign_templates_data.*
+        product, entity, operation, campaign_id, ad_group_id, portfolio_id, ad_id, keyword_id, product_targeting_id, campaign_name, ad_group_name, start_date, end_date, targeting_type, state, daily_budget, sku, ad_group_default_bid, bid, keyword_text, match_type, bidding_strategy, placement, percentage, product_targeting_expression
         FROM campaign_templates_data
         WHERE campaign_templates_data.campaign_id_external = $1 ;`;
         var campaign_template_data = await queryDatabase(query, [campaign_id]);
+        campaign_template_data = campaign_template_data.rows.length > 0 ? campaign_template_data.rows : []
 
-
-
-
-        // console.log(JSON.parse(campaign_data.rows[0].value))
-        // console.log(campaign_template_data.rows)
-
-        return NextResponse.json({ success: true, message: 'Templates fetched successfully.', data: [] }, { status: 200 })
+        return NextResponse.json({ success: true, message: 'Templates fetched successfully.', data: { campaign_data, campaign_template_data } }, { status: 200 })
     } catch (error) {
         console.log(error)
         return NextResponse.json({ success: false, message: 'Database Error:', error }, { status: 500 })
@@ -111,6 +104,8 @@ function stringify(data: any): string {
 }
 
 async function insertTemplateData(data: any, campaign_id: number) {
+    // This function inserts template data make sure to data should have equal object length as no of cols inserted! Cols as listed below
+    // product, entity, operation, campaign_id, ad_group_id, portfolio_id, ad_id, keyword_id, product_targeting_id, campaign_name, ad_group_name, start_date, end_date, targeting_type, state, daily_budget, sku, ad_group_default_bid, bid, keyword_text, match_type, bidding_strategy, placement, percentage, product_targeting_expression
     var insert_str = await getCols();
     var value_str = '';
 

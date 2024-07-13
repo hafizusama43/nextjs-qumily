@@ -54,7 +54,7 @@ export const initialState = {
 
 const Products = () => {
     const params = useParams<{ slug: string }>();
-    const { currentStep, campaignData, targetingType, biddingData, skus } = useCampaignsStore()
+    const { currentStep, campaignData, targetingType, biddingData, skus, setCampaignData } = useCampaignsStore()
     const [pendingSave, setPendingSave] = useState(false);
     const [pending, setPending] = useState(false);
 
@@ -65,13 +65,14 @@ const Products = () => {
             const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
             if (res.data.success) {
                 console.log(res.data)
+                setCampaignData(res.data.data.campaign_template_data);
             }
             setPending(false)
         } catch (error) {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }, [params.slug])
+    }, [params.slug, setCampaignData])
 
     useEffect(() => {
         getCampaignData()
@@ -95,10 +96,6 @@ const Products = () => {
             console.log(error)
         }
     }
-
-    useEffect(() => {
-        console.log(campaignData)
-    }, [campaignData, currentStep])
 
     return (
         <React.Fragment>
