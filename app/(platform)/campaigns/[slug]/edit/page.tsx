@@ -1,10 +1,6 @@
 "use client"
-import TemplateHeader from '@/components/ui/_header';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { toast } from '@/components/ui/use-toast';
-import { capitalizeFirstLetter } from '@/lib/helpers';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
@@ -36,19 +32,8 @@ const EditCampaign = () => {
         getData()
     }, [getData])
 
-
-
-
     return (
         <div className='mb-20'>
-            <TemplateHeader>
-                <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; campaign</Label>
-                <div className='flex gap-2'>
-                    <Button size='sm'>Save changes</Button>
-                    {/* <Link href={`/campa/${params.slug}/create-campaign`}><Button size='sm'>Create campaign</Button></Link> */}
-                    {/* <Button disabled={pendingSave} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button> */}
-                </div>
-            </TemplateHeader>
             {pending ? <Skeleton className="h-[400px] w-[100%] rounded-xl" /> :
                 <React.Fragment>
                     {/* Need to mount the form according to campaign category */}

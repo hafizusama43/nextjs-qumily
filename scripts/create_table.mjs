@@ -7,7 +7,7 @@ const createCampaignTemplateTable = async (client) => {
             campaign_templates_id SERIAL PRIMARY KEY, 
             template_name VARCHAR(255) NOT NULL,
             template_category VARCHAR(255) NOT NULL,
-            slug VARCHAR(255) NOT NULL, 
+            slug VARCHAR(255) NOT NULL UNIQUE, 
             created_by VARCHAR(255) NOT NULL,
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -32,7 +32,7 @@ const createCampaignTable = async (client) => {
             campaign_id SERIAL PRIMARY KEY, 
             campaign_name VARCHAR(255) NOT NULL,
             campaign_category VARCHAR(255) NOT NULL,
-            slug VARCHAR(255) NOT NULL, 
+            slug VARCHAR(255) NOT NULL UNIQUE, 
             created_by VARCHAR(255) NOT NULL,
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -55,7 +55,7 @@ const createCampaignTemplateDataTable = async (client) => {
         const createTable = await client.query(`
         CREATE TABLE IF NOT EXISTS campaign_templates_data (
             campaign_templates_data_id SERIAL PRIMARY KEY,
-            template_id INT,
+            campaign_id_external INT,
             product VARCHAR(255) NULL,
             entity VARCHAR(255) NULL,
             operation VARCHAR(255) NULL,
@@ -105,7 +105,7 @@ const createCampaignDataTable = async (client) => {
         CREATE TABLE IF NOT EXISTS campaign_data (
             campaign_id INT, 
             key VARCHAR(255) NOT NULL,
-            value VARCHAR(255) NOT NULL
+            value text
         );`, []);
 
         console.log(`Created "campaign_data" table`);

@@ -10,7 +10,7 @@ async function main() {
     try {
         const client = await DbConnect();
 
-        await createCampaignTemplateTable(client)
+        // await createCampaignTemplateTable(client)
         await createCampaignTable(client);
         await createCampaignTemplateDataTable(client);
         await createCampaignDataTable(client)
