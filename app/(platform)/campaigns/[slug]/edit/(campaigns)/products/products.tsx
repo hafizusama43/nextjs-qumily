@@ -54,7 +54,7 @@ export const initialState = {
 
 const Products = () => {
     const params = useParams<{ slug: string }>();
-    const { currentStep, campaignData, targetingType, biddingData, skus, setCampaignData } = useCampaignsStore()
+    const { currentStep, campaignData, targetingType, biddingData, skus, setCampaignData, setTargetingType, setBiddingData, setSkus } = useCampaignsStore()
     const [pendingSave, setPendingSave] = useState(false);
     const [pending, setPending] = useState(false);
 
@@ -64,17 +64,21 @@ const Products = () => {
             setPending(true)
             const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
             if (res.data.success) {
-                console.log(res.data)
-                setCampaignData(res.data.data.campaign_template_data);
+                const { campaign_template_data, campaign_data } = res.data.data
+                setCampaignData(campaign_template_data);
+                campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
+                campaign_data.bidding_data && setBiddingData(campaign_data.bidding_data);
+                campaign_data.skus && setSkus(campaign_data.skus);
             }
             setPending(false)
         } catch (error) {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }, [params.slug, setCampaignData])
+    }, [params.slug, setCampaignData, setTargetingType])
 
     useEffect(() => {
+        // Get campaign template and campaign data
         getCampaignData()
     }, [getCampaignData])
 
