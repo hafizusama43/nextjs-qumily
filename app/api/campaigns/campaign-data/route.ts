@@ -77,6 +77,10 @@ export async function POST(request: NextRequest) {
     targetingType = stringify(targetingType);
     targetingType && await queryDatabase(query, [campaign_id, 'targeting-type', targetingType]);
 
+    // Insert skus
+    skus = stringify(skus);
+    skus && await queryDatabase(query, [campaign_id, 'skus', skus]);
+
     // Insert campaign-template-data
     insertTemplateData(campaignData, campaign_id);
 
@@ -99,8 +103,6 @@ async function insertTemplateData(data: any, campaign_id: number) {
     var value_str = '';
 
     insert_str += ' VALUES ';
-    // console.log(insert_str);
-
     data.forEach((element, index) => {
         value_str = `(${campaign_id},`;
         const obj = Object.values(element)
@@ -118,9 +120,7 @@ async function insertTemplateData(data: any, campaign_id: number) {
         }
         insert_str += value_str;
     });
-    // console.log(insert_str);
     queryDatabase(insert_str, [])
-
 }
 
 async function getCols() {

@@ -71,9 +71,11 @@ const Products = () => {
                     }
                 }
             );
+            toast({ description: 'Changes saved successfully!'})
             setPendingSave(false);
         } catch (error) {
             setPendingSave(false);
+            console.log(error)
         }
     }
 
