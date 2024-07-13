@@ -15,6 +15,7 @@ import { useParams } from 'next/navigation'
 import { Spin } from '@/components/ui/spin'
 import { toast } from '@/components/ui/use-toast'
 import axios from 'axios'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 
 export const initialState = {
@@ -55,15 +56,31 @@ const Products = () => {
     const params = useParams<{ slug: string }>();
     const { currentStep, campaignData, targetingType, biddingData, skus } = useCampaignsStore()
     const [pendingSave, setPendingSave] = useState(false);
+    const [pending, setPending] = useState(false);
+
+
+    const getCampaignData = useCallback(async () => {
+        try {
+            setPending(true)
+            const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
+            if (res.data.success) {
+                console.log(res.data)
+            }
+            setPending(false)
+        } catch (error) {
+            setPending(false)
+            toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
+        }
+    }, [params.slug])
+
+    useEffect(() => {
+        getCampaignData()
+    }, [getCampaignData])
 
     const handleSaveChanges = async () => {
         setPendingSave(true);
-        // setTimeout(() => {
-        //     setPendingSave(false)
-        //     toast({ description: 'Changes saved successfully!' })
-        // }, 3000);
         try {
-            const res = await axios.post('/api/campaigns/campaign-data',
+            await axios.post('/api/campaigns/campaign-data',
                 { campaignData, targetingType, biddingData, skus, slug: params.slug },
                 {
                     headers: {
@@ -71,7 +88,7 @@ const Products = () => {
                     }
                 }
             );
-            toast({ description: 'Changes saved successfully!'})
+            toast({ description: 'Changes saved successfully!' })
             setPendingSave(false);
         } catch (error) {
             setPendingSave(false);
@@ -90,18 +107,21 @@ const Products = () => {
                 <div className='flex gap-2'>
                     {/* <Button size='sm'>Save changes</Button> */}
                     {/* <Link href={`/campa/${params.slug}/create-campaign`}><Button size='sm'>Create campaign</Button></Link> */}
-                    <Button disabled={pendingSave} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button>
+                    <Button disabled={pendingSave || pending} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button>
                 </div>
             </TemplateHeader>
-            <div className='border border-gray-300 p-5 rounded-lg'>
-                <strong><h5>{currentStep && currentStep === 5 && targetingType.toLocaleLowerCase() === "auto" ? "Product Targeting" : STEPS[currentStep]}</h5></strong>
-                <Separator className='mt-3 mb-3'></Separator>
-                {currentStep === 1 && <Step1 />}
-                {currentStep === 2 && <Step2 />}
-                {currentStep === 3 && <Step3 />}
-                {currentStep === 4 && <Step4 />}
-                {currentStep === 5 && <Step5 />}
-            </div>
+            {pending ?
+                <Skeleton className="h-[400px] w-[100%] rounded-xl" /> :
+                <div className='border border-gray-300 p-5 rounded-lg'>
+                    <strong><h5>{currentStep && currentStep === 5 && targetingType.toLocaleLowerCase() === "auto" ? "Product Targeting" : STEPS[currentStep]}</h5></strong>
+                    <Separator className='mt-3 mb-3'></Separator>
+                    {currentStep === 1 && <Step1 />}
+                    {currentStep === 2 && <Step2 />}
+                    {currentStep === 3 && <Step3 />}
+                    {currentStep === 4 && <Step4 />}
+                    {currentStep === 5 && <Step5 />}
+                </div>}
+
         </React.Fragment>
     )
 }

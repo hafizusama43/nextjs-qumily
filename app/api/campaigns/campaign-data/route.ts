@@ -10,20 +10,32 @@ export async function GET(request: NextRequest) {
         var query = `SELECT
         campaigns.campaign_id
         FROM campaigns
-        WHERE campaigns.slug = '${slug}' ;`;
-        const template = await queryDatabase(query, []);
-        if (template.rows.length == 0) {
-            return NextResponse.json({ success: false, message: 'Invalid template id' }, { status: 500 });
+        WHERE campaigns.slug = $1 ;`;
+        const campaign = await queryDatabase(query, [slug]);
+        if (campaign.rows.length == 0) {
+            return NextResponse.json({ success: false, message: 'Invalid campaign id' }, { status: 500 });
         }
+        const campaign_id = campaign.rows[0].campaign_id;
+        query = `SELECT
+        campaign_data.*
+        FROM campaign_data
+        WHERE campaign_id = $1 ;`;
+        var campaign_data = await queryDatabase(query, [campaign_id]);
+        campaign_data = campaign_data.rows.length > 0 ? parseValues(campaign_data.rows) : []
 
-        // console.log(template.rows);
-        // query = `SELECT
-        // campaign_data.*
-        // FROM campaign_data
-        // WHERE campaign_id = ${template.rows[0].campaign_templates_id}
-        // ORDER BY campaign_data.campaign_data_id ASC ;`;
+        console.log(campaign_data);
 
-        // const template_data = await queryDatabase(query, []);
+        query = `SELECT
+        campaign_templates_data.*
+        FROM campaign_templates_data
+        WHERE campaign_templates_data.campaign_id_external = $1 ;`;
+        var campaign_template_data = await queryDatabase(query, [campaign_id]);
+
+
+
+
+        // console.log(JSON.parse(campaign_data.rows[0].value))
+        // console.log(campaign_template_data.rows)
 
         return NextResponse.json({ success: true, message: 'Templates fetched successfully.', data: [] }, { status: 200 })
     } catch (error) {
@@ -71,11 +83,11 @@ export async function POST(request: NextRequest) {
 
     // Insert bidding-data
     biddingData = stringify(biddingData);
-    biddingData && await queryDatabase(query, [campaign_id, 'bidding-data', biddingData]);
+    biddingData && await queryDatabase(query, [campaign_id, 'bidding_data', biddingData]);
 
     // Insert targeting-type
     targetingType = stringify(targetingType);
-    targetingType && await queryDatabase(query, [campaign_id, 'targeting-type', targetingType]);
+    targetingType && await queryDatabase(query, [campaign_id, 'targeting_type', targetingType]);
 
     // Insert skus
     skus = stringify(skus);
@@ -140,4 +152,21 @@ async function getCols() {
     });
     query_str += ')';
     return query_str;
+}
+
+function parseValues(data) {
+    const result = {};
+
+    data.forEach(item => {
+        const { key, value } = item;
+        try {
+            // Attempt to parse the JSON value
+            result[key] = JSON.parse(value);
+        } catch (error) {
+            // If parsing fails (not valid JSON), assign the value as string
+            result[key] = value;
+        }
+    });
+
+    return result;
 }

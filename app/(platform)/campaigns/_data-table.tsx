@@ -53,7 +53,7 @@ export function DataTable<TData extends MyData, TValue>({
                         </ConfirmDialog>
                     </TemplateTooltip>
                     <TemplateTooltip title={"Edit template"} >
-                        <Link href={`/campaigns/${row.original.slug}/edit`}>
+                        <Link href={`/campaigns/${row.original.slug}/edit?category=${row.original.campaign_category}`}>
                             <PencilLine role="button" color="green" />
                         </Link>
                     </TemplateTooltip>
