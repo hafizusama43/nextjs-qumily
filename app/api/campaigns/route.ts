@@ -1,5 +1,6 @@
 import queryDatabase from "@/lib/queryHelper";
 import { clerkClient } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 // Get all templates
@@ -27,6 +28,7 @@ export async function GET(request: NextRequest) {
       return { ...item, username: userMap[item.created_by] };
     });
 
+    revalidatePath(request.url)
     return NextResponse.json({ success: true, message: 'Campaigns fetched successfully.', data: templatesData }, { status: 200 })
   } catch (error) {
     console.log(error)
