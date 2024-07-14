@@ -24,7 +24,7 @@ const FormSchema = z.object({
     sku: z.string().min(1, { message: "Products SKU'S are required" }),
 });
 
-const Step4 = ({ steps }) => {
+const ProductAd = ({ steps }) => {
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setSkus, skus } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -96,4 +96,4 @@ const Step4 = ({ steps }) => {
     )
 }
 
-export default Step4
+export default ProductAd

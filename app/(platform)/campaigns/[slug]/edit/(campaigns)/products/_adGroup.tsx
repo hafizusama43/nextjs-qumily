@@ -20,7 +20,7 @@ const FormSchema = z.object({
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-const Step3 = ({ steps }) => {
+const AdGroup = ({ steps }) => {
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -100,4 +100,4 @@ const Step3 = ({ steps }) => {
     )
 }
 
-export default Step3
+export default AdGroup

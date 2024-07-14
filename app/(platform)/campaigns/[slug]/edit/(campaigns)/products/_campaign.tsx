@@ -35,7 +35,7 @@ const FormSchema = z.object({
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 
-const Step1 = ({ steps }) => {
+const Campaign = ({ steps }) => {
     const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep, setTargetingType } = useCampaignsStore()
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -156,4 +156,4 @@ const Step1 = ({ steps }) => {
 }
 
 
-export default Step1
+export default Campaign

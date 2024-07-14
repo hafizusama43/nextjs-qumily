@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { bigint, z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
-import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
+import { AlertTriangle, CircleArrowLeft, CircleArrowRight, SaveIcon, Trash2 } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
 import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { RenderSelect } from '../_renderSelect'
@@ -20,18 +20,20 @@ import { Kablammo } from 'next/font/google'
 import { Card } from '@/components/ui/card'
 
 const FormSchema = z.object({
-    placement: z.string().min(1, { message: "Placement is required" }).default('Placement Top'),
-    percentage: z.coerce.number().min(1, 'Percentage must be greater then 0').default(0),
+    state: z.string().min(1, { message: "State is required" }).default('Enabled'),
+    bid: z.coerce.number().min(1, 'Bid must be greater then 0').default(0),
+    product_targeting_expression: z.string().min(1, { message: "Product targeting expression is required" }).default('Enabled'),
 });
 
-const Step2 = ({ steps }) => {
 
+const CampaignNegKeyword = ({ steps }) => {
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setBiddingData } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            placement: 'Placement Top',
-            percentage: 0,
+            state: 'Enabled',
+            bid: 0,
+            product_targeting_expression: ''
         },
     })
 
@@ -43,17 +45,6 @@ const Step2 = ({ steps }) => {
         form.reset()
     }
 
-    // Function to reverse the transformation for arrays
-    const reverseTransformArray = (placementArray, percentageArray) => {
-        return placementArray.map((placementObj, index) => {
-            const id = Object.keys(placementObj)[0];
-            const placement = placementObj[id];
-            const percentage = percentageArray[index][id];
-
-            return { id, placement, percentage };
-        });
-    }
-
     const handleDeleteBtn = (id: string) => {
         const updatedData = biddingData.filter((item) => item.id !== id)
         setBiddingData(updatedData);
@@ -63,18 +54,18 @@ const Step2 = ({ steps }) => {
         // Bidding adjustments is optional if not added any then skip 
         if (biddingData.length > 0) {
             // Get existsing campaign object to retain values in next object
-            var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
-            const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
-            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
+            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'ad_group_id']);
+            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "product targeting");
 
             if (objExists.length > 0) {
                 console.info(`Object "${steps[currentStep]}" found : Updating`)
                 const updatedObj = {
                     ...initialState,
-                    ...campaignObjValues,
-                    'entity': steps[currentStep],
-                    ['placement']: '%placement%',
-                    ['percentage']: '%percentage%'
+                    ...adGroupObjValues,
+                    ['state']: '%state%',
+                    ['bid']: '%bid%',
+                    ['product_targeting_expression']: '%product_targeting_expression%'
                 };
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
@@ -82,22 +73,30 @@ const Step2 = ({ steps }) => {
                 console.info(`Object "${steps[currentStep]}" not found : Creating`)
                 const updatedObj = {
                     ...initialState,
-                    ...campaignObjValues,
-                    'entity': steps[currentStep],
-                    ['placement']: '%placement%',
-                    ['percentage']: '%percentage%'
+                    ...adGroupObjValues,
+                    'entity': 'Product Targeting',
+                    ['state']: '%state%',
+                    ['bid']: '%bid%',
+                    ['product_targeting_expression']: '%product_targeting_expression%'
                 };
                 campaignData.push(updatedObj);
                 setCampaignData(campaignData);
             }
         }
-        setNextStep();
+        // setNextStep();
     }
 
 
 
     return (
         <div>
+            <Alert className="my-5">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Heads up!</AlertTitle>
+                <AlertDescription>
+                    You can create four product targeting entities in <b>auto-targeting</b> campaigns if you want to define the bid amounts at the targeting level. Otherwise, Amazon will automatically create these rows, and the bid amount will match the ad group default bid. The four product targets will each have one of these four targeting expression values: <b>close-match, loose-match, substitutes, complements</b>. If you do include these four rows, you can customize the bid for each product target you want to bid on—and you can set the “state” to paused for any targeting expressions you do not want to bid on.
+                </AlertDescription>
+            </Alert>
             <div className='flex flex-row gap-5 mb-5'>
                 <div className='basis-1/2'>
                     <Form {...form}>
@@ -117,13 +116,6 @@ const Step2 = ({ steps }) => {
                     </Form>
                 </div>
                 <div className='basis-1/2'>
-                    <Alert className="my-5">
-                        <AlertTriangle className="h-4 w-4" />
-                        <AlertTitle>Heads up!</AlertTitle>
-                        <AlertDescription>
-                            The placements you add will appear in table below. Each placement will be added as a seprate row when creating campaign.
-                        </AlertDescription>
-                    </Alert>
                     <Card>
                         <Table className='' id='placements_table'>
                             <TableHeader>
@@ -155,10 +147,10 @@ const Step2 = ({ steps }) => {
             <Separator></Separator>
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
-                <Button onClick={handleNextStepClick} disabled={currentStep >= 5}>{currentStep < 5 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button>
             </div>
         </div>
     )
 }
 
-export default Step2
+export default CampaignNegKeyword

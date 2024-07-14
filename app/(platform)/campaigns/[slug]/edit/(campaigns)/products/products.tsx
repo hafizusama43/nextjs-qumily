@@ -1,11 +1,6 @@
 "use client"
 import { Separator } from '@/components/ui/separator'
 import React, { useCallback, useEffect, useState } from 'react'
-import Step1 from './_step1'
-import Step2 from './_step2'
-import Step3 from './_step3'
-import Step4 from './_step4'
-import Step5 from './_step5'
 import { capitalizeFirstLetter, GET_STEPS } from '@/lib/helpers'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import TemplateHeader from '@/components/ui/_header'
@@ -16,6 +11,11 @@ import { Spin } from '@/components/ui/spin'
 import { toast } from '@/components/ui/use-toast'
 import axios from 'axios'
 import { Skeleton } from '@/components/ui/Skeleton'
+import Campaign from './_campaign'
+import BiddingAdjustment from './_biddingAdjustment'
+import AdGroup from './_adGroup'
+import ProductAd from './_productAd'
+import CampaignNegKeyword from './_campaignNegKeyword'
 
 
 export const initialState = {
@@ -58,7 +58,6 @@ const Products = () => {
     const [pendingSave, setPendingSave] = useState(false);
     const [pending, setPending] = useState(false);
     const STEPS = GET_STEPS(targetingType);
-
 
     const getCampaignData = useCallback(async () => {
         try {
@@ -113,13 +112,13 @@ const Products = () => {
             {pending ?
                 <Skeleton className="h-[400px] w-[100%] rounded-xl" /> :
                 <div className='border border-gray-300 p-5 rounded-lg'>
-                    <strong><h5>{currentStep && currentStep === 5 && targetingType.toLocaleLowerCase() === "auto" ? "Product Targeting" : STEPS[currentStep]}</h5></strong>
+                    <strong><h5>{STEPS[currentStep]}</h5></strong>
                     <Separator className='mt-3 mb-3'></Separator>
-                    {currentStep === 1 && <Step1 steps={STEPS} />}
-                    {currentStep === 2 && <Step2 steps={STEPS} />}
-                    {currentStep === 3 && <Step3 steps={STEPS} />}
-                    {currentStep === 4 && <Step4 steps={STEPS} />}
-                    {currentStep === 5 && <Step5 steps={STEPS} />}
+                    {currentStep === 1 && <Campaign steps={STEPS} />}
+                    {currentStep === 2 && <BiddingAdjustment steps={STEPS} />}
+                    {currentStep === 3 && <AdGroup steps={STEPS} />}
+                    {currentStep === 4 && <ProductAd steps={STEPS} />}
+                    {currentStep === 5 && <CampaignNegKeyword steps={STEPS} />}
                 </div>}
         </React.Fragment>
     )
