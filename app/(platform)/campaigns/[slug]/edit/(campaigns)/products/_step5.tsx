@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, SaveIcon, Trash2 } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS, STEPS } from '@/lib/helpers'
+import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -26,7 +26,7 @@ const FormSchema = z.object({
 });
 
 
-const Step5 = () => {
+const Step5 = ({ steps }) => {
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setBiddingData } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -59,7 +59,7 @@ const Step5 = () => {
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "product targeting");
 
             if (objExists.length > 0) {
-                console.info(`Object "${STEPS[currentStep]}" found : Updating`)
+                console.info(`Object "${steps[currentStep]}" found : Updating`)
                 const updatedObj = {
                     ...initialState,
                     ...adGroupObjValues,
@@ -70,7 +70,7 @@ const Step5 = () => {
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
             } else {
-                console.info(`Object "${STEPS[currentStep]}" not found : Creating`)
+                console.info(`Object "${steps[currentStep]}" not found : Creating`)
                 const updatedObj = {
                     ...initialState,
                     ...adGroupObjValues,
@@ -146,7 +146,7 @@ const Step5 = () => {
             </div>
             <Separator></Separator>
             <div className='flex justify-end gap-4 mt-5'>
-                <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
+                <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                 <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button>
             </div>
         </div>

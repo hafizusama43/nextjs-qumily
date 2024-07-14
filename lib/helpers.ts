@@ -53,13 +53,45 @@ export const SPONSORED_PRODUCTS_CAMPAIGNS = {
     product_targeting_expression: 'Product Targeting Expression'
 };
 
-export const STEPS = {
-    1: "Campaign",
-    2: "Bidding Adjustment",
-    3: "Ad Group",
-    4: "Product Ad",
-    5: "Keywords",
+const STEPS_DEFAULT = {
+    1: "Campaign (Required)",
+    2: "Bidding Adjustment (Required)",
+    3: "Ad Group (Required)",
+    4: "Product Ad (Required)",
+    5: "Product Targeting (Required)",
+};
+
+const STEPS_CAMPAIGN_AUTO = {
+    1: "Campaign (Required)",
+    2: "Bidding Adjustment (Required)",
+    3: "Ad Group (Required)",
+    4: "Product Ad (Required)",
+    5: "Campaign negative keyword (Optional)",
+    6: "Negative keyword  (Optional)",
+    7: "Negative product targeting  (Optional)",
 }
+
+
+const STEPS_CAMPAIGN_MANUAL = {
+    1: "Campaign (Required)",
+    2: "Bidding Adjustment (Required)",
+    3: "Ad Group (Required)",
+    4: "Product Ad (Required)",
+}
+
+
+// Function to get the appropriate steps object based on a condition
+export const GET_STEPS = (condition: string) => {
+    if (condition.toLocaleLowerCase() === 'auto') {
+        return STEPS_CAMPAIGN_AUTO;
+    } else if (condition.toLocaleLowerCase() === 'manual') {
+        return STEPS_CAMPAIGN_MANUAL;
+    } else {
+        return STEPS_DEFAULT;
+    }
+};
+
+
 
 // Helper function to capitalize the first letter of the string
 export const capitalizeFirstLetter = (string) => {

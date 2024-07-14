@@ -6,7 +6,7 @@ import Step2 from './_step2'
 import Step3 from './_step3'
 import Step4 from './_step4'
 import Step5 from './_step5'
-import { capitalizeFirstLetter, STEPS } from '@/lib/helpers'
+import { capitalizeFirstLetter, GET_STEPS } from '@/lib/helpers'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import TemplateHeader from '@/components/ui/_header'
 import { Label } from '@/components/ui/label'
@@ -57,6 +57,7 @@ const Products = () => {
     const { currentStep, campaignData, targetingType, biddingData, skus, setCampaignData, setTargetingType, setBiddingData, setSkus } = useCampaignsStore()
     const [pendingSave, setPendingSave] = useState(false);
     const [pending, setPending] = useState(false);
+    const STEPS = GET_STEPS(targetingType);
 
 
     const getCampaignData = useCallback(async () => {
@@ -75,7 +76,7 @@ const Products = () => {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }, [params.slug, setCampaignData, setTargetingType])
+    }, [params.slug, setBiddingData, setCampaignData, setSkus, setTargetingType])
 
     useEffect(() => {
         // Get campaign template and campaign data
@@ -106,8 +107,6 @@ const Products = () => {
             <TemplateHeader>
                 <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; campaign</Label>
                 <div className='flex gap-2'>
-                    {/* <Button size='sm'>Save changes</Button> */}
-                    {/* <Link href={`/campa/${params.slug}/create-campaign`}><Button size='sm'>Create campaign</Button></Link> */}
                     <Button disabled={pendingSave || pending} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button>
                 </div>
             </TemplateHeader>
@@ -116,13 +115,12 @@ const Products = () => {
                 <div className='border border-gray-300 p-5 rounded-lg'>
                     <strong><h5>{currentStep && currentStep === 5 && targetingType.toLocaleLowerCase() === "auto" ? "Product Targeting" : STEPS[currentStep]}</h5></strong>
                     <Separator className='mt-3 mb-3'></Separator>
-                    {currentStep === 1 && <Step1 />}
-                    {currentStep === 2 && <Step2 />}
-                    {currentStep === 3 && <Step3 />}
-                    {currentStep === 4 && <Step4 />}
-                    {currentStep === 5 && <Step5 />}
+                    {currentStep === 1 && <Step1 steps={STEPS} />}
+                    {currentStep === 2 && <Step2 steps={STEPS} />}
+                    {currentStep === 3 && <Step3 steps={STEPS} />}
+                    {currentStep === 4 && <Step4 steps={STEPS} />}
+                    {currentStep === 5 && <Step5 steps={STEPS} />}
                 </div>}
-
         </React.Fragment>
     )
 }

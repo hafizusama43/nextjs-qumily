@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import React, { useEffect } from 'react'
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
-import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, SPONSORED_PRODUCTS_CAMPAIGNS, STEPS, TARGETING_TYPE } from '@/lib/helpers'
+import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE } from '@/lib/helpers'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -20,7 +20,7 @@ const FormSchema = z.object({
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-const Step3 = () => {
+const Step3 = ({ steps }) => {
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -32,7 +32,7 @@ const Step3 = () => {
     })
 
     useEffect(() => {
-        console.info(`Setting "${STEPS[currentStep]}" form state`)
+        console.info(`Setting "${steps[currentStep]}" form state`)
         var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
         if (adGroupObjExists.length > 0) {
             const campaignObjValues = getSpecificKeyValues(adGroupObjExists[0], ['ad_group_id', 'ad_group_name', 'ad_group_default_bid']);
@@ -40,7 +40,7 @@ const Step3 = () => {
                 form.setValue(key as keyof FormSchemaType, value as any);
             });
         }
-    }, [campaignData, currentStep, form])
+    }, [campaignData, currentStep, form, steps])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
@@ -48,21 +48,21 @@ const Step3 = () => {
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
 
         if (objExists.length > 0) {
-            console.info(`Object "${STEPS[currentStep]}" found : Updating`)
+            console.info(`Object "${steps[currentStep]}" found : Updating`)
             const updatedObj = {
                 ...initialState,
                 ...campaignObjValues,
-                'entity': STEPS[currentStep],
+                'entity': steps[currentStep],
                 ...data
             };
             const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
             setCampaignData(arr)
         } else {
-            console.info(`Object "${STEPS[currentStep]}" not found : Creating`)
+            console.info(`Object "${steps[currentStep]}" not found : Creating`)
             const updatedObj = {
                 ...initialState,
                 ...campaignObjValues,
-                'entity': STEPS[currentStep],
+                'entity': steps[currentStep],
                 ...data
             };
             campaignData.push(updatedObj);
@@ -91,8 +91,8 @@ const Step3 = () => {
                     </div>
                     <Separator className='my-3'></Separator>
                     <div className='flex justify-end gap-4 mt-10'>
-                        <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
-                        <Button disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                        <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
+                        <Button disabled={currentStep >= 5}>{currentStep < 5 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
                     </div>
                 </form>
             </Form>

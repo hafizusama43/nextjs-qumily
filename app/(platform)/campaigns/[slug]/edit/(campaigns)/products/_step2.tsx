@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS, STEPS } from '@/lib/helpers'
+import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -24,7 +24,7 @@ const FormSchema = z.object({
     percentage: z.coerce.number().min(1, 'Percentage must be greater then 0').default(0),
 });
 
-const Step2 = () => {
+const Step2 = ({ steps }) => {
 
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setBiddingData } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -68,22 +68,22 @@ const Step2 = () => {
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
 
             if (objExists.length > 0) {
-                console.info(`Object "${STEPS[currentStep]}" found : Updating`)
+                console.info(`Object "${steps[currentStep]}" found : Updating`)
                 const updatedObj = {
                     ...initialState,
                     ...campaignObjValues,
-                    'entity': STEPS[currentStep],
+                    'entity': steps[currentStep],
                     ['placement']: '%placement%',
                     ['percentage']: '%percentage%'
                 };
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
             } else {
-                console.info(`Object "${STEPS[currentStep]}" not found : Creating`)
+                console.info(`Object "${steps[currentStep]}" not found : Creating`)
                 const updatedObj = {
                     ...initialState,
                     ...campaignObjValues,
-                    'entity': STEPS[currentStep],
+                    'entity': steps[currentStep],
                     ['placement']: '%placement%',
                     ['percentage']: '%percentage%'
                 };
@@ -154,8 +154,8 @@ const Step2 = () => {
             </div>
             <Separator></Separator>
             <div className='flex justify-end gap-4 mt-5'>
-                <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && STEPS[currentStep - 1]}</Button>
-                <Button onClick={handleNextStepClick} disabled={currentStep >= 5}>{currentStep < 5 && STEPS[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
+                <Button onClick={handleNextStepClick} disabled={currentStep >= 5}>{currentStep < 5 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
             </div>
         </div>
     )
