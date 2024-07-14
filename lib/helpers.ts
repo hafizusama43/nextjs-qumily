@@ -14,6 +14,11 @@ export const CAMPAIGN_STATE = {
     "Disabled": "Disabled",
 }
 
+export const MATCH_TYPE = {
+    "Negative exact": "Negative exact",
+    "Negative phrase": "Negative phrase",
+}
+
 export const BIDDING_STRATEGY = {
     "Fixed bid": "Fixed bid",
     "Dynamic bids - down only": "Dynamic bids - down only",

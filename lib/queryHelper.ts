@@ -10,7 +10,7 @@ const queryDatabase = async (query: string, params: any[], keepAlive = false) =>
             return acc.replace(`$${index + 1}`, `'${param}'`);
         }, query);
 
-        // console.log('\x1b[33m%s\x1b[0m', debugQuery);
+        console.log('\x1b[33m%s\x1b[0m', debugQuery);
 
         if (process.env.NEXT_ENV === 'development') {
             // TODO : Implement pooling for local postgres

@@ -3,26 +3,25 @@ import { Button } from '@/components/ui/button'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { bigint, z } from 'zod'
+import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
-import { Form } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, SaveIcon, Trash2 } from 'lucide-react'
-import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
-import { RenderSelect } from '../_renderSelect'
+import { getSpecificKeyValues, MATCH_TYPE, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
-import loadJsConfig from 'next/dist/build/load-jsconfig'
-import { Kablammo } from 'next/font/google'
 import { Card } from '@/components/ui/card'
+import { RenderTextArea } from '../_renderTextInput'
+import { Checkbox } from '@radix-ui/react-checkbox'
 
 const FormSchema = z.object({
-    state: z.string().min(1, { message: "State is required" }).default('Enabled'),
-    bid: z.coerce.number().min(1, 'Bid must be greater then 0').default(0),
-    product_targeting_expression: z.string().min(1, { message: "Product targeting expression is required" }).default('Enabled'),
+    keyword_text: z.string().min(1, { message: "Keyword text is required" }),
+    items: z.array(z.string()).refine((value) => value.some((item) => item), {
+        message: "You have to select at least one item.",
+    }),
 });
 
 
@@ -31,9 +30,8 @@ const CampaignNegKeyword = ({ steps }) => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            state: 'Enabled',
-            bid: 0,
-            product_targeting_expression: ''
+            keyword_text: '',
+            items: [],
         },
     })
 
@@ -55,7 +53,8 @@ const CampaignNegKeyword = ({ steps }) => {
         if (biddingData.length > 0) {
             // Get existsing campaign object to retain values in next object
             var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
-            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'ad_group_id']);
+            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
+
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "product targeting");
 
             if (objExists.length > 0) {
@@ -90,27 +89,68 @@ const CampaignNegKeyword = ({ steps }) => {
 
     return (
         <div>
-            <Alert className="my-5">
+            {/* <Alert className="my-5">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Heads up!</AlertTitle>
                 <AlertDescription>
                     You can create four product targeting entities in <b>auto-targeting</b> campaigns if you want to define the bid amounts at the targeting level. Otherwise, Amazon will automatically create these rows, and the bid amount will match the ad group default bid. The four product targets will each have one of these four targeting expression values: <b>close-match, loose-match, substitutes, complements</b>. If you do include these four rows, you can customize the bid for each product target you want to bid on—and you can set the “state” to paused for any targeting expressions you do not want to bid on.
                 </AlertDescription>
-            </Alert>
+            </Alert> */}
             <div className='flex flex-row gap-5 mb-5'>
                 <div className='basis-1/2'>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                            <div className="block md:flex gap-5">
-                                <div className='basis-1/2 w-full'>
-                                    <RenderSelect name={"placement"} form={form} options={PLACEMENT} label={SPONSORED_PRODUCTS_CAMPAIGNS.placement}></RenderSelect>
-                                </div>
-                                <div className='basis-1/2 w-full'>
-                                    <RenderInput type='number' name={"percentage"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.percentage}></RenderInput>
-                                </div>
+                            <div className="w-full">
+                                <RenderTextArea name={"keyword_text"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.keyword_text}></RenderTextArea>
+                            </div>
+                            <div>
+                                <FormField
+                                    control={form.control}
+                                    name="items"
+                                    render={() => (
+                                        <FormItem>
+                                            <div className="mb-4">
+                                                <FormLabel className="text-base">Sidebar</FormLabel>
+                                            </div>
+                                            {Object.keys(MATCH_TYPE).map((item, index) => (
+                                                <FormField
+                                                    key={index}
+                                                    control={form.control}
+                                                    name="items"
+                                                    render={({ field }) => {
+                                                        return (
+                                                            <FormItem
+                                                                key={item}
+                                                                className="flex flex-row items-start space-x-3 space-y-0"
+                                                            >
+                                                                <FormControl>
+                                                                    <Checkbox
+                                                                        checked={field.value?.includes(item)}
+                                                                        onCheckedChange={(checked) => {
+                                                                            return checked
+                                                                                ? field.onChange([...field.value, item])
+                                                                                : field.onChange(
+                                                                                    field.value?.filter(
+                                                                                        (value) => value !== item
+                                                                                    )
+                                                                                )
+                                                                        }}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormLabel className="font-normal">
+                                                                    {item}
+                                                                </FormLabel>
+                                                            </FormItem>
+                                                        )
+                                                    }}
+                                                />
+                                            ))}
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
                             <div className='flex justify-end gap-4 mt-10'>
-                                <Button className='block w-full' >Add Placement</Button>
+                                <Button className='block w-full' >Add Keywords</Button>
                             </div>
                         </form>
                     </Form>
