@@ -1,9 +1,9 @@
 import queryDatabase from "@/lib/queryHelper";
 import { clerkClient } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Get all templates
-export async function GET() {
+export async function GET(request: NextRequest) {
   const ITEMS_PER_PAGE = 20;
   try {
     let campaigns;
