@@ -26,7 +26,7 @@ const FormSchema = z.object({
 
 
 const CampaignNegKeyword = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setBiddingData } = useCampaignsStore()
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, campaignNegKeywordData, setCampaignNegKeywordData } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -37,22 +37,44 @@ const CampaignNegKeyword = ({ steps }) => {
 
     const onSubmit = (data) => {
         const id = uuidv4();
-        // const objectWithId = { ...data, id: id };
-        console.log(data);
-        // const updatedData = [...biddingData, objectWithId]
+        var keywordArray: string[] = data.keyword_text.split(',');
+        keywordArray = keywordArray.filter(v => v != '');
+        const types: string[] = data.items ? data.items : [];
 
-        // setBiddingData(updatedData);
-        // form.reset()
+        // Function to check if the keyword already exists for a match type
+        const keywordExists = (array, keyword, type) => {
+            return array.some(item => item.keyword_text === keyword && item.match_type === type);
+        };
+
+        types.forEach(type => {
+            keywordArray.forEach(keyword => {
+                if (!keywordExists(campaignNegKeywordData, keyword, type)) {
+                    campaignNegKeywordData.push({
+                        id: uuidv4(),
+                        keyword_text: keyword,
+                        match_type: type
+                    });
+                }
+            });
+        });
+
+        form.reset();
+        console.log(campaignNegKeywordData)
+
     }
 
     const handleDeleteBtn = (id: string) => {
-        const updatedData = biddingData.filter((item) => item.id !== id)
-        setBiddingData(updatedData);
+        const updatedData = campaignNegKeywordData.filter((item) => item.id !== id)
+        setCampaignNegKeywordData(updatedData);
     }
 
     const handleNextStepClick = () => {
         // Bidding adjustments is optional if not added any then skip 
-        if (biddingData.length > 0) {
+        if (campaignNegKeywordData.length > 0) {
+            var entity: string = steps[currentStep];
+            entity = entity.replace('(Required)', '');
+            entity = entity.trim()
+
             // Get existsing campaign object to retain values in next object
             var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
             const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
@@ -60,25 +82,23 @@ const CampaignNegKeyword = ({ steps }) => {
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "product targeting");
 
             if (objExists.length > 0) {
-                console.info(`Object "${steps[currentStep]}" found : Updating`)
+                console.info(`Object "${entity}" found : Updating`)
                 const updatedObj = {
                     ...initialState,
                     ...adGroupObjValues,
-                    ['state']: '%state%',
-                    ['bid']: '%bid%',
-                    ['product_targeting_expression']: '%product_targeting_expression%'
+                    ['keyword_text']: '%keyword_text%',
+                    ['match_type']: '%match_type%',
                 };
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
             } else {
-                console.info(`Object "${steps[currentStep]}" not found : Creating`)
+                console.info(`Object "${entity}" not found : Creating`)
                 const updatedObj = {
                     ...initialState,
                     ...adGroupObjValues,
-                    'entity': 'Product Targeting',
-                    ['state']: '%state%',
-                    ['bid']: '%bid%',
-                    ['product_targeting_expression']: '%product_targeting_expression%'
+                    'entity': entity,
+                    ['keyword_text']: '%keyword_text%',
+                    ['match_type']: '%match_type%',
                 };
                 campaignData.push(updatedObj);
                 setCampaignData(campaignData);
@@ -112,7 +132,7 @@ const CampaignNegKeyword = ({ steps }) => {
                                     render={() => (
                                         <FormItem>
                                             <div className="mb-4">
-                                                <FormLabel className="text-base">Sidebar</FormLabel>
+                                                <FormLabel className="text-base">Match type</FormLabel>
                                             </div>
                                             {Object.keys(MATCH_TYPE).map((item, index) => (
                                                 <FormField
@@ -162,17 +182,17 @@ const CampaignNegKeyword = ({ steps }) => {
                         <Table className='' id='placements_table'>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Placement</TableHead>
-                                    <TableHead>Percentage</TableHead>
+                                    <TableHead>Keyword text</TableHead>
+                                    <TableHead>Match type</TableHead>
                                     <TableHead>Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {biddingData.length > 0 ? <>{biddingData.map((item, index) => {
+                                {campaignNegKeywordData.length > 0 ? <>{campaignNegKeywordData.map((item, index) => {
                                     return (
                                         <TableRow key={index}>
-                                            <TableCell>{item.placement}</TableCell>
-                                            <TableCell>{item.percentage}</TableCell>
+                                            <TableCell>{item.keyword_text}</TableCell>
+                                            <TableCell>{item.match_type}</TableCell>
                                             <TableCell>
                                                 <Trash2 className='m-auto' onClick={() => handleDeleteBtn(item.id)} role="button" color="red" />
                                             </TableCell>
@@ -190,7 +210,6 @@ const CampaignNegKeyword = ({ steps }) => {
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                 <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button>
-                <Button onClick={() => { form.reset() }} type="button"><SaveIcon /> &nbsp; Rest</Button>
             </div>
         </div>
     )

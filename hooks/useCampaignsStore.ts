@@ -35,6 +35,12 @@ interface BiddingData {
     id: string
 }
 
+interface CampaignNegKeywordData {
+    match_type: string;
+    keyword_text: string;
+    id: string
+}
+
 interface ProductTargetingExpressionData {
     state: string;
     bid: number;
@@ -46,9 +52,11 @@ interface useCampaignsStoreProps {
     skus: string;
     currentStep: number;
     biddingData: BiddingData[];
+    campaignNegKeywordData: CampaignNegKeywordData[];
     targetingType: string;
     productTargetingExpressionData: ProductTargetingExpressionData[],
     setCampaignData: (data: InitialState[]) => void;
+    setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => void;
     setNextStep: (step?: number) => void;
     setPrevStep: (step?: number) => void;
     setBiddingData: (data: BiddingData[]) => void;
@@ -58,12 +66,16 @@ interface useCampaignsStoreProps {
 export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     campaignData: [],
     biddingData: [],
+    campaignNegKeywordData: [],
     currentStep: 1,
     skus: '',
     targetingType: '',
     productTargetingExpressionData: [],
     setCampaignData: (data: InitialState[]) => set(() => {
         return { campaignData: data }
+    }),
+    setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => set(() => {
+        return { campaignNegKeywordData: data }
     }),
     setBiddingData: (data: BiddingData[]) => set(() => {
         return { biddingData: data }
