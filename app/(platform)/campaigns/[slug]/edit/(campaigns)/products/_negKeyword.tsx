@@ -74,8 +74,6 @@ const NegKeyword = ({ steps }) => {
             var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
             const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
-
-            console.log(objExists)
             if (objExists.length > 0) {
                 console.info(`Object "${entity}" found : Updating`)
                 const updatedObj = {
@@ -85,7 +83,6 @@ const NegKeyword = ({ steps }) => {
                     ['keyword_text']: '%keyword_text%',
                     ['match_type']: '%match_type%',
                 };
-                console.log(updatedObj)
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
             } else {

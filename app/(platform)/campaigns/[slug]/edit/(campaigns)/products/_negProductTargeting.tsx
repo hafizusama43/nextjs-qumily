@@ -43,7 +43,6 @@ const NegProductTargeting = ({ steps }) => {
             var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
             const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
-            console.log(objExists)
             if (objExists.length > 0) {
                 console.info(`Object "${entity}" found : Updating`)
                 const updatedObj = {
@@ -52,7 +51,6 @@ const NegProductTargeting = ({ steps }) => {
                     'entity': entity,
                     ['product_targeting_expression']: '%product_targeting_expression%',
                 };
-                console.log(updatedObj)
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
             } else {
@@ -68,44 +66,6 @@ const NegProductTargeting = ({ steps }) => {
             }
         }
     }
-
-    const handleSaveChanges = useCallback(() => {
-        console.log(productTargetingExpression);
-        // Bidding adjustments is optional if not added any then skip 
-        // if (negKeywordData.length > 0) {
-        //     var entity: string = getStepName(steps[currentStep]);
-        //     // Get existing campaign object to retain values in next object
-        //     var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
-        //     const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
-        //     var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
-
-        //     console.log(objExists)
-        //     if (objExists.length > 0) {
-        //         console.info(`Object "${entity}" found : Updating`)
-        //         const updatedObj = {
-        //             ...initialState,
-        //             ...adGroupObjValues,
-        //             'entity': entity,
-        //             ['keyword_text']: '%keyword_text%',
-        //             ['match_type']: '%match_type%',
-        //         };
-        //         console.log(updatedObj)
-        //         const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-        //         setCampaignData(arr)
-        //     } else {
-        //         console.info(`Object "${entity}" not found : Creating`)
-        //         const updatedObj = {
-        //             ...initialState,
-        //             ...adGroupObjValues,
-        //             'entity': entity,
-        //             ['keyword_text']: '%keyword_text%',
-        //             ['match_type']: '%match_type%',
-        //         };
-        //         campaignData.push(updatedObj);
-        //         setCampaignData(campaignData);
-        //     }
-        // }
-    }, [productTargetingExpression])
 
     return (
         <div>
