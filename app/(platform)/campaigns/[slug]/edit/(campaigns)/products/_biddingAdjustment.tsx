@@ -43,16 +43,6 @@ const BiddingAdjustment = ({ steps }) => {
         form.reset()
     }
 
-    // Function to reverse the transformation for arrays
-    const reverseTransformArray = (placementArray, percentageArray) => {
-        return placementArray.map((placementObj, index) => {
-            const id = Object.keys(placementObj)[0];
-            const placement = placementObj[id];
-            const percentage = percentageArray[index][id];
-
-            return { id, placement, percentage };
-        });
-    }
 
     const handleDeleteBtn = (id: string) => {
         const updatedData = biddingData.filter((item) => item.id !== id)
@@ -60,30 +50,33 @@ const BiddingAdjustment = ({ steps }) => {
     }
 
     const handleNextStepClick = () => {
+        var entity: string = steps[currentStep];
+        entity = entity.replace('(Required)', '');
+        entity = entity.trim()
         // Bidding adjustments is optional if not added any then skip 
         if (biddingData.length > 0) {
-            // Get existsing campaign object to retain values in next object
+            // Get existing campaign object to retain values in next object
             var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
             const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
 
             if (objExists.length > 0) {
-                console.info(`Object "${steps[currentStep]}" found : Updating`)
+                console.info(`Object "${entity}" found : Updating`)
                 const updatedObj = {
                     ...initialState,
                     ...campaignObjValues,
-                    'entity': steps[currentStep],
+                    'entity': entity,
                     ['placement']: '%placement%',
                     ['percentage']: '%percentage%'
                 };
                 const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
                 setCampaignData(arr)
             } else {
-                console.info(`Object "${steps[currentStep]}" not found : Creating`)
+                console.info(`Object "${entity}" not found : Creating`)
                 const updatedObj = {
                     ...initialState,
                     ...campaignObjValues,
-                    'entity': steps[currentStep],
+                    'entity': entity,
                     ['placement']: '%placement%',
                     ['percentage']: '%percentage%'
                 };

@@ -43,26 +43,30 @@ const AdGroup = ({ steps }) => {
     }, [campaignData, currentStep, form, steps])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
+        var entity: string = steps[currentStep];
+        entity = entity.replace('(Required)', '');
+        entity = entity.trim()
+
         var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
 
         if (objExists.length > 0) {
-            console.info(`Object "${steps[currentStep]}" found : Updating`)
+            console.info(`Object "${entity}" found : Updating`)
             const updatedObj = {
                 ...initialState,
                 ...campaignObjValues,
-                'entity': steps[currentStep],
+                'entity': entity,
                 ...data
             };
             const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
             setCampaignData(arr)
         } else {
-            console.info(`Object "${steps[currentStep]}" not found : Creating`)
+            console.info(`Object "${entity}" not found : Creating`)
             const updatedObj = {
                 ...initialState,
                 ...campaignObjValues,
-                'entity': steps[currentStep],
+                'entity': entity,
                 ...data
             };
             campaignData.push(updatedObj);

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, SaveIcon, Trash2 } from 'lucide-react'
 import { getSpecificKeyValues, MATCH_TYPE, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
@@ -37,10 +37,12 @@ const CampaignNegKeyword = ({ steps }) => {
 
     const onSubmit = (data) => {
         const id = uuidv4();
-        const objectWithId = { ...data, id: id };
-        const updatedData = [...biddingData, objectWithId]
-        setBiddingData(updatedData);
-        form.reset()
+        // const objectWithId = { ...data, id: id };
+        console.log(data);
+        // const updatedData = [...biddingData, objectWithId]
+
+        // setBiddingData(updatedData);
+        // form.reset()
     }
 
     const handleDeleteBtn = (id: string) => {
@@ -124,16 +126,15 @@ const CampaignNegKeyword = ({ steps }) => {
                                                                 className="flex flex-row items-start space-x-3 space-y-0"
                                                             >
                                                                 <FormControl>
-                                                                    <Checkbox
+                                                                    <input type='checkbox'
                                                                         checked={field.value?.includes(item)}
-                                                                        onCheckedChange={(checked) => {
-                                                                            return checked
-                                                                                ? field.onChange([...field.value, item])
-                                                                                : field.onChange(
-                                                                                    field.value?.filter(
-                                                                                        (value) => value !== item
-                                                                                    )
-                                                                                )
+                                                                        onChange={(checked) => {
+                                                                            if (checked.currentTarget.checked) {
+                                                                                field.onChange([...field.value, item])
+                                                                            } else {
+                                                                                const filtered = field.value?.filter((value) => value !== item)
+                                                                                field.onChange([...filtered])
+                                                                            }
                                                                         }}
                                                                     />
                                                                 </FormControl>
@@ -145,6 +146,7 @@ const CampaignNegKeyword = ({ steps }) => {
                                                     }}
                                                 />
                                             ))}
+                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
@@ -188,6 +190,7 @@ const CampaignNegKeyword = ({ steps }) => {
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                 <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button>
+                <Button onClick={() => { form.reset() }} type="button"><SaveIcon /> &nbsp; Rest</Button>
             </div>
         </div>
     )

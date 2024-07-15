@@ -71,10 +71,14 @@ const Campaign = ({ steps }) => {
     }, [campaignData, currentStep, form, steps])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
+        var entity: string = steps[currentStep];
+        entity = entity.replace('(Required)', '');
+        entity = entity.trim()
+
         setTargetingType(data.targeting_type)
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         if (objExists.length > 0) {
-            console.info(`Object "${steps[currentStep]}" found : Updating`)
+            console.info(`Object "${entity}" found : Updating`)
             const updatedObj = {
                 ...objExists[0],
                 ...data
@@ -82,7 +86,7 @@ const Campaign = ({ steps }) => {
             const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
             setCampaignData(arr)
         } else {
-            console.info(`Object "${steps[currentStep]}" not found : Creating`)
+            console.info(`Object "${entity}" not found : Creating`)
             const updatedObj = {
                 ...initialState,
                 ...data

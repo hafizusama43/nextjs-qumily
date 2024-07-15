@@ -101,6 +101,11 @@ const Products = () => {
         }
     }
 
+    useEffect(() => {
+        console.log(biddingData)
+    }, [biddingData])
+
+
     return (
         <React.Fragment>
             <TemplateHeader>
