@@ -23,8 +23,8 @@ const FormSchema = z.object({
 });
 
 
-const CampaignNegKeyword = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, campaignNegKeywordData, setCampaignNegKeywordData } = useCampaignsStore()
+const NegKeyword = ({ steps }) => {
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, negKeywordData, setNegKeywordData } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -46,8 +46,8 @@ const CampaignNegKeyword = ({ steps }) => {
 
         types.forEach(type => {
             keywordArray.forEach(keyword => {
-                if (!keywordExists(campaignNegKeywordData, keyword, type)) {
-                    campaignNegKeywordData.push({
+                if (!keywordExists(negKeywordData, keyword, type)) {
+                    negKeywordData.push({
                         id: uuidv4(),
                         keyword_text: keyword,
                         match_type: type
@@ -55,19 +55,20 @@ const CampaignNegKeyword = ({ steps }) => {
                 }
             });
         });
+        1
         form.reset();
-        console.log(campaignNegKeywordData)
+        console.log(negKeywordData)
 
     }
 
     const handleDeleteBtn = (id: string) => {
-        const updatedData = campaignNegKeywordData.filter((item) => item.id !== id)
-        setCampaignNegKeywordData(updatedData);
+        const updatedData = negKeywordData.filter((item) => item.id !== id)
+        setNegKeywordData(updatedData);
     }
 
     const handleNextStepClick = () => {
         // Bidding adjustments is optional if not added any then skip 
-        if (campaignNegKeywordData.length > 0) {
+        if (negKeywordData.length > 0) {
             var entity: string = getStepName(steps[currentStep]);
             // Get existing campaign object to retain values in next object
             var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
@@ -96,7 +97,7 @@ const CampaignNegKeyword = ({ steps }) => {
                 setCampaignData(campaignData);
             }
         }
-        setNextStep();
+        // setNextStep();
     }
 
 
@@ -173,7 +174,7 @@ const CampaignNegKeyword = ({ steps }) => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {campaignNegKeywordData.length > 0 ? <>{campaignNegKeywordData.map((item, index) => {
+                                {negKeywordData.length > 0 ? <>{negKeywordData.map((item, index) => {
                                     return (
                                         <TableRow key={index}>
                                             <TableCell>{item.keyword_text}</TableCell>
@@ -195,10 +196,10 @@ const CampaignNegKeyword = ({ steps }) => {
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                 {/* <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button> */}
-                <Button onClick={handleNextStepClick} disabled={currentStep >= 6}>{currentStep < 6 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                <Button onClick={handleNextStepClick} disabled={currentStep >= 7}>{currentStep < 7 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
             </div>
         </div>
     )
 }
 
-export default CampaignNegKeyword
+export default NegKeyword

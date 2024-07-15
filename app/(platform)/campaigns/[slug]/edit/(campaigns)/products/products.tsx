@@ -16,6 +16,7 @@ import BiddingAdjustment from './_biddingAdjustment'
 import AdGroup from './_adGroup'
 import ProductAd from './_productAd'
 import CampaignNegKeyword from './_campaignNegKeyword'
+import NegKeyword from './_negKeyword'
 
 
 export const initialState = {
@@ -54,7 +55,7 @@ export const initialState = {
 
 const Products = () => {
     const params = useParams<{ slug: string }>();
-    const { currentStep, campaignData, targetingType, biddingData, skus, setCampaignData, setTargetingType, setBiddingData, setSkus } = useCampaignsStore()
+    const { currentStep, campaignData, targetingType, biddingData, skus, negKeywordData, campaignNegKeywordData, setCampaignData, setTargetingType, setBiddingData, setSkus, setNegKeywordData, setCampaignNegKeywordData } = useCampaignsStore()
     const [pendingSave, setPendingSave] = useState(false);
     const [pending, setPending] = useState(false);
     const STEPS = GET_STEPS(targetingType);
@@ -69,13 +70,16 @@ const Products = () => {
                 campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
                 campaign_data.bidding_data && setBiddingData(campaign_data.bidding_data);
                 campaign_data.skus && setSkus(campaign_data.skus);
+                campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
+                campaign_data.neg_keyword_data && setNegKeywordData(campaign_data.neg_keyword_data);
+                campaign_data.campaign_neg_keyword_data && setCampaignNegKeywordData(campaign_data.campaign_neg_keyword_data);
             }
             setPending(false)
         } catch (error) {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }, [params.slug, setBiddingData, setCampaignData, setSkus, setTargetingType])
+    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setNegKeywordData, setSkus, setTargetingType])
 
     useEffect(() => {
         // Get campaign template and campaign data
@@ -86,7 +90,7 @@ const Products = () => {
         setPendingSave(true);
         try {
             await axios.post('/api/campaigns/campaign-data',
-                { campaignData, targetingType, biddingData, skus, slug: params.slug },
+                { campaignData, targetingType, biddingData, skus, slug: params.slug, negKeywordData, campaignNegKeywordData },
                 {
                     headers: {
                         "Accept": "application/json"
@@ -124,6 +128,7 @@ const Products = () => {
                     {currentStep === 3 && <AdGroup steps={STEPS} />}
                     {currentStep === 4 && <ProductAd steps={STEPS} />}
                     {currentStep === 5 && <CampaignNegKeyword steps={STEPS} />}
+                    {currentStep === 6 && <NegKeyword steps={STEPS} />}
                 </div>}
         </React.Fragment>
     )
