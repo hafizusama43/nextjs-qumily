@@ -14,6 +14,10 @@ import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
+import axios from 'axios'
+import { toast } from '@/components/ui/use-toast'
+import { useParams } from 'next/navigation'
+import { Spin } from '@/components/ui/spin'
 
 const FormSchema = z.object({
     product_targeting_expression: z.string().optional(),
@@ -21,13 +25,20 @@ const FormSchema = z.object({
 
 
 const NegProductTargeting = ({ steps }) => {
+    const params = useParams<{ slug: string }>();
     const { campaignData,
         setCampaignData,
-        setNextStep,
         currentStep,
         setPrevStep,
         setProductTargetingExpression,
-        productTargetingExpression
+        productTargetingExpression,
+        setPendingSave,
+        negKeywordData,
+        campaignNegKeywordData,
+        targetingType,
+        biddingData,
+        skus,
+        pendingSave
     } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -41,7 +52,7 @@ const NegProductTargeting = ({ steps }) => {
         form.setValue("product_targeting_expression", productTargetingExpression);
     }, [currentStep, form, productTargetingExpression, steps])
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         if (data.product_targeting_expression) {
             setProductTargetingExpression(data.product_targeting_expression)
             var entity: string = getStepName(steps[currentStep]);
@@ -72,7 +83,22 @@ const NegProductTargeting = ({ steps }) => {
             }
         }
 
-
+        setPendingSave(true);
+        try {
+            await axios.post('/api/campaigns/campaign-data',
+                { campaignData, targetingType, biddingData, skus, slug: params.slug, negKeywordData, campaignNegKeywordData, productTargetingExpression: data.product_targeting_expression },
+                {
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+            toast({ description: 'Changes saved successfully!' })
+            setPendingSave(false);
+        } catch (error) {
+            setPendingSave(false);
+            console.log(error)
+        }
     }
 
     return (
@@ -84,8 +110,9 @@ const NegProductTargeting = ({ steps }) => {
                     </div>
                     <Separator className='mt-10 mb-3'></Separator>
                     <div className='flex justify-end gap-4 mt-5'>
-                        <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
-                        <Button type="submit"><SaveIcon /> &nbsp; Save changes</Button>
+                        <Button type="button" disabled={currentStep < 2 || pendingSave} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
+                        <Button type="submit" disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>
+                        {/* <SaveIcon /> &nbsp; Save changes</Button> */}
                     </div>
                 </form>
             </Form>

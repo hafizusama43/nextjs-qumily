@@ -18,6 +18,7 @@ import ProductAd from './_productAd'
 import CampaignNegKeyword from './_campaignNegKeyword'
 import NegKeyword from './_negKeyword'
 import NegProductTargeting from './_negProductTargeting'
+import Link from 'next/link'
 
 
 export const initialState = {
@@ -103,31 +104,34 @@ const Products = () => {
         getCampaignData()
     }, [getCampaignData])
 
-    const handleSaveChanges = async () => {
-        setPendingSave(true);
-        try {
-            await axios.post('/api/campaigns/campaign-data',
-                { campaignData, targetingType, biddingData, skus, slug: params.slug, negKeywordData, campaignNegKeywordData, productTargetingExpression },
-                {
-                    headers: {
-                        "Accept": "application/json"
-                    }
-                }
-            );
-            toast({ description: 'Changes saved successfully!' })
-            setPendingSave(false);
-        } catch (error) {
-            setPendingSave(false);
-            console.log(error)
-        }
-    }
+    // const handleSaveChanges = async () => {
+    //     setPendingSave(true);
+    //     try {
+    //         await axios.post('/api/campaigns/campaign-data',
+    //             { campaignData, targetingType, biddingData, skus, slug: params.slug, negKeywordData, campaignNegKeywordData, productTargetingExpression },
+    //             {
+    //                 headers: {
+    //                     "Accept": "application/json"
+    //                 }
+    //             }
+    //         );
+    //         toast({ description: 'Changes saved successfully!' })
+    //         setPendingSave(false);
+    //     } catch (error) {
+    //         setPendingSave(false);
+    //         console.log(error)
+    //     }
+    // }
 
     return (
         <React.Fragment>
             <TemplateHeader>
                 <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; campaign</Label>
                 <div className='flex gap-2'>
-                    <Button disabled={pendingSave || pending} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button>
+                    {/* <Button disabled={pendingSave || pending} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button> */}
+                    <Link href="/campaigns">
+                        <Button>Campaigns</Button>
+                    </Link>
                 </div>
             </TemplateHeader>
             {pending ?
