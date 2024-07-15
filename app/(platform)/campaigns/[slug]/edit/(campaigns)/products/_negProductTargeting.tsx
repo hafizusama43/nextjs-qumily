@@ -1,6 +1,6 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -36,8 +36,14 @@ const NegProductTargeting = ({ steps }) => {
         },
     })
 
+    useEffect(() => {
+        console.info(`Setting "${steps[currentStep]}" form state`)
+        form.setValue("product_targeting_expression", productTargetingExpression);
+    }, [currentStep, form, productTargetingExpression, steps])
+
     const onSubmit = (data) => {
         if (data.product_targeting_expression) {
+            setProductTargetingExpression(data.product_targeting_expression)
             var entity: string = getStepName(steps[currentStep]);
             // Get existing campaign object to retain values in next object
             var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
@@ -65,6 +71,8 @@ const NegProductTargeting = ({ steps }) => {
                 setCampaignData(campaignData);
             }
         }
+
+
     }
 
     return (

@@ -122,11 +122,6 @@ const Products = () => {
         }
     }
 
-    useEffect(() => {
-        console.log(campaignData)
-    }, [campaignData])
-
-
     return (
         <React.Fragment>
             <TemplateHeader>
