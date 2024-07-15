@@ -1,21 +1,19 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { AlertTriangle, CircleArrowLeft, CircleArrowRight, SaveIcon, Trash2 } from 'lucide-react'
-import { getSpecificKeyValues, MATCH_TYPE, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
+import { getSpecificKeyValues, getStepName, MATCH_TYPE, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
-import { Checkbox } from '@radix-ui/react-checkbox'
 
 const FormSchema = z.object({
     keyword_text: z.string().min(1, { message: "Keyword text is required" }),
@@ -57,7 +55,6 @@ const CampaignNegKeyword = ({ steps }) => {
                 }
             });
         });
-
         form.reset();
         console.log(campaignNegKeywordData)
 
@@ -71,16 +68,11 @@ const CampaignNegKeyword = ({ steps }) => {
     const handleNextStepClick = () => {
         // Bidding adjustments is optional if not added any then skip 
         if (campaignNegKeywordData.length > 0) {
-            var entity: string = steps[currentStep];
-            entity = entity.replace('(Required)', '');
-            entity = entity.trim()
-
-            // Get existsing campaign object to retain values in next object
+            var entity: string = getStepName(steps[currentStep]);
+            // Get existing campaign object to retain values in next object
             var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
             const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
-
-            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "product targeting");
-
+            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
             if (objExists.length > 0) {
                 console.info(`Object "${entity}" found : Updating`)
                 const updatedObj = {
@@ -111,13 +103,6 @@ const CampaignNegKeyword = ({ steps }) => {
 
     return (
         <div>
-            {/* <Alert className="my-5">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Heads up!</AlertTitle>
-                <AlertDescription>
-                    You can create four product targeting entities in <b>auto-targeting</b> campaigns if you want to define the bid amounts at the targeting level. Otherwise, Amazon will automatically create these rows, and the bid amount will match the ad group default bid. The four product targets will each have one of these four targeting expression values: <b>close-match, loose-match, substitutes, complements</b>. If you do include these four rows, you can customize the bid for each product target you want to bid on—and you can set the “state” to paused for any targeting expressions you do not want to bid on.
-                </AlertDescription>
-            </Alert> */}
             <div className='flex flex-row gap-5 mb-5'>
                 <div className='basis-1/2'>
                     <Form {...form}>
@@ -209,7 +194,8 @@ const CampaignNegKeyword = ({ steps }) => {
             <Separator></Separator>
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
-                <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button>
+                {/* <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button> */}
+                <Button onClick={handleNextStepClick} disabled={currentStep >= 6}>{currentStep < 6 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
             </div>
         </div>
     )

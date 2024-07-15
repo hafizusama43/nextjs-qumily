@@ -114,3 +114,9 @@ export const getSpecificKeyValues = (obj, keys) => {
     });
     return result;
 };
+
+export const getStepName = (str: string) => {
+    var stepStr = str.replace(/\(.*?\)/g, '').trim();
+    stepStr = stepStr.trim()
+    return stepStr
+}

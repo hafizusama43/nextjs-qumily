@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, getStepName, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -50,9 +50,8 @@ const BiddingAdjustment = ({ steps }) => {
     }
 
     const handleNextStepClick = () => {
-        var entity: string = steps[currentStep];
-        entity = entity.replace('(Required)', '');
-        entity = entity.trim()
+        var entity: string = getStepName(steps[currentStep]);
+        console.log(entity)
         // Bidding adjustments is optional if not added any then skip 
         if (biddingData.length > 0) {
             // Get existing campaign object to retain values in next object

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import React, { useEffect } from 'react'
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
-import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE } from '@/lib/helpers'
+import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE } from '@/lib/helpers'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -43,9 +43,8 @@ const AdGroup = ({ steps }) => {
     }, [campaignData, currentStep, form, steps])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        var entity: string = steps[currentStep];
-        entity = entity.replace('(Required)', '');
-        entity = entity.trim()
+        var entity: string = getStepName(steps[currentStep]);
+        console.log(entity)
 
         var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
