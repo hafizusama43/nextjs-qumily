@@ -58,7 +58,7 @@ export function DataTable<TData extends MyData, TValue>({
                         </Link>
                     </TemplateTooltip>
                     <TemplateTooltip title={"View template"} >
-                        <Link href={`/campaigns/${row.original.slug}`}>
+                        <Link href={`/campaigns/${row.original.slug}?category=${row.original.campaign_category}`}>
                             <EyeIcon role="button" />
                         </Link>
                     </TemplateTooltip>

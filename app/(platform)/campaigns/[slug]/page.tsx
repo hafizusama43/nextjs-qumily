@@ -14,11 +14,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
 import { Spin } from '@/components/ui/spin';
+import ZoomControl from './_zoom';
 
 const Campaigns = () => {
+    const searchParams = useSearchParams()
+    const category = searchParams.get('category')
     const params = useParams<{ slug: string }>();
     const [pending, setPending] = useState(false);
     const [data, setData] = useState([])
@@ -28,7 +31,8 @@ const Campaigns = () => {
             setPending(true)
             const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
             if (res.data.success) {
-                setData(res.data.data)
+                console.log(res.data.data)
+                setData(res.data.data.campaign_template_data)
             }
             setPending(false)
         } catch (error) {
@@ -47,10 +51,10 @@ const Campaigns = () => {
                 <Label>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</Label>
                 <div className=''>
                     <Button size='sm'>Download excel</Button>
-                    <Link className='ml-2' href={`/campaigns/${params.slug}/edit`}><Button size='sm'>Edit campaign</Button></Link>
+                    <Link className='ml-2' href={`/campaigns/${params.slug}/edit?category=${category}`}><Button size='sm'>Edit campaign</Button></Link>
                 </div>
             </TemplateHeader>
-
+            <ZoomControl />
             <Table className='mb-40 border rounded custom-template-table'>
                 <TableHeader>
                     <TableRow>

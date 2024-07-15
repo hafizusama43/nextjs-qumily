@@ -85,6 +85,7 @@ const NegProductTargeting = ({ steps }) => {
 
         setPendingSave(true);
         try {
+            console.log(JSON.stringify(campaignData))
             await axios.post('/api/campaigns/campaign-data',
                 { campaignData, targetingType, biddingData, skus, slug: params.slug, negKeywordData, campaignNegKeywordData, productTargetingExpression: data.product_targeting_expression },
                 {
@@ -112,7 +113,6 @@ const NegProductTargeting = ({ steps }) => {
                     <div className='flex justify-end gap-4 mt-5'>
                         <Button type="button" disabled={currentStep < 2 || pendingSave} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                         <Button type="submit" disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>
-                        {/* <SaveIcon /> &nbsp; Save changes</Button> */}
                     </div>
                 </form>
             </Form>
