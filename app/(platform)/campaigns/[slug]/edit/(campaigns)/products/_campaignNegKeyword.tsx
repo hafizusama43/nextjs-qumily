@@ -78,6 +78,7 @@ const CampaignNegKeyword = ({ steps }) => {
                 const updatedObj = {
                     ...initialState,
                     ...adGroupObjValues,
+                    'entity': entity,
                     ['keyword_text']: '%keyword_text%',
                     ['match_type']: '%match_type%',
                 };

@@ -49,13 +49,26 @@ export const initialState = {
 
 /*
  For bulk sponsored Products campaigns
- Refer to amazon adds documentation here : https://advertising.amazon.com/API/docs/en-us/bulksheets/2-0/create-sp-campaign
+ Refer to amazon sponsored adds documentation here : https://advertising.amazon.com/API/docs/en-us/bulksheets/2-0/create-sp-campaign
  Author : Usama Abdur Rehman <hafizusama43@gmail.com>
 */
 
 const Products = () => {
     const params = useParams<{ slug: string }>();
-    const { currentStep, campaignData, targetingType, biddingData, skus, negKeywordData, campaignNegKeywordData, setCampaignData, setTargetingType, setBiddingData, setSkus, setNegKeywordData, setCampaignNegKeywordData } = useCampaignsStore()
+    const { currentStep,
+        campaignData,
+        targetingType,
+        biddingData,
+        skus,
+        negKeywordData,
+        campaignNegKeywordData,
+        setCampaignData,
+        setTargetingType,
+        setBiddingData,
+        setSkus,
+        setNegKeywordData,
+        setCampaignNegKeywordData
+    } = useCampaignsStore()
     const [pendingSave, setPendingSave] = useState(false);
     const [pending, setPending] = useState(false);
     const STEPS = GET_STEPS(targetingType);
@@ -66,7 +79,7 @@ const Products = () => {
             const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
             if (res.data.success) {
                 const { campaign_template_data, campaign_data } = res.data.data
-                setCampaignData(campaign_template_data);
+                campaign_template_data && setCampaignData(campaign_template_data);
                 campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
                 campaign_data.bidding_data && setBiddingData(campaign_data.bidding_data);
                 campaign_data.skus && setSkus(campaign_data.skus);
