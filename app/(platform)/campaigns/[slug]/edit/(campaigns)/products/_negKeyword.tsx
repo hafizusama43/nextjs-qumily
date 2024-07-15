@@ -101,7 +101,7 @@ const NegKeyword = ({ steps }) => {
                 setCampaignData(campaignData);
             }
         }
-        // setNextStep();
+        setNextStep();
     }
 
 

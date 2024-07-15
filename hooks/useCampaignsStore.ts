@@ -62,6 +62,7 @@ interface useCampaignsStoreProps {
     targetingType: string;
     productTargetingExpressionData: ProductTargetingExpressionData[];
     negKeywordData: NegKeywordData[];
+    productTargetingExpression: string;
     setCampaignData: (data: InitialState[]) => void;
     setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => void;
     setNegKeywordData: (data: NegKeywordData[]) => void;
@@ -69,6 +70,7 @@ interface useCampaignsStoreProps {
     setPrevStep: (step?: number) => void;
     setBiddingData: (data: BiddingData[]) => void;
     setSkus: (data: string) => void;
+    setProductTargetingExpression: (data: string) => void;
     setTargetingType: (data: string) => void;
 }
 export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
@@ -80,6 +82,7 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     skus: '',
     targetingType: '',
     productTargetingExpressionData: [],
+    productTargetingExpression: '',
     setCampaignData: (data: InitialState[]) => set(() => {
         return { campaignData: data }
     }),
@@ -98,10 +101,15 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     setSkus: (data: string) => set(() => {
         return { skus: data }
     }),
+    setProductTargetingExpression: (data: string) => set(() => {
+        return { productTargetingExpression: data }
+    }),
     setTargetingType: (data: string) => set(() => {
         return { targetingType: data }
     }),
-    setNextStep: (step: number) => set((state) => ({ currentStep: state.currentStep + 1 })),
+    setNextStep: (step: number) => set((state) => {
+        return { currentStep: state.currentStep + 1 }
+    }),
     setPrevStep: (step: number) => set((state) => {
         return { currentStep: state.currentStep - 1 }
     })

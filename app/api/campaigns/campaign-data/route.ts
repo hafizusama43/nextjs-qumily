@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
 
     const body = await request.json();
-    var { campaignData, targetingType, biddingData, skus, slug, negKeywordData, campaignNegKeywordData } = body;
+    var { campaignData, targetingType, biddingData, skus, slug, negKeywordData, campaignNegKeywordData, productTargetingExpression } = body;
     // console.log(body)
 
     // Get campaign_id from campaigns
@@ -90,9 +90,13 @@ export async function POST(request: NextRequest) {
     negKeywordData = stringify(negKeywordData);
     negKeywordData && await queryDatabase(query, [campaign_id, 'neg_keyword_data', negKeywordData]);
 
-    // Insert skus
+    // Insert campaign_neg_keyword_data
     campaignNegKeywordData = stringify(campaignNegKeywordData);
     campaignNegKeywordData && await queryDatabase(query, [campaign_id, 'campaign_neg_keyword_data', campaignNegKeywordData]);
+
+    // Insert product_targeting_expression
+    productTargetingExpression = stringify(productTargetingExpression);
+    productTargetingExpression && await queryDatabase(query, [campaign_id, 'product_targeting_expression', productTargetingExpression]);
 
     // Insert campaign-template-data
     insertTemplateData(campaignData, campaign_id);

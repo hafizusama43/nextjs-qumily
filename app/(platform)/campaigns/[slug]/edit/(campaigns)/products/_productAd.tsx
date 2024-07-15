@@ -44,7 +44,7 @@ const ProductAd = ({ steps }) => {
         var entity: string = getStepName(steps[currentStep]);
         console.log(entity)
 
-        // Get existsing campaign object to retain values in next object
+        // Get existing campaign object to retain values in next object
         var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
         const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'ad_group_id', 'state']);
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "product ad");
