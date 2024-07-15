@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
     try {
         const slug = request.nextUrl.searchParams.get("slug");
+        const mode = request.nextUrl.searchParams.get("mode");
         if (!slug) {
             return NextResponse.json({ success: false, message: 'Invalid request params' }, { status: 500 });
         }
@@ -29,6 +30,10 @@ export async function GET(request: NextRequest) {
         WHERE campaign_templates_data.campaign_id_external = $1 ;`;
         var campaign_template_data = await queryDatabase(query, [campaign_id]);
         campaign_template_data = campaign_template_data.rows.length > 0 ? campaign_template_data.rows : []
+
+        if (mode && mode === 'view') {
+            campaign_template_data = createCampaignData(campaign_template_data, campaign_data);
+        }
 
         return NextResponse.json({ success: true, message: 'Templates fetched successfully.', data: { campaign_data, campaign_template_data } }, { status: 200 })
     } catch (error) {
@@ -176,4 +181,55 @@ function parseValues(data) {
     });
 
     return result;
+}
+
+function createCampaignData(campaign_template_data, campaign_data) {
+
+    const arr = ['prod1', 'prod2', 'prod3', 'prod4', 'prod5', 'prod6', 'prod7', 'prod8', 'prod9', 'prod10', 'prod11', 'prod12', 'prod13', 'prod14', 'prod15', 'prod16', 'prod17', 'prod18', 'prod19', 'prod20'];
+    const productsPerCampaign = 3;  // User-defined number of products per campaign
+    const numberOfCampaigns = Math.ceil(arr.length / productsPerCampaign);
+
+    console.log(numberOfCampaigns);
+    const campaigns = [];
+
+    for (let i = 0; i < numberOfCampaigns; i++) {
+        const campaignId = `campaign_${i + 1}`;
+        const adGroupId = `ad_group_${i + 1}`;
+
+        //     // Copy base template and replace placeholders
+        let campaign = campaign_template_data.map(item => ({
+            ...item,
+            campaign_id: campaignId,
+            ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad (Required)" ? adGroupId : item.ad_group_id
+        }));
+
+        console.log(campaign)
+
+        // Find the index of the "Product Ad (Required)" row
+        const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad (Required)");
+
+        // Remove the "Product Ad (Required)" row from the template
+        campaign.splice(productAdIndex, 1);
+        console.log(productAdIndex)
+
+        console.log(campaign)
+
+        // Insert the appropriate "Product Ad" rows at the found index
+        for (let j = 0; j < productsPerCampaign; j++) {
+            const productIndex = i * productsPerCampaign + j;
+            if (productIndex < arr.length) {
+                const productAd = {
+                    ...campaign_template_data.find(item => item.entity === "Product Ad (Required)"),
+                    campaign_id: campaignId,
+                    ad_group_id: adGroupId,
+                    sku: arr[productIndex]
+                };
+                campaign.splice(productAdIndex + j, 0, productAd);
+            }
+        }
+
+        campaigns.push(campaign);
+    }
+
+    return campaign_template_data = campaigns.flat();
 }

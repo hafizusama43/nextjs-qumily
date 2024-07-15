@@ -18,6 +18,8 @@ import { useParams, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
 import { Spin } from '@/components/ui/spin';
 import ZoomControl from './_zoom';
+import { cn } from '@/lib/utils';
+import * as XLSX from "xlsx";
 
 const Campaigns = () => {
     const searchParams = useSearchParams()
@@ -29,7 +31,7 @@ const Campaigns = () => {
         try {
             console.log('Fetching campaign data')
             setPending(true)
-            const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
+            const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}&mode=view`);
             if (res.data.success) {
                 console.log(res.data.data)
                 setData(res.data.data.campaign_template_data)
@@ -45,12 +47,29 @@ const Campaigns = () => {
         getData()
     }, [getData])
 
+    const createExcelSheet = () => {
+        // const res = await axios.post(`/api/campaigns?slug=${params.slug}`, { data: prodData });
+        const worksheet = XLSX.utils.json_to_sheet(data.map(item => {
+            const mappedItem = {};
+            for (const key in item) {
+                if (Object.prototype.hasOwnProperty.call(item, key)) {
+                    mappedItem[SPONSORED_PRODUCTS_CAMPAIGNS[key]] = item[key];
+                }
+            }
+            return mappedItem;
+        }));
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sponsored Products Data');
+        XLSX.writeFile(workbook, 'sponsored_products_data.xlsx');
+    }
+
     return (
         <div>
             <TemplateHeader>
                 <Label>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</Label>
                 <div className=''>
-                    <Button size='sm'>Download excel</Button>
+                    <Button size='sm' onClick={createExcelSheet}>Download excel</Button>
                     <Link className='ml-2' href={`/campaigns/${params.slug}/edit?category=${category}`}><Button size='sm'>Edit campaign</Button></Link>
                 </div>
             </TemplateHeader>
@@ -64,7 +83,7 @@ const Campaigns = () => {
                 <TableBody>
                     {data.length > 0 ? <>{data.map((item, index) => {
                         return (
-                            <TableRow key={index}>
+                            <TableRow key={index} className={cn('', item.entity === "Campaign" && 'bg-slate-200')}>
                                 <TableCell>{item.product}</TableCell>
                                 <TableCell>{item.entity}</TableCell>
                                 <TableCell>{item.operation}</TableCell>

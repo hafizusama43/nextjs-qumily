@@ -83,6 +83,7 @@ const Products = () => {
             const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
             if (res.data.success) {
                 const { campaign_template_data, campaign_data } = res.data.data
+                console.log(campaign_template_data)
                 campaign_template_data && setCampaignData(campaign_template_data);
                 campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
                 campaign_data.bidding_data && setBiddingData(campaign_data.bidding_data);
