@@ -46,7 +46,16 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
 
     const body = await request.json();
-    var { campaignData, targetingType, biddingData, skus, slug, negKeywordData, campaignNegKeywordData, productTargetingExpression } = body;
+    var { campaignData,
+        targetingType,
+        biddingData,
+        skus,
+        slug,
+        negKeywordData,
+        campaignNegKeywordData,
+        productTargetingExpression,
+        campaignProductsCount
+    } = body;
     // console.log(body)
 
     // Get campaign_id from campaigns
@@ -102,6 +111,9 @@ export async function POST(request: NextRequest) {
     // Insert product_targeting_expression
     productTargetingExpression = stringify(productTargetingExpression);
     productTargetingExpression && await queryDatabase(query, [campaign_id, 'product_targeting_expression', productTargetingExpression]);
+
+    // Insert product_targeting_expression
+    campaignProductsCount >= 0 && await queryDatabase(query, [campaign_id, 'campaign_products_count', campaignProductsCount]);
 
     // Insert campaign-template-data
     insertTemplateData(campaignData, campaign_id);
@@ -219,7 +231,7 @@ function createCampaignData(campaign_template_data, campaign_data) {
             const productIndex = i * productsPerCampaign + j;
             if (productIndex < arr.length) {
                 const productAd = {
-                    ...campaign_template_data.find(item => item.entity === "Product Ad (Required)"),
+                    ...campaign_template_data.find(item => item.entity === "Product Ad"),
                     campaign_id: campaignId,
                     ad_group_id: adGroupId,
                     sku: arr[productIndex]
@@ -231,5 +243,5 @@ function createCampaignData(campaign_template_data, campaign_data) {
         campaigns.push(campaign);
     }
 
-    return campaign_template_data = campaigns.flat();
+    return campaigns.flat();
 }

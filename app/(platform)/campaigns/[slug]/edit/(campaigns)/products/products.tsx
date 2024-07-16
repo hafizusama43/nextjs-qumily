@@ -7,7 +7,6 @@ import TemplateHeader from '@/components/ui/_header'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { useParams } from 'next/navigation'
-import { Spin } from '@/components/ui/spin'
 import { toast } from '@/components/ui/use-toast'
 import axios from 'axios'
 import { Skeleton } from '@/components/ui/Skeleton'
@@ -58,12 +57,7 @@ export const initialState = {
 const Products = () => {
     const params = useParams<{ slug: string }>();
     const { currentStep,
-        campaignData,
         targetingType,
-        biddingData,
-        skus,
-        negKeywordData,
-        campaignNegKeywordData,
         setCampaignData,
         setTargetingType,
         setBiddingData,
@@ -71,9 +65,8 @@ const Products = () => {
         setNegKeywordData,
         setCampaignNegKeywordData,
         setProductTargetingExpression,
-        productTargetingExpression
+        setCampaignProductCount
     } = useCampaignsStore()
-    const [pendingSave, setPendingSave] = useState(false);
     const [pending, setPending] = useState(false);
     const STEPS = GET_STEPS(targetingType);
 
@@ -92,37 +85,19 @@ const Products = () => {
                 campaign_data.neg_keyword_data && setNegKeywordData(campaign_data.neg_keyword_data);
                 campaign_data.campaign_neg_keyword_data && setCampaignNegKeywordData(campaign_data.campaign_neg_keyword_data);
                 campaign_data.product_targeting_expression && setProductTargetingExpression(campaign_data.product_targeting_expression);
+                campaign_data.campaign_products_count && setCampaignProductCount(campaign_data.campaign_products_count);
             }
             setPending(false)
         } catch (error) {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setNegKeywordData, setProductTargetingExpression, setSkus, setTargetingType])
+    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setCampaignProductCount, setNegKeywordData, setProductTargetingExpression, setSkus, setTargetingType])
 
     useEffect(() => {
         // Get campaign template and campaign data
         getCampaignData()
     }, [getCampaignData])
-
-    // const handleSaveChanges = async () => {
-    //     setPendingSave(true);
-    //     try {
-    //         await axios.post('/api/campaigns/campaign-data',
-    //             { campaignData, targetingType, biddingData, skus, slug: params.slug, negKeywordData, campaignNegKeywordData, productTargetingExpression },
-    //             {
-    //                 headers: {
-    //                     "Accept": "application/json"
-    //                 }
-    //             }
-    //         );
-    //         toast({ description: 'Changes saved successfully!' })
-    //         setPendingSave(false);
-    //     } catch (error) {
-    //         setPendingSave(false);
-    //         console.log(error)
-    //     }
-    // }
 
     return (
         <React.Fragment>

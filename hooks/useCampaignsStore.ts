@@ -63,8 +63,9 @@ interface useCampaignsStoreProps {
     productTargetingExpressionData: ProductTargetingExpressionData[];
     negKeywordData: NegKeywordData[];
     productTargetingExpression: string;
-    setCampaignData: (data: InitialState[]) => void;
+    campaignProductsCount: number;
     pendingSave: boolean;
+    setCampaignData: (data: InitialState[]) => void;
     setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => void;
     setNegKeywordData: (data: NegKeywordData[]) => void;
     setNextStep: (step?: number) => void;
@@ -74,9 +75,11 @@ interface useCampaignsStoreProps {
     setProductTargetingExpression: (data: string) => void;
     setTargetingType: (data: string) => void;
     setPendingSave: (data: boolean) => void;
+    setCampaignProductCount: (data: number) => void;
 }
 export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     pendingSave: false,
+    campaignProductsCount: 0,
     campaignData: [],
     biddingData: [],
     campaignNegKeywordData: [],
@@ -88,6 +91,9 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     productTargetingExpression: '',
     setPendingSave: (data: boolean) => set(() => {
         return { pendingSave: data }
+    }),
+    setCampaignProductCount: (data: number) => set(() => {
+        return { campaignProductsCount: data }
     }),
     setCampaignData: (data: InitialState[]) => set(() => {
         return { campaignData: data }

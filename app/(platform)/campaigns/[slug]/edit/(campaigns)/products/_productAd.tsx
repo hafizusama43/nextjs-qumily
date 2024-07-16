@@ -1,45 +1,45 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { bigint, z } from 'zod'
-import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod'
 import { Form } from '@/components/ui/form'
-import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
+import { AlertTriangle, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, getStepName, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
-import { RenderSelect } from '../_renderSelect'
+import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
-import loadJsConfig from 'next/dist/build/load-jsconfig'
-import { Kablammo } from 'next/font/google'
-import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
 
 const FormSchema = z.object({
     sku: z.string().min(1, { message: "Products SKU'S are required" }),
+    campaign_products_count: z.coerce.number().min(0, { message: "Must be a positive number." }).default(0),
 });
 
 const ProductAd = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setSkus, skus } = useCampaignsStore()
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setSkus, skus, setCampaignProductCount, campaignProductsCount } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             sku: '',
+            campaign_products_count: 0
         },
     })
+
+    const skusVal = form.watch('sku');
 
     useEffect(() => {
         console.info(`Setting "${steps[currentStep]}" form state`)
         form.setValue("sku", skus);
-    }, [currentStep, form, skus, steps])
+        form.setValue("campaign_products_count", campaignProductsCount);
+    }, [campaignProductsCount, currentStep, form, skus, steps])
 
     const onSubmit = (data) => {
         setSkus(data.sku);
+        setCampaignProductCount(data.campaign_products_count)
 
         var entity: string = getStepName(steps[currentStep]);
         console.log(entity)
@@ -64,7 +64,7 @@ const ProductAd = ({ steps }) => {
             const updatedObj = {
                 ...initialState,
                 ...adGroupObjValues,
-                'entity': steps[currentStep],
+                'entity': entity,
                 'sku': '%sku%'
             };
             campaignData.push(updatedObj);
@@ -79,13 +79,16 @@ const ProductAd = ({ steps }) => {
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Heads up!</AlertTitle>
                 <AlertDescription>
-                    You can add <b>multiples SKU&apos;S</b> at once, either they should be comma seperated <b>eg. sku1, sku2, sku2....</b> or they should be seperated by space eg. <b>sku1 sku2 sku2....</b>.
+                    You can add <b>multiples SKU&apos;S</b> at once, either they should be comma separated <b>eg. sku1, sku2, sku2....</b> or they should be separated by space eg. <b>sku1 sku2 sku2....</b>.
                 </AlertDescription>
             </Alert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className='w-full'>
                         <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
+                    </div>
+                    <div className='w-1/2'>
+                        <RenderInput disabled={!skusVal || skusVal === ''} name={"campaign_products_count"} form={form} label={'Products to add in each campaign'} type={"number"}></RenderInput>
                     </div>
 
                     <Separator className='mt-5'></Separator>
