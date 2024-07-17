@@ -4,6 +4,8 @@ import { siteConfig } from "@/config/site";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import Provider from "@/providers/ThemeProvider";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,10 +24,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    <html lang="en" className="fle">
+    <html lang="en" className="fle" suppressHydrationWarning>
       <ClerkProvider>
-        <body className={inter.className}>
-          {children}
+        <body className={cn('dark:bg-gray-800', inter.className)}>
+          <Provider>
+            {children}
+          </Provider>
           <Toaster />
         </body>
       </ClerkProvider>

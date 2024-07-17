@@ -2,16 +2,23 @@
 import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from './button'
-import { Plus } from "lucide-react";
+import { Moon, Plus, Sun } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { Switch } from "./switch";
+import { Label } from "./label";
+import { useTheme } from "next-themes";
 
 const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
     const { isLoaded, isSignedIn, user } = useUser();
+    const [mounted, setMounted] = useState(false)
+    const { setTheme, resolvedTheme } = useTheme()
+
+    useEffect(() => setMounted(true), [])
 
     return (
-        <div className='border-b-2 border-b-gray-200 fixed top-0 w-full backdrop-blur z-10 bg-white'>
+        <div className='border-b-2 border-b-gray-200 fixed top-0 w-full backdrop-blur z-10'>
             <div className='px-2 py-2 md:py-4 mx-auto max-w-7xl flex flex-row items-center justify-between relative'>
                 {org_dashboard ?
                     <>
@@ -33,7 +40,9 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                             <span className='font-bold'>Taskify</span>
                         </Link>
                         <div className="flex items-center">
-
+                            {mounted && <div className="flex items-center mr-4">
+                                <Switch id="airplane-mode" checked={resolvedTheme === 'dark'} onCheckedChange={(e) => e ? setTheme('dark') : setTheme('light')}>{resolvedTheme === 'light' ? <Sun /> : <Moon />}</Switch>
+                            </div>}
                             {!isSignedIn && <>
                                 <Link href="/sign-in"><Button className='mr-4' variant="secondary">Login</Button></Link>
                                 <Link href="join-taskify"><Button className=''>Get Taskify for free</Button></Link>
