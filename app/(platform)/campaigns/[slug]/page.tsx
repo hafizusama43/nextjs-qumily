@@ -83,7 +83,7 @@ const Campaigns = () => {
                 <TableBody>
                     {data.length > 0 ? <>{data.map((item, index) => {
                         return (
-                            <TableRow key={index} className={cn('', item.entity === "Campaign" && 'bg-slate-200')}>
+                            <TableRow key={index} className={cn('', item.entity === "Campaign" && 'bg-slate-200 dark:bg-blue-700')}>
                                 <TableCell>{item.product}</TableCell>
                                 <TableCell>{item.entity}</TableCell>
                                 <TableCell>{item.operation}</TableCell>

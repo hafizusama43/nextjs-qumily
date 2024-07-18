@@ -44,7 +44,7 @@ const ZoomControl: React.FC = () => {
     };
 
     return (
-        <div className='my-5 max-w-max border rounded p-3'>
+        <div className='my-5 max-w-max border rounded p-3 dark:border-white'>
             <small>Current Zoom Level: {zoomLevel}%</small>
             <Separator />
             <div className='flex gap-4 mt-3'>
