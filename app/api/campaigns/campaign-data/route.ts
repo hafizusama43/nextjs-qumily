@@ -1,4 +1,5 @@
-import { getSpecificKeyValues, MONTH_NAMES } from "@/lib/helpers";
+// import { getSpecificKeyValues } from "@/lib/helpers";
+import { MONTH_NAMES } from "@/lib/helpers";
 import { SponsoredProductsInterface } from "@/lib/interfaces";
 import queryDatabase from "@/lib/queryHelper";
 import { NextRequest, NextResponse } from "next/server";
@@ -201,64 +202,135 @@ function parseValues(data) {
 function createCampaignData(campaign_template_data: SponsoredProductsInterface[], campaign_data) {
     // Split products into array
     const products: string[] = (campaign_data.skus as string).split(',');
-    console.log(products);
+    console.info('Total products : ', products.length)
+
     // Default campaign number
     var numberOfCampaigns: number = 1;
+
     // User-defined number of products per campaign
-    if (campaign_data.campaign_products_count && parseInt(campaign_data.campaign_products_count) > 0) {
-        numberOfCampaigns = Math.ceil(products.length / campaign_data.campaign_products_count);
-    }
-    console.log(numberOfCampaigns);
+    // if (campaign_data.campaign_products_count && parseInt(campaign_data.campaign_products_count) > 0) {
+    //     numberOfCampaigns = Math.ceil(products.length / campaign_data.campaign_products_count);
+    // }
+
     const campaigns = [];
-
     console.log(campaign_data)
+
+    // Replace values for keys like bidding_data, skus, neg_keyword_data, product_targeting_expression
+    // Replace bidding_data
+    if (campaign_data.bidding_data && campaign_data.bidding_data.length > 0) {
+        var biddingAdjustmentObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "bidding adjustment");
+        // Make copy of object and remove from index
+        var biddingAdjustmentObj = campaign_template_data.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+        campaign_template_data.splice(biddingAdjustmentObjIndex, 1);
+        const results = campaign_data.bidding_data.map(data => {
+            return {
+                ...biddingAdjustmentObj[0],
+                placement: data.placement,
+                percentage: data.percentage
+            };
+        });
+        const campaignIndex = campaign_template_data.findIndex(item => item.entity === 'Campaign');
+        campaign_template_data.splice(campaignIndex + 1, 0, ...results);
+    }
+
+    // Replace neg_keyword_data
+    if (campaign_data.neg_keyword_data && campaign_data.neg_keyword_data.length > 0) {
+        var negKeywordObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "negative keyword");
+        // Make copy of object and remove from index
+        var negKeywordObj = campaign_template_data.filter((item) => item.entity.toLowerCase() === "negative keyword");
+        campaign_template_data.splice(negKeywordObjIndex, 1);
+        const results = campaign_data.neg_keyword_data.map(data => {
+            return {
+                ...negKeywordObj[0],
+                keyword_text: data.keyword_text,
+                match_type: data.match_type
+            };
+        });
+        campaign_template_data.splice(campaign_template_data.length, 0, ...results);
+    }
+
+    // Replace campaign_neg_keyword_data
+    if (campaign_data.campaign_neg_keyword_data && campaign_data.campaign_neg_keyword_data.length > 0) {
+        var campaignNegKeywordObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "campaign negative keyword");
+        // Make copy of object and remove from index
+        var campaignNegKeywordOb = campaign_template_data.filter((item) => item.entity.toLowerCase() === "campaign negative keyword");
+        campaign_template_data.splice(campaignNegKeywordObjIndex, 1);
+        const results = campaign_data.campaign_neg_keyword_data.map(data => {
+            return {
+                ...campaignNegKeywordOb[0],
+                keyword_text: data.keyword_text,
+                match_type: data.match_type
+            };
+        });
+        campaign_template_data.splice(campaign_template_data.length, 0, ...results);
+    }
+
+    // Replace product_targeting_expression
+    if (campaign_data.product_targeting_expression && campaign_data.product_targeting_expression.length > 0) {
+        var arrayExpressions = campaign_data.product_targeting_expression.split(",")
+        arrayExpressions = arrayExpressions.filter(item => item !== '');
+        var negProductTargetingObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "negative product targeting");
+        // Make copy of object and remove from index
+        var negProductTargetingObj = campaign_template_data.filter((item) => item.entity.toLowerCase() === "negative product targeting");
+        campaign_template_data.splice(negProductTargetingObjIndex, 1);
+        const results = arrayExpressions.map(data => {
+            return {
+                ...negProductTargetingObj[0],
+                product_targeting_expression: 'asin=' + data,
+            };
+        });
+        campaign_template_data.splice(campaign_template_data.length, 0, ...results);
+    }
+
+    return campaign_template_data
+
     // Replace campaign id and ad-group id for now temp
+    var campaignIdTemp: string = `SP | ${campaign_data.targeting_type} - (${new Date().getFullYear()} - ${MONTH_NAMES[new Date().getMonth()]}) - %campaignNumber%`;
 
-    var campaignId: string = `SP | ${campaign_data.targeting_type} - (${new Date().getFullYear()} - ${MONTH_NAMES[new Date().getMonth()]}) - %campaignNumber%`;
-    var adGroupId: string = campaignId;
 
-    // var adGroupObjExists = campaign_template_data.filter((item) => item.entity.toLowerCase() === "ad group");
     // const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['campaign_id', 'ad_group_id']);
 
     for (let i = 0; i < numberOfCampaigns; i++) {
         console.log('Campaign number : ', i)
-        var campaignId = campaignId.replace('%campaignNumber%', (i + 1).toString());;
+        var campaignId = campaignIdTemp.replace('%campaignNumber%', (i + 1).toString());;
         var adGroupId = campaignId;
 
 
         console.log(campaignId);
         console.log(adGroupId);
 
-        // Copy base template and replace placeholders
-        //     let campaign = campaign_template_data.map(item => ({
-        //         ...item,
-        //         campaign_id: campaignId,
-        //         ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad (Required)" ? adGroupId : item.ad_group_id
-        //     }));
+        // Copy base template and replace campaign id and ad group id
+        let campaign = campaign_template_data.map(item => ({
+            ...item,
+            campaign_id: campaignId,
+            ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad" ? adGroupId : item.ad_group_id
+        }));
+
+        // console.log(campaign)
 
 
         // Find the index of the "Product Ad (Required)" row
-        //     const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad (Required)");
+        // const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad (Required)");
 
-        // Remove the "Product Ad (Required)" row from the template
-        //     campaign.splice(productAdIndex, 1);
-        //     console.log(productAdIndex)
+        // // Remove the "Product Ad (Required)" row from the template
+        // campaign.splice(productAdIndex, 1);
+        // console.log(productAdIndex)
 
-        // Insert the appropriate "Product Ad" rows at the found index
-        //     for (let j = 0; j < productsPerCampaign; j++) {
-        //         const productIndex = i * productsPerCampaign + j;
-        //         if (productIndex < arr.length) {
-        //             const productAd = {
-        //                 ...campaign_template_data.find(item => item.entity === "Product Ad"),
-        //                 campaign_id: campaignId,
-        //                 ad_group_id: adGroupId,
-        //                 sku: arr[productIndex]
-        //             };
-        //             campaign.splice(productAdIndex + j, 0, productAd);
-        //         }
+        // // Insert the appropriate "Product Ad" rows at the found index
+        // for (let j = 0; j < numberOfCampaigns; j++) {
+        //     const productIndex = i * numberOfCampaigns + j;
+        //     if (productIndex < products.length) {
+        //         const productAd = {
+        //             ...campaign_template_data.find(item => item.entity === "Product Ad"),
+        //             campaign_id: campaignId,
+        //             ad_group_id: adGroupId,
+        //             sku: products[productIndex]
+        //         };
+        //         campaign.splice(productAdIndex + j, 0, productAd);
         //     }
-        //     campaigns.push(campaign);
+        // }
+        // campaigns.push(campaign);
     }
 
-    return campaigns.flat();
+    // return campaigns.flat();
 }
