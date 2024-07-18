@@ -76,6 +76,10 @@ const STEPS_CAMPAIGN_AUTO = {
     7: "Negative product targeting  (Optional)",
 }
 
+export const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
+
 
 const STEPS_CAMPAIGN_MANUAL = {
     1: "Campaign (Required)",

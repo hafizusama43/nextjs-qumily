@@ -84,7 +84,7 @@
 }
 
 .cl-userProfile-root .cl-cardBox .cl-navbar {
-  background: white !important;
+  /* background: white !important; */
   border-right: 2px solid gray;
   /* padding-left: 0px !important; */
 }

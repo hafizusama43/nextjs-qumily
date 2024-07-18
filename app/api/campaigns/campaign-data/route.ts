@@ -1,3 +1,4 @@
+import { getSpecificKeyValues, MONTH_NAMES } from "@/lib/helpers";
 import { SponsoredProductsInterface } from "@/lib/interfaces";
 import queryDatabase from "@/lib/queryHelper";
 import { NextRequest, NextResponse } from "next/server";
@@ -197,63 +198,67 @@ function parseValues(data) {
     return result;
 }
 
-function createCampaignData(campaignTemplateData: SponsoredProductsInterface[], campaignData) {
-
-
-    // Test products
-    const arr: string[] = ['prod1', 'prod2', 'prod3', 'prod4', 'prod5', 'prod6', 'prod7', 'prod8', 'prod9', 'prod10', 'prod11', 'prod12', 'prod13', 'prod14', 'prod15', 'prod16', 'prod17', 'prod18', 'prod19', 'prod20'];
-
-    const products: string[] = [];
+function createCampaignData(campaign_template_data: SponsoredProductsInterface[], campaign_data) {
+    // Split products into array
+    const products: string[] = (campaign_data.skus as string).split(',');
+    console.log(products);
     // Default campaign number
     var numberOfCampaigns: number = 1;
     // User-defined number of products per campaign
-    if (campaignData.campaign_products_count && parseInt(campaignData.campaign_products_count) > 0) {
-        numberOfCampaigns = Math.ceil(arr.length / campaignData.campaign_products_count);
+    if (campaign_data.campaign_products_count && parseInt(campaign_data.campaign_products_count) > 0) {
+        numberOfCampaigns = Math.ceil(products.length / campaign_data.campaign_products_count);
     }
-
-    console.log(campaignData);
-
     console.log(numberOfCampaigns);
     const campaigns = [];
 
-    // for (let i = 0; i < numberOfCampaigns; i++) {
-    //     const campaignId = `campaign_${i + 1}`;
-    //     const adGroupId = `ad_group_${i + 1}`;
+    console.log(campaign_data)
+    // Replace campaign id and ad-group id for now temp
 
-    //     //     // Copy base template and replace placeholders
-    //     let campaign = campaign_template_data.map(item => ({
-    //         ...item,
-    //         campaign_id: campaignId,
-    //         ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad (Required)" ? adGroupId : item.ad_group_id
-    //     }));
+    var campaignId: string = `SP | ${campaign_data.targeting_type} - (${new Date().getFullYear()} - ${MONTH_NAMES[new Date().getMonth()]}) - %campaignNumber%`;
+    var adGroupId: string = campaignId;
 
-    //     console.log(campaign)
+    // var adGroupObjExists = campaign_template_data.filter((item) => item.entity.toLowerCase() === "ad group");
+    // const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['campaign_id', 'ad_group_id']);
 
-    //     // Find the index of the "Product Ad (Required)" row
-    //     const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad (Required)");
+    for (let i = 0; i < numberOfCampaigns; i++) {
+        console.log('Campaign number : ', i)
+        var campaignId = campaignId.replace('%campaignNumber%', (i + 1).toString());;
+        var adGroupId = campaignId;
 
-    //     // Remove the "Product Ad (Required)" row from the template
-    //     campaign.splice(productAdIndex, 1);
-    //     console.log(productAdIndex)
 
-    //     console.log(campaign)
+        console.log(campaignId);
+        console.log(adGroupId);
 
-    //     // Insert the appropriate "Product Ad" rows at the found index
-    //     for (let j = 0; j < productsPerCampaign; j++) {
-    //         const productIndex = i * productsPerCampaign + j;
-    //         if (productIndex < arr.length) {
-    //             const productAd = {
-    //                 ...campaign_template_data.find(item => item.entity === "Product Ad"),
-    //                 campaign_id: campaignId,
-    //                 ad_group_id: adGroupId,
-    //                 sku: arr[productIndex]
-    //             };
-    //             campaign.splice(productAdIndex + j, 0, productAd);
-    //         }
-    //     }
+        // Copy base template and replace placeholders
+        //     let campaign = campaign_template_data.map(item => ({
+        //         ...item,
+        //         campaign_id: campaignId,
+        //         ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad (Required)" ? adGroupId : item.ad_group_id
+        //     }));
 
-    //     campaigns.push(campaign);
-    // }
+
+        // Find the index of the "Product Ad (Required)" row
+        //     const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad (Required)");
+
+        // Remove the "Product Ad (Required)" row from the template
+        //     campaign.splice(productAdIndex, 1);
+        //     console.log(productAdIndex)
+
+        // Insert the appropriate "Product Ad" rows at the found index
+        //     for (let j = 0; j < productsPerCampaign; j++) {
+        //         const productIndex = i * productsPerCampaign + j;
+        //         if (productIndex < arr.length) {
+        //             const productAd = {
+        //                 ...campaign_template_data.find(item => item.entity === "Product Ad"),
+        //                 campaign_id: campaignId,
+        //                 ad_group_id: adGroupId,
+        //                 sku: arr[productIndex]
+        //             };
+        //             campaign.splice(productAdIndex + j, 0, productAd);
+        //         }
+        //     }
+        //     campaigns.push(campaign);
+    }
 
     return campaigns.flat();
 }
