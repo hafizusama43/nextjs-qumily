@@ -1,3 +1,4 @@
+import { SponsoredProductsInterface } from "@/lib/interfaces";
 import queryDatabase from "@/lib/queryHelper";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -28,12 +29,13 @@ export async function GET(request: NextRequest) {
         product, entity, operation, campaign_id, ad_group_id, portfolio_id, ad_id, keyword_id, product_targeting_id, campaign_name, ad_group_name, start_date, end_date, targeting_type, state, daily_budget, sku, ad_group_default_bid, bid, keyword_text, match_type, bidding_strategy, placement, percentage, product_targeting_expression
         FROM campaign_templates_data
         WHERE campaign_templates_data.campaign_id_external = $1 ;`;
-        var campaign_template_data = await queryDatabase(query, [campaign_id]);
-        campaign_template_data = campaign_template_data.rows.length > 0 ? campaign_template_data.rows : []
+        var campaignTemplateData = await queryDatabase(query, [campaign_id]);
+        campaignTemplateData = campaignTemplateData.rows.length > 0 ? campaignTemplateData.rows : []
 
         if (mode && mode === 'view') {
-            campaign_template_data = createCampaignData(campaign_template_data, campaign_data);
+            campaignTemplateData = createCampaignData(campaignTemplateData, campaign_data);
         }
+        var campaign_template_data: SponsoredProductsInterface[] = campaignTemplateData ? campaignTemplateData : []
 
         return NextResponse.json({ success: true, message: 'Templates fetched successfully.', data: { campaign_data, campaign_template_data } }, { status: 200 })
     } catch (error) {
@@ -195,53 +197,63 @@ function parseValues(data) {
     return result;
 }
 
-function createCampaignData(campaign_template_data, campaign_data) {
+function createCampaignData(campaignTemplateData: SponsoredProductsInterface[], campaignData) {
 
-    const arr = ['prod1', 'prod2', 'prod3', 'prod4', 'prod5', 'prod6', 'prod7', 'prod8', 'prod9', 'prod10', 'prod11', 'prod12', 'prod13', 'prod14', 'prod15', 'prod16', 'prod17', 'prod18', 'prod19', 'prod20'];
-    const productsPerCampaign = 3;  // User-defined number of products per campaign
-    const numberOfCampaigns = Math.ceil(arr.length / productsPerCampaign);
+
+    // Test products
+    const arr: string[] = ['prod1', 'prod2', 'prod3', 'prod4', 'prod5', 'prod6', 'prod7', 'prod8', 'prod9', 'prod10', 'prod11', 'prod12', 'prod13', 'prod14', 'prod15', 'prod16', 'prod17', 'prod18', 'prod19', 'prod20'];
+
+    const products: string[] = [];
+    // Default campaign number
+    var numberOfCampaigns: number = 1;
+    // User-defined number of products per campaign
+    if (campaignData.campaign_products_count && parseInt(campaignData.campaign_products_count) > 0) {
+        numberOfCampaigns = Math.ceil(arr.length / campaignData.campaign_products_count);
+    }
+
+    console.log(campaignData);
 
     console.log(numberOfCampaigns);
     const campaigns = [];
 
-    for (let i = 0; i < numberOfCampaigns; i++) {
-        const campaignId = `campaign_${i + 1}`;
-        const adGroupId = `ad_group_${i + 1}`;
+    // for (let i = 0; i < numberOfCampaigns; i++) {
+    //     const campaignId = `campaign_${i + 1}`;
+    //     const adGroupId = `ad_group_${i + 1}`;
 
-        //     // Copy base template and replace placeholders
-        let campaign = campaign_template_data.map(item => ({
-            ...item,
-            campaign_id: campaignId,
-            ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad (Required)" ? adGroupId : item.ad_group_id
-        }));
+    //     //     // Copy base template and replace placeholders
+    //     let campaign = campaign_template_data.map(item => ({
+    //         ...item,
+    //         campaign_id: campaignId,
+    //         ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad (Required)" ? adGroupId : item.ad_group_id
+    //     }));
 
-        console.log(campaign)
+    //     console.log(campaign)
 
-        // Find the index of the "Product Ad (Required)" row
-        const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad (Required)");
+    //     // Find the index of the "Product Ad (Required)" row
+    //     const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad (Required)");
 
-        // Remove the "Product Ad (Required)" row from the template
-        campaign.splice(productAdIndex, 1);
-        console.log(productAdIndex)
+    //     // Remove the "Product Ad (Required)" row from the template
+    //     campaign.splice(productAdIndex, 1);
+    //     console.log(productAdIndex)
 
-        console.log(campaign)
+    //     console.log(campaign)
 
-        // Insert the appropriate "Product Ad" rows at the found index
-        for (let j = 0; j < productsPerCampaign; j++) {
-            const productIndex = i * productsPerCampaign + j;
-            if (productIndex < arr.length) {
-                const productAd = {
-                    ...campaign_template_data.find(item => item.entity === "Product Ad"),
-                    campaign_id: campaignId,
-                    ad_group_id: adGroupId,
-                    sku: arr[productIndex]
-                };
-                campaign.splice(productAdIndex + j, 0, productAd);
-            }
-        }
+    //     // Insert the appropriate "Product Ad" rows at the found index
+    //     for (let j = 0; j < productsPerCampaign; j++) {
+    //         const productIndex = i * productsPerCampaign + j;
+    //         if (productIndex < arr.length) {
+    //             const productAd = {
+    //                 ...campaign_template_data.find(item => item.entity === "Product Ad"),
+    //                 campaign_id: campaignId,
+    //                 ad_group_id: adGroupId,
+    //                 sku: arr[productIndex]
+    //             };
+    //             campaign.splice(productAdIndex + j, 0, productAd);
+    //         }
+    //     }
 
-        campaigns.push(campaign);
-    }
+    //     campaigns.push(campaign);
+    // }
 
     return campaigns.flat();
 }

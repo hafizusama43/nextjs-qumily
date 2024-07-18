@@ -6,7 +6,8 @@
         "SKU'S",
         "skus",
         "Taskify",
-        "Usama"
+        "Usama",
+        "zustand"
     ],
     "tailwindCSS.includeLanguages": {
         "html": "html",

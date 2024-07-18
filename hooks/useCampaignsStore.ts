@@ -1,60 +1,8 @@
+import { BiddingData, CampaignNegKeywordData, NegKeywordData, ProductTargetingExpressionData, SponsoredProductsInterface } from '@/lib/interfaces';
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
-
-interface InitialState {
-    product: string;
-    entity: string;
-    operation: string;
-    campaign_id: string;
-    ad_group_id: string;
-    portfolio_id: string;
-    ad_id: string;
-    keyword_id: string;
-    product_targeting_id: string;
-    campaign_name: string;
-    ad_group_name: string;
-    start_date: string | Date;
-    end_date: string | Date | null;
-    targeting_type: string;
-    state: string;
-    daily_budget: number;
-    sku: string;
-    ad_group_default_bid: number;
-    bid: string;
-    keyword_text: string;
-    match_type: string;
-    bidding_strategy: string;
-    placement: string;
-    percentage: string;
-    product_targeting_expression: string;
-}
-
-interface BiddingData {
-    placement: string;
-    percentage: number;
-    id: string
-}
-
-interface CampaignNegKeywordData {
-    match_type: string;
-    keyword_text: string;
-    id: string
-}
-
-interface NegKeywordData {
-    match_type: string;
-    keyword_text: string;
-    id: string
-}
-
-interface ProductTargetingExpressionData {
-    state: string;
-    bid: number;
-    product_targeting_expression: string
-}
 
 interface useCampaignsStoreProps {
-    campaignData: InitialState[];
+    campaignData: SponsoredProductsInterface[];
     skus: string;
     currentStep: number;
     biddingData: BiddingData[];
@@ -65,7 +13,7 @@ interface useCampaignsStoreProps {
     productTargetingExpression: string;
     campaignProductsCount: number;
     pendingSave: boolean;
-    setCampaignData: (data: InitialState[]) => void;
+    setCampaignData: (data: SponsoredProductsInterface[]) => void;
     setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => void;
     setNegKeywordData: (data: NegKeywordData[]) => void;
     setNextStep: (step?: number) => void;
@@ -95,7 +43,7 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     setCampaignProductCount: (data: number) => set(() => {
         return { campaignProductsCount: data }
     }),
-    setCampaignData: (data: InitialState[]) => set(() => {
+    setCampaignData: (data: SponsoredProductsInterface[]) => set(() => {
         return { campaignData: data }
     }),
     setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => set(() => {
