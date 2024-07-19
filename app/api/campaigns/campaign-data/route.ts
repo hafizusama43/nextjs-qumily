@@ -208,9 +208,9 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
     var numberOfCampaigns: number = 1;
 
     // User-defined number of products per campaign
-    // if (campaign_data.campaign_products_count && parseInt(campaign_data.campaign_products_count) > 0) {
-    //     numberOfCampaigns = Math.ceil(products.length / campaign_data.campaign_products_count);
-    // }
+    if (campaign_data.campaign_products_count && parseInt(campaign_data.campaign_products_count) > 0) {
+        numberOfCampaigns = Math.ceil(products.length / campaign_data.campaign_products_count);
+    }
 
     const campaigns = [];
     console.log(campaign_data)
@@ -282,7 +282,7 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
         campaign_template_data.splice(campaign_template_data.length, 0, ...results);
     }
 
-    return campaign_template_data
+    // return campaign_template_data
 
     // Replace campaign id and ad-group id for now temp
     var campaignIdTemp: string = `SP | ${campaign_data.targeting_type} - (${new Date().getFullYear()} - ${MONTH_NAMES[new Date().getMonth()]}) - %campaignNumber%`;
@@ -296,17 +296,17 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
         var adGroupId = campaignId;
 
 
-        console.log(campaignId);
-        console.log(adGroupId);
+        // console.log(campaignId);
+        // console.log(adGroupId);
 
         // Copy base template and replace campaign id and ad group id
         let campaign = campaign_template_data.map(item => ({
             ...item,
             campaign_id: campaignId,
-            ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad" ? adGroupId : item.ad_group_id
+            ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad" || item.entity === "Negative keyword" || item.entity === "Negative product targeting" ? adGroupId : item.ad_group_id
         }));
 
-        // console.log(campaign)
+        console.log(campaign)
 
 
         // Find the index of the "Product Ad (Required)" row
@@ -329,8 +329,8 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
         //         campaign.splice(productAdIndex + j, 0, productAd);
         //     }
         // }
-        // campaigns.push(campaign);
+        campaigns.push(campaign);
     }
 
-    // return campaigns.flat();
+    return campaigns.flat();
 }
