@@ -74,7 +74,7 @@ const Campaigns = () => {
                 </div>
             </TemplateHeader>
             <ZoomControl />
-            <Table className='mb-40 border rounded custom-template-table'>
+            <Table className='border rounded custom-template-table'>
                 <TableHeader>
                     <TableRow>
                         {Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
