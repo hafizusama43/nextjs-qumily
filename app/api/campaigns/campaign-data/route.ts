@@ -202,7 +202,7 @@ function parseValues(data) {
 function createCampaignData(campaign_template_data: SponsoredProductsInterface[], campaign_data) {
     // Split products into array
     const products: string[] = (campaign_data.skus as string).split(',');
-    console.info('Total products : ', products.length)
+    // console.info('Total products : ', products.length)
 
     // Default campaign number
     var numberOfCampaigns: number = 1;
@@ -211,10 +211,7 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
     if (campaign_data.campaign_products_count && parseInt(campaign_data.campaign_products_count) > 0) {
         numberOfCampaigns = Math.ceil(products.length / campaign_data.campaign_products_count);
     }
-
     const campaigns = [];
-    console.log(campaign_data)
-
     // Replace values for keys like bidding_data, skus, neg_keyword_data, product_targeting_expression
     // Replace bidding_data
     if (campaign_data.bidding_data && campaign_data.bidding_data.length > 0) {
@@ -295,10 +292,6 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
         var campaignId = campaignIdTemp.replace('%campaignNumber%', (i + 1).toString());;
         var adGroupId = campaignId;
 
-
-        // console.log(campaignId);
-        // console.log(adGroupId);
-
         // Copy base template and replace campaign id and ad group id
         let campaign = campaign_template_data.map(item => ({
             ...item,
@@ -306,29 +299,23 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
             ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad" || item.entity === "Negative keyword" || item.entity === "Negative product targeting" ? adGroupId : item.ad_group_id
         }));
 
-        console.log(campaign)
-
-
-        // Find the index of the "Product Ad (Required)" row
-        // const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad (Required)");
-
-        // // Remove the "Product Ad (Required)" row from the template
-        // campaign.splice(productAdIndex, 1);
-        // console.log(productAdIndex)
-
-        // // Insert the appropriate "Product Ad" rows at the found index
-        // for (let j = 0; j < numberOfCampaigns; j++) {
-        //     const productIndex = i * numberOfCampaigns + j;
-        //     if (productIndex < products.length) {
-        //         const productAd = {
-        //             ...campaign_template_data.find(item => item.entity === "Product Ad"),
-        //             campaign_id: campaignId,
-        //             ad_group_id: adGroupId,
-        //             sku: products[productIndex]
-        //         };
-        //         campaign.splice(productAdIndex + j, 0, productAd);
-        //     }
-        // }
+        // Find the index of the "Product Ad" row
+        const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad");
+        // Remove the "Product Ad (Required)" row from the template
+        campaign.splice(productAdIndex, 1);
+        // Insert the appropriate "Product Ad" rows at the found index
+        for (let j = 0; j < campaign_data.campaign_products_count; j++) {
+            const productIndex = i * campaign_data.campaign_products_count + j;
+            if (productIndex < products.length) {
+                const productAd = {
+                    ...campaign_template_data.find(item => item.entity === "Product Ad"),
+                    campaign_id: campaignId,
+                    ad_group_id: adGroupId,
+                    sku: products[productIndex]
+                };
+                campaign.splice(productAdIndex + j, 0, productAd);
+            }
+        }
         campaigns.push(campaign);
     }
 
