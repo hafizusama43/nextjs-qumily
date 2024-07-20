@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true, message: 'Campaign updated successfully.', data: [] }, { status: 200 })
     } catch (error) {
         console.log(error)
-        return NextResponse.json({ success: false, message: 'Database Error: Failed to update campaign.', }, { status: 500 })
+        return NextResponse.json({ success: false, message: 'Database Error: Failed to update campaign.' }, { status: 500 })
     }
 }
 

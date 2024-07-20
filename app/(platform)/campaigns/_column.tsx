@@ -18,11 +18,10 @@ export const columns: ColumnDef<Templates>[] = [
     {
         accessorKey: "campaign_id",
         header: "Id",
-        // cell: ({ cell }) => <Link href={"/"}>{format(new Date(cell.getValue() as string), 'MM/dd/yyyy')}</Link>, // Format date here
     },
     {
         accessorKey: "campaign_name",
-        header: "Campaign name",
+        header: "Campaign Template name",
     },
     {
         accessorKey: "campaign_category",
