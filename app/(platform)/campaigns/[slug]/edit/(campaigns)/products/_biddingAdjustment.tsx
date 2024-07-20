@@ -21,7 +21,7 @@ import { Card } from '@/components/ui/card'
 
 const FormSchema = z.object({
     placement: z.string().min(1, { message: "Placement is required" }).default('Placement Top'),
-    percentage: z.coerce.number().min(1, 'Percentage must be greater then 0').default(0),
+    percentage: z.coerce.number().min(1, 'Percentage must be greater then 0').max(900, { message: "Percentage must be greater then 900" }).default(0),
 });
 
 const BiddingAdjustment = ({ steps }) => {

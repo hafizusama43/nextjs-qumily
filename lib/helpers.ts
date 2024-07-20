@@ -68,7 +68,7 @@ const STEPS_DEFAULT = {
 
 const STEPS_CAMPAIGN_AUTO = {
     1: "Campaign (Required)",
-    2: "Bidding Adjustment (Required)",
+    2: "Bidding Adjustment (Optional)",
     3: "Ad Group (Required)",
     4: "Product Ad (Required)",
     5: "Campaign negative keyword (Optional)",

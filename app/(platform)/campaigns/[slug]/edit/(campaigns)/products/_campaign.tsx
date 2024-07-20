@@ -127,7 +127,7 @@ const Campaign = ({ steps }) => {
                             <RenderDatePicker name={"start_date"} label={SPONSORED_PRODUCTS_CAMPAIGNS.start_date} form={form}></RenderDatePicker>
                         </div>
                         <div className='basis-1/2 w-full'>
-                            <RenderDatePicker name={"end_date"} label={SPONSORED_PRODUCTS_CAMPAIGNS.end_date} form={form}></RenderDatePicker>
+                            <RenderDatePicker disabled name={"end_date"} label={SPONSORED_PRODUCTS_CAMPAIGNS.end_date} form={form}></RenderDatePicker>
                         </div>
                     </div>
 

@@ -10,7 +10,7 @@ import { CalendarIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { format } from "date-fns"
 
-export const RenderDatePicker = ({ form, name, label }) => {
+export const RenderDatePicker = ({ form, name, label, disabled = false }) => {
     return (
         <FormField
             control={form.control}
@@ -21,7 +21,7 @@ export const RenderDatePicker = ({ form, name, label }) => {
                     <Popover>
                         <PopoverTrigger asChild>
                             <FormControl>
-                                <Button
+                                <Button disabled={disabled}
                                     variant={"outline"}
                                     className={cn(
                                         "h-10  pl-3 text-left font-normal",
