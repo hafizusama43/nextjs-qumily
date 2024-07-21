@@ -13,7 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
 const FormSchema = z.object({
@@ -44,8 +44,6 @@ const ProductAd = ({ steps }) => {
         setCampaignProductCount(data.campaign_products_count)
 
         var entity: string = getStepName(steps[currentStep]);
-        console.log(entity)
-
         // Get existing campaign object to retain values in next object
         var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
         const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'ad_group_id', 'state']);
@@ -81,7 +79,6 @@ const ProductAd = ({ steps }) => {
     // }
 
     const printNumberedProducts = () => {
-        console.log(form.getValues('sku').split(' '))
         var splitArr = []
         var separator = '';
         if (form.getValues('sku').includes(",")) {

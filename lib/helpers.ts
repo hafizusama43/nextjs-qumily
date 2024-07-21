@@ -25,6 +25,11 @@ export const BIDDING_STRATEGY = {
     "Dynamic bids - up and down": " Dynamic bids - up and down"
 }
 
+export const TARGETING_STRATEGY = {
+    "keyword": "Keyword targeting",
+    "product": "Product targeting",
+}
+
 export const PLACEMENT = {
     "Placement Product Page": "Placement Product Page",
     "Placement Top": "Placement Top",
@@ -72,8 +77,8 @@ const STEPS_CAMPAIGN_AUTO = {
     3: "Ad Group (Required)",
     4: "Product Ad (Required)",
     5: "Campaign negative keyword (Optional)",
-    6: "Negative keyword  (Optional)",
-    7: "Negative product targeting  (Optional)",
+    6: "Negative keyword (Optional)",
+    7: "Negative product targeting (Optional)",
 }
 
 export const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
@@ -83,20 +88,36 @@ export const MONTH_NAMES = ["January", "February", "March", "April", "May", "Jun
 
 const STEPS_CAMPAIGN_MANUAL = {
     1: "Campaign (Required)",
-    2: "Bidding Adjustment (Required)",
+    2: "Bidding Adjustment (Optional)",
     3: "Ad Group (Required)",
     4: "Product Ad (Required)",
 }
 
 
 // Function to get the appropriate steps object based on a condition
-export const GET_STEPS = (condition: string) => {
+export const GET_STEPS = (condition: string, targeting: string) => {
     if (condition.toLocaleLowerCase() === 'auto') {
         return STEPS_CAMPAIGN_AUTO;
     } else if (condition.toLocaleLowerCase() === 'manual') {
-        return STEPS_CAMPAIGN_MANUAL;
+        console.log(targeting)
+        // Build the steps dynamically for manual campaigns
+        var stepsManual = {}
+        if (targeting === 'keyword') {
+            stepsManual = {
+                ...STEPS_CAMPAIGN_MANUAL,
+                5: "Negative keyword (Optional)",
+                6: "Keyword targeting (Required)"
+            };
+        } else {
+            stepsManual = {
+                ...STEPS_CAMPAIGN_MANUAL,
+                5: "Product targeting (Required)",
+                6: "Negative product targeting (Optional)"
+            };
+        }
+        return stepsManual;
     } else {
-        return STEPS_DEFAULT;
+        return {}; // Default steps object if condition is neither 'auto' nor 'manual'
     }
 };
 

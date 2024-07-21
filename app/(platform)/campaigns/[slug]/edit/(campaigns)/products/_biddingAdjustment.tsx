@@ -49,7 +49,6 @@ const BiddingAdjustment = ({ steps }) => {
 
     const handleNextStepClick = () => {
         var entity: string = getStepName(steps[currentStep]);
-        console.log(entity)
         // Bidding adjustments is optional if not added any then skip 
         if (biddingData.length > 0) {
             // Get existing campaign object to retain values in next object

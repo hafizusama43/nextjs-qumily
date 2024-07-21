@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_TYPE } from '@/lib/helpers'
+import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_STRATEGY, TARGETING_TYPE } from '@/lib/helpers'
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { RenderInput } from '../_renderInput'
@@ -30,13 +30,14 @@ const FormSchema = z.object({
     state: z.string().min(1, { message: "State is required" }).default('Enabled'),
     daily_budget: z.coerce.number().min(1, 'Daily Budget must be greater then 0'),
     bidding_strategy: z.string().min(1, { message: "Bidding Strategy is required" }),
+    targeting_strategy: z.string().min(1, { message: "Targeting strategy is required" }).default('keyword'),
 });
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 
 const Campaign = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep, setTargetingType } = useCampaignsStore()
+    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep, setTargetingType, setTargetingStrategy } = useCampaignsStore()
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -52,6 +53,7 @@ const Campaign = ({ steps }) => {
             state: 'Enabled',
             daily_budget: 10,
             bidding_strategy: 'Fixed bid',
+            targeting_strategy: 'keyword'
         },
     })
 
@@ -68,14 +70,21 @@ const Campaign = ({ steps }) => {
                 form.setValue(key as keyof FormSchemaType, value as any);
             });
         }
-    }, [campaignData, currentStep, form, steps])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         var entity: string = steps[currentStep];
         entity = entity.replace('(Required)', '');
         entity = entity.trim()
 
+
         setTargetingType(data.targeting_type)
+        if (data.targeting_type === 'Manual') {
+            setTargetingStrategy(data.targeting_strategy);
+            console.log(data.targeting_strategy)
+        }
+        delete data.targeting_strategy;
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         if (objExists.length > 0) {
             console.info(`Object "${entity}" found : Updating`)
@@ -147,6 +156,13 @@ const Campaign = ({ steps }) => {
                         <div className='basis-1/2 w-full'>
                             <RenderSelect name={"bidding_strategy"} form={form} options={BIDDING_STRATEGY} label={SPONSORED_PRODUCTS_CAMPAIGNS.bidding_strategy}></RenderSelect>
                         </div>
+
+                        <div className='basis-1/2 w-full'>
+                            {form.getValues('targeting_type') && form.getValues('targeting_type') === "Manual" &&
+                                <RenderSelect name={"targeting_strategy"} form={form} options={TARGETING_STRATEGY} label={'Targeting Strategy'}></RenderSelect>
+                            }
+                        </div>
+
                     </div>
                     <Separator className='my-3'></Separator>
                     <div className='flex justify-end gap-4 mt-10'>

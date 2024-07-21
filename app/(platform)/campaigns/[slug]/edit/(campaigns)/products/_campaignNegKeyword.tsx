@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
-import { getSpecificKeyValues, getStepName, MATCH_TYPE, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, getStepName, MATCH_TYPE, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'

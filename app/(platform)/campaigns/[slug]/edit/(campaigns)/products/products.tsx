@@ -18,6 +18,8 @@ import CampaignNegKeyword from './_campaignNegKeyword'
 import NegKeyword from './_negKeyword'
 import NegProductTargeting from './_negProductTargeting'
 import Link from 'next/link'
+import KeywordTargeting from './_keywordTargeting'
+import ProductTargeting from './_productTargeting'
 
 
 export const initialState = {
@@ -56,7 +58,9 @@ export const initialState = {
 
 const Products = () => {
     const params = useParams<{ slug: string }>();
+    const [STEPS, setSteps] = useState({})
     const { currentStep,
+        targetingStrategy,
         targetingType,
         setCampaignData,
         setTargetingType,
@@ -68,7 +72,14 @@ const Products = () => {
         setCampaignProductCount
     } = useCampaignsStore()
     const [pending, setPending] = useState(false);
-    const STEPS = GET_STEPS(targetingType);
+    // const STEPS =  ;
+
+    useEffect(() => {
+        console.log('Change in types')
+        setSteps(GET_STEPS(targetingType, targetingStrategy));
+
+    }, [targetingStrategy, targetingType])
+
 
     const getCampaignData = useCallback(async () => {
         try {
@@ -104,7 +115,6 @@ const Products = () => {
             <TemplateHeader>
                 <Label>Editing &quot;<b>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</b>&quot; campaign</Label>
                 <div className='flex gap-2'>
-                    {/* <Button disabled={pendingSave || pending} size='sm' onClick={() => { handleSaveChanges() }}>{pendingSave && <><Spin variant="light" size="sm"></Spin> &nbsp;  </>} Save changes</Button> */}
                     <Link href="/campaigns">
                         <Button>Campaigns</Button>
                     </Link>
@@ -115,16 +125,40 @@ const Products = () => {
                 <div className='border border-gray-300 p-5 rounded-lg'>
                     <strong><h5>{STEPS[currentStep]}</h5></strong>
                     <Separator className='mt-3 mb-3'></Separator>
-                    {currentStep === 1 && <Campaign steps={STEPS} />}
+                    <StepRenderer currentStep={currentStep} steps={STEPS} />
+                    {/* {currentStep === 1 && <Campaign steps={STEPS} />}
                     {currentStep === 2 && <BiddingAdjustment steps={STEPS} />}
                     {currentStep === 3 && <AdGroup steps={STEPS} />}
                     {currentStep === 4 && <ProductAd steps={STEPS} />}
                     {currentStep === 5 && <CampaignNegKeyword steps={STEPS} />}
                     {currentStep === 6 && <NegKeyword steps={STEPS} />}
-                    {currentStep === 7 && <NegProductTargeting steps={STEPS} />}
+                    {currentStep === 7 && <NegProductTargeting steps={STEPS} />} */}
                 </div>}
         </React.Fragment>
     )
 }
+
+// Component mapping
+const COMPONENT_MAP = {
+    "Campaign (Required)": Campaign,
+    "Bidding Adjustment (Optional)": BiddingAdjustment,
+    "Ad Group (Required)": AdGroup,
+    "Product Ad (Required)": ProductAd,
+    "Campaign negative keyword (Optional)": CampaignNegKeyword,
+    "Negative keyword (Optional)": NegKeyword,
+    "Negative product targeting (Optional)": NegProductTargeting,
+    "Keyword targeting (Required)": KeywordTargeting, // Assuming NegKeyword component handles keyword targeting
+    "Product targeting (Required)": ProductTargeting // Assuming NegProductTargeting component handles product targeting
+};
+
+const StepRenderer = ({ currentStep, steps }) => {
+    console.log(currentStep)
+    console.log(steps)
+    const stepName = steps[currentStep];
+    // console.log(object)
+    console.log(stepName)
+    const StepComponent = COMPONENT_MAP[stepName];
+    return StepComponent ? <StepComponent steps={steps} /> : null;
+};
 
 export default Products

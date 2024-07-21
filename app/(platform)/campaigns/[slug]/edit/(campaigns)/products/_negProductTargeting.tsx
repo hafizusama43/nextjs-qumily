@@ -1,18 +1,14 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { v4 as uuidv4 } from 'uuid';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { CircleArrowLeft, CircleArrowRight, SaveIcon, Trash2 } from 'lucide-react'
-import { getSpecificKeyValues, getStepName, MATCH_TYPE, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
-import { Separator } from '@/components/ui/separator'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Form } from '@/components/ui/form'
+import { CircleArrowLeft, SaveIcon } from 'lucide-react'
+import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
-import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
 import axios from 'axios'
 import { toast } from '@/components/ui/use-toast'
@@ -86,7 +82,6 @@ const NegProductTargeting = ({ steps }) => {
 
         setPendingSave(true);
         try {
-            console.log(JSON.stringify(campaignData))
             await axios.post('/api/campaigns/campaign-data',
                 { campaignData, targetingType, biddingData, skus, slug: params.slug, negKeywordData, campaignNegKeywordData, productTargetingExpression: data.product_targeting_expression, campaignProductsCount },
                 {
@@ -110,7 +105,6 @@ const NegProductTargeting = ({ steps }) => {
                     <div className="w-full">
                         <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
                     </div>
-                    {/* <Separator className='mt-10 mb-3'></Separator> */}
                     <div className='flex justify-end gap-4 mt-5'>
                         <Button type="button" disabled={currentStep < 2 || pendingSave} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                         <Button type="submit" disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>
