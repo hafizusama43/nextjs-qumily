@@ -75,12 +75,20 @@ const ProductAd = ({ steps }) => {
         setNextStep();
     }
 
+    // const handleRemoveProduct = (item: string, separator: string) => {
+    //     console.log(separator)
+    //     console.log(item)
+    // }
+
     const printNumberedProducts = () => {
         console.log(form.getValues('sku').split(' '))
         var splitArr = []
+        var separator = '';
         if (form.getValues('sku').includes(",")) {
+            separator = ","
             splitArr = form.getValues('sku').split(',')
         } else if (form.getValues('sku').includes("\n")) {
+            separator = "\n"
             splitArr = form.getValues('sku').split('\n')
         } else {
             splitArr = form.getValues('sku').split(" ")
@@ -88,7 +96,7 @@ const ProductAd = ({ steps }) => {
         return splitArr.map((item, index) => {
             return (
                 item && <Badge key={index} className="mr-2 mb-1" variant="outline">{item} <Separator orientation="vertical" />
-                    {/* <X className='ml-1' role="button" size={16} strokeWidth={0.5}></X> */}
+                    {/* <X onClick={() => { handleRemoveProduct(item, separator) }} className='ml-1' role="button" size={16} strokeWidth={0.5}></X> */}
                 </Badge>
             )
         })

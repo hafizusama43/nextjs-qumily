@@ -165,7 +165,7 @@ const NegKeyword = ({ steps }) => {
                     </Form>
                 </div>
                 <div className='basis-1/2'>
-                    <Card>
+                    <Card className='mt-8'>
                         <Table className='' id='placements_table'>
                             <TableHeader>
                                 <TableRow>

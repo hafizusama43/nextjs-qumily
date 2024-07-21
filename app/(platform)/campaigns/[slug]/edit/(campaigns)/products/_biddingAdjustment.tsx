@@ -1,9 +1,9 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { bigint, z } from 'zod'
+import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
@@ -11,12 +11,10 @@ import { RenderInput } from '../_renderInput'
 import { getSpecificKeyValues, getStepName, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
-import loadJsConfig from 'next/dist/build/load-jsconfig'
-import { Kablammo } from 'next/font/google'
 import { Card } from '@/components/ui/card'
 
 const FormSchema = z.object({
@@ -109,7 +107,7 @@ const BiddingAdjustment = ({ steps }) => {
                     </Form>
                 </div>
                 <div className='basis-1/2'>
-                    <Alert className="my-5">
+                    <Alert className="mt-8 mb-5">
                         <AlertTriangle className="h-4 w-4" />
                         <AlertTitle>Heads up!</AlertTitle>
                         <AlertDescription>

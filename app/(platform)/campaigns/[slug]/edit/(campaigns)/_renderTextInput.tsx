@@ -1,7 +1,7 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 
-export const RenderTextArea = ({ form, name, label, disabled = false }) => {
+export const RenderTextArea = ({ form, name, label, disabled = false, placeholder = "Please enter text here" }) => {
     return (
         <FormField
             control={form.control}
@@ -13,7 +13,7 @@ export const RenderTextArea = ({ form, name, label, disabled = false }) => {
                     <FormControl>
                         <Textarea
                             rows={15}
-                            placeholder="Tell us a little bit about yourself"
+                            placeholder={placeholder}
                             className="resize-none"
                             {...field}
                         />
