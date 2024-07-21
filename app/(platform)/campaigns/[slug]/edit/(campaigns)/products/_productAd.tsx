@@ -87,7 +87,9 @@ const ProductAd = ({ steps }) => {
         }
         return splitArr.map((item, index) => {
             return (
-                item && <Badge key={index} className="mr-2 mb-1" variant="outline">{item} <Separator orientation="vertical" /> <X className='ml-1' role="button" size={16} strokeWidth={0.5}></X></Badge>
+                item && <Badge key={index} className="mr-2 mb-1" variant="outline">{item} <Separator orientation="vertical" />
+                    {/* <X className='ml-1' role="button" size={16} strokeWidth={0.5}></X> */}
+                </Badge>
             )
         })
     }
@@ -98,7 +100,7 @@ const ProductAd = ({ steps }) => {
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Heads up!</AlertTitle>
                 <AlertDescription>
-                    You can add <b>multiples SKU&apos;S</b> at once, either they should be comma separated <b>eg. sku1, sku2, sku2....</b> or they should be separated by space eg. <b>sku1 sku2 sku2....</b>.
+                    You can add <b>multiples SKU&apos;S</b> at once, <b>after adding an SKU press enter to go to next line</b> and then repeat same for all SKU&pos;s either they should be comma separated <b>eg. sku1, sku2, sku2....</b> they should be separated by space eg. <b>sku1 sku2 sku2....</b>.
                 </AlertDescription>
             </Alert>
             <Form {...form}>
