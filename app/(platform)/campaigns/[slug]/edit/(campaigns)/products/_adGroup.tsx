@@ -15,7 +15,7 @@ import { initialState } from './products'
 const FormSchema = z.object({
     ad_group_id: z.string().min(1, { message: "Ad group id is required" }),
     ad_group_name: z.string().min(1, { message: "Ad group name is required" }),
-    ad_group_default_bid: z.coerce.number().min(1, 'Ad group default bid must be greater then 0'),
+    ad_group_default_bid: z.coerce.number().min(0.1, 'Ad group default bid must be at least 0.1'),
 });
 
 type FormSchemaType = z.infer<typeof FormSchema>;

@@ -12,6 +12,7 @@ export const RenderTextArea = ({ form, name, label, disabled = false }) => {
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
                         <Textarea
+                            rows={15}
                             placeholder="Tell us a little bit about yourself"
                             className="resize-none"
                             {...field}

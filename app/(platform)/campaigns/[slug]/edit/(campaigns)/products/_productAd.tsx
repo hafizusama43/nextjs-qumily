@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
-import { AlertTriangle, CircleArrowLeft, CircleArrowRight } from 'lucide-react'
+import { AlertTriangle, CircleArrowLeft, CircleArrowRight, X } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
 import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
@@ -13,6 +13,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useCampaignsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
 const FormSchema = z.object({
     sku: z.string().min(1, { message: "Products SKU'S are required" }),
@@ -73,6 +75,23 @@ const ProductAd = ({ steps }) => {
         setNextStep();
     }
 
+    const printNumberedProducts = () => {
+        console.log(form.getValues('sku').split(' '))
+        var splitArr = []
+        if (form.getValues('sku').includes(",")) {
+            splitArr = form.getValues('sku').split(',')
+        } else if (form.getValues('sku').includes("\n")) {
+            splitArr = form.getValues('sku').split('\n')
+        } else {
+            splitArr = form.getValues('sku').split(" ")
+        }
+        return splitArr.map((item, index) => {
+            return (
+                item && <Badge key={index} className="mr-2 mb-1" variant="outline">{item} <Separator orientation="vertical" /> <X className='ml-1' role="button" size={16} strokeWidth={0.5}></X></Badge>
+            )
+        })
+    }
+
     return (
         <div>
             <Alert className="my-5">
@@ -84,8 +103,20 @@ const ProductAd = ({ steps }) => {
             </Alert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                    <div className='w-full'>
-                        <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
+                    <div className='flex gap-3'>
+                        <div className='w-1/2'>
+                            <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
+                        </div>
+                        <div className='w-1/2'>
+                            {form.getValues('sku') && <Card className='mt-8'>
+                                <CardHeader >
+                                    <CardDescription>Product SKU&apos;s.</CardDescription>
+                                    <CardContent className='p-0'>
+                                        {printNumberedProducts()}
+                                    </CardContent>
+                                </CardHeader>
+                            </Card>}
+                        </div>
                     </div>
                     <div className='w-1/2'>
                         <RenderInput disabled={!skusVal || skusVal === ''} name={"campaign_products_count"} form={form} label={'Products to add in each campaign'} type={"number"}></RenderInput>
