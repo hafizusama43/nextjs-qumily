@@ -19,6 +19,12 @@ export const MATCH_TYPE = {
     "Negative phrase": "Negative phrase",
 }
 
+export const MATCH_TYPE_KEYWORD_TARGETING = {
+    "exact": "Exact",
+    "broad": "Broad",
+    "phrase": "phrase",
+}
+
 export const BIDDING_STRATEGY = {
     "Fixed bid": "Fixed bid",
     "Dynamic bids - down only": "Dynamic bids - down only",

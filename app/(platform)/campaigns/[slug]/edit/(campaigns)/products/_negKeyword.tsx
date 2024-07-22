@@ -55,10 +55,8 @@ const NegKeyword = ({ steps }) => {
                 }
             });
         });
-        1
         form.reset();
         console.log(negKeywordData)
-
     }
 
     const handleDeleteBtn = (id: string) => {

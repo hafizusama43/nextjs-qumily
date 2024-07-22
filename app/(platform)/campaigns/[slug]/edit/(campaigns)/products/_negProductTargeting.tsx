@@ -35,7 +35,8 @@ const NegProductTargeting = ({ steps }) => {
         biddingData,
         skus,
         pendingSave,
-        campaignProductsCount
+        campaignProductsCount,
+        targetingStrategy
     } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -83,7 +84,17 @@ const NegProductTargeting = ({ steps }) => {
         setPendingSave(true);
         try {
             await axios.post('/api/campaigns/campaign-data',
-                { campaignData, targetingType, biddingData, skus, slug: params.slug, negKeywordData, campaignNegKeywordData, productTargetingExpression: data.product_targeting_expression, campaignProductsCount },
+                {
+                    campaignData, targetingType,
+                    biddingData,
+                    skus,
+                    slug: params.slug,
+                    negKeywordData,
+                    campaignNegKeywordData,
+                    productTargetingExpression: data.product_targeting_expression,
+                    campaignProductsCount,
+                    targetingStrategy
+                },
                 {
                     headers: {
                         "Accept": "application/json"

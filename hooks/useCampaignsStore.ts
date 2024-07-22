@@ -1,4 +1,4 @@
-import { BiddingData, CampaignNegKeywordData, NegKeywordData, ProductTargetingExpressionData, SponsoredProductsInterface } from '@/lib/interfaces';
+import { BiddingData, CampaignNegKeywordData, KeywordTargetingData, NegKeywordData, ProductTargetingExpressionData, SponsoredProductsInterface } from '@/lib/interfaces';
 import { create } from 'zustand'
 
 interface useCampaignsStoreProps {
@@ -11,12 +11,14 @@ interface useCampaignsStoreProps {
     targetingStrategy: string;
     productTargetingExpressionData: ProductTargetingExpressionData[];
     negKeywordData: NegKeywordData[];
+    keywordTargetingData: KeywordTargetingData[];
     productTargetingExpression: string;
     campaignProductsCount: number;
     pendingSave: boolean;
     setCampaignData: (data: SponsoredProductsInterface[]) => void;
     setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => void;
     setNegKeywordData: (data: NegKeywordData[]) => void;
+    setKeywordTargetingData: (data: KeywordTargetingData[]) => void;
     setNextStep: (step?: number) => void;
     setPrevStep: (step?: number) => void;
     setBiddingData: (data: BiddingData[]) => void;
@@ -34,6 +36,7 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     biddingData: [],
     campaignNegKeywordData: [],
     negKeywordData: [],
+    keywordTargetingData: [],
     currentStep: 1,
     skus: '',
     targetingType: '',
@@ -54,6 +57,9 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     }),
     setNegKeywordData: (data: NegKeywordData[]) => set(() => {
         return { negKeywordData: data }
+    }),
+    setKeywordTargetingData: (data: KeywordTargetingData[]) => set(() => {
+        return { keywordTargetingData: data }
     }),
     setBiddingData: (data: BiddingData[]) => set(() => {
         return { biddingData: data }

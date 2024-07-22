@@ -58,7 +58,8 @@ export async function POST(request: NextRequest) {
         negKeywordData,
         campaignNegKeywordData,
         productTargetingExpression,
-        campaignProductsCount
+        campaignProductsCount,
+        targetingStrategy
     } = body;
     // console.log(body)
 
@@ -121,6 +122,10 @@ export async function POST(request: NextRequest) {
 
     // Insert campaign-template-data
     insertTemplateData(campaignData, campaign_id);
+
+    // Insert product_targeting_expression
+    targetingStrategy = stringify(targetingStrategy);
+    targetingStrategy && await queryDatabase(query, [campaign_id, 'targeting_strategy', targetingStrategy]);
 
     try {
         return NextResponse.json({ success: true, message: 'Campaign updated successfully.', data: [] }, { status: 200 })

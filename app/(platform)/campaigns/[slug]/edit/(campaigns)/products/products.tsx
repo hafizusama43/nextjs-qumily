@@ -87,7 +87,6 @@ const Products = () => {
             const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
             if (res.data.success) {
                 const { campaign_template_data, campaign_data } = res.data.data
-                console.log(campaign_template_data)
                 campaign_template_data && setCampaignData(campaign_template_data);
                 campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
                 campaign_data.bidding_data && setBiddingData(campaign_data.bidding_data);
@@ -126,13 +125,6 @@ const Products = () => {
                     <strong><h5>{STEPS[currentStep]}</h5></strong>
                     <Separator className='mt-3 mb-3'></Separator>
                     <StepRenderer currentStep={currentStep} steps={STEPS} />
-                    {/* {currentStep === 1 && <Campaign steps={STEPS} />}
-                    {currentStep === 2 && <BiddingAdjustment steps={STEPS} />}
-                    {currentStep === 3 && <AdGroup steps={STEPS} />}
-                    {currentStep === 4 && <ProductAd steps={STEPS} />}
-                    {currentStep === 5 && <CampaignNegKeyword steps={STEPS} />}
-                    {currentStep === 6 && <NegKeyword steps={STEPS} />}
-                    {currentStep === 7 && <NegProductTargeting steps={STEPS} />} */}
                 </div>}
         </React.Fragment>
     )
@@ -152,11 +144,7 @@ const COMPONENT_MAP = {
 };
 
 const StepRenderer = ({ currentStep, steps }) => {
-    console.log(currentStep)
-    console.log(steps)
-    const stepName = steps[currentStep];
-    // console.log(object)
-    console.log(stepName)
+    const stepName: string = steps[currentStep];
     const StepComponent = COMPONENT_MAP[stepName];
     return StepComponent ? <StepComponent steps={steps} /> : null;
 };

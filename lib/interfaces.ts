@@ -44,6 +44,13 @@ export interface NegKeywordData {
     id: string
 }
 
+export interface KeywordTargetingData {
+    match_type: string;
+    keyword_text: string;
+    bid: number;
+    id: string
+}
+
 export interface ProductTargetingExpressionData {
     state: string;
     bid: number;
