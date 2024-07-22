@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
@@ -37,7 +37,8 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 
 
 const Campaign = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep, setTargetingType, setTargetingStrategy } = useCampaignsStore()
+    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep, setTargetingType, setTargetingStrategy, targetingStrategy } = useCampaignsStore()
+    const [isReady, setIsReady] = useState(false);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -49,11 +50,11 @@ const Campaign = ({ steps }) => {
             campaign_name: '',
             start_date: new Date(),
             end_date: null,
-            targeting_type: 'Auto',
-            state: 'Enabled',
+            targeting_type: '',
+            state: '',
             daily_budget: 10,
-            bidding_strategy: 'Fixed bid',
-            targeting_strategy: 'keyword'
+            bidding_strategy: '',
+            targeting_strategy: ''
         },
     })
 
@@ -69,6 +70,7 @@ const Campaign = ({ steps }) => {
                 }
                 form.setValue(key as keyof FormSchemaType, value as any);
             });
+            form.setValue('targeting_strategy', targetingStrategy)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -105,6 +107,13 @@ const Campaign = ({ steps }) => {
         }
         setNextStep();
     }
+
+
+    useEffect(() => {
+        // Trigger re-render when form values are set to populate dropdowns
+        setIsReady(true);
+    }, []);
+    if (!isReady) return null;
 
     return (
         <div>

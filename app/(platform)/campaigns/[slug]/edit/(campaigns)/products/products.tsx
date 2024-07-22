@@ -69,23 +69,23 @@ const Products = () => {
         setNegKeywordData,
         setCampaignNegKeywordData,
         setProductTargetingExpression,
-        setCampaignProductCount
+        setCampaignProductCount,
+        setTargetingStrategy
     } = useCampaignsStore()
     const [pending, setPending] = useState(false);
-    // const STEPS =  ;
 
     useEffect(() => {
-        console.log('Change in types')
         setSteps(GET_STEPS(targetingType, targetingStrategy));
-
     }, [targetingStrategy, targetingType])
 
 
     const getCampaignData = useCallback(async () => {
         try {
+            console.log('Setting api response data in store.')
             setPending(true)
             const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
             if (res.data.success) {
+
                 const { campaign_template_data, campaign_data } = res.data.data
                 campaign_template_data && setCampaignData(campaign_template_data);
                 campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
@@ -96,13 +96,14 @@ const Products = () => {
                 campaign_data.campaign_neg_keyword_data && setCampaignNegKeywordData(campaign_data.campaign_neg_keyword_data);
                 campaign_data.product_targeting_expression && setProductTargetingExpression(campaign_data.product_targeting_expression);
                 campaign_data.campaign_products_count && setCampaignProductCount(campaign_data.campaign_products_count);
+                campaign_data.targeting_strategy && setTargetingStrategy(campaign_data.targeting_strategy);
             }
             setPending(false)
         } catch (error) {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setCampaignProductCount, setNegKeywordData, setProductTargetingExpression, setSkus, setTargetingType])
+    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setCampaignProductCount, setNegKeywordData, setProductTargetingExpression, setSkus, setTargetingStrategy, setTargetingType])
 
     useEffect(() => {
         // Get campaign template and campaign data
@@ -139,8 +140,8 @@ const COMPONENT_MAP = {
     "Campaign negative keyword (Optional)": CampaignNegKeyword,
     "Negative keyword (Optional)": NegKeyword,
     "Negative product targeting (Optional)": NegProductTargeting,
-    "Keyword targeting (Required)": KeywordTargeting, // Assuming NegKeyword component handles keyword targeting
-    "Product targeting (Required)": ProductTargeting // Assuming NegProductTargeting component handles product targeting
+    "Keyword targeting (Required)": KeywordTargeting,
+    "Product targeting (Required)": ProductTargeting
 };
 
 const StepRenderer = ({ currentStep, steps }) => {
