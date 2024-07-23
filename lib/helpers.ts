@@ -112,7 +112,7 @@ export const GET_STEPS = (condition: string, targeting: string) => {
             stepsManual = {
                 ...STEPS_CAMPAIGN_MANUAL,
                 5: "Negative keyword (Optional)",
-                6: "Keyword targeting (Required)"
+                6: "Keyword (Required)"
             };
         } else {
             stepsManual = {

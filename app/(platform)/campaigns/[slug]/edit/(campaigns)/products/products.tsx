@@ -140,7 +140,7 @@ const COMPONENT_MAP = {
     "Campaign negative keyword (Optional)": CampaignNegKeyword,
     "Negative keyword (Optional)": NegKeyword,
     "Negative product targeting (Optional)": NegProductTargeting,
-    "Keyword targeting (Required)": KeywordTargeting,
+    "Keyword (Required)": KeywordTargeting,
     "Product targeting (Required)": ProductTargeting
 };
 

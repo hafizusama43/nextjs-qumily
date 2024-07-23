@@ -70,6 +70,13 @@ const KeywordTargeting = ({ steps }) => {
         setKeywordTargetingData(updatedData);
     }
 
+    const handleSaveChanges = () => {
+        if (keywordTargetingData.length > 0) {
+            var entity: string = getStepName(steps[currentStep]);
+            console.log(entity)
+        }
+    }
+
     return (
         <div>
             <div className='flex flex-row gap-5 mb-5'>
@@ -158,7 +165,7 @@ const KeywordTargeting = ({ steps }) => {
                                         </TableRow>
                                     )
                                 })}</> : <TableRow>
-                                    <TableCell colSpan={3}><p className='text-neutral-400 mt-5 m-auto'>No keywords added.</p></TableCell>
+                                    <TableCell colSpan={4}><p className='text-neutral-400 mt-5 m-auto'>No keywords added.</p></TableCell>
                                 </TableRow>}
                             </TableBody>
                         </Table>
@@ -168,7 +175,7 @@ const KeywordTargeting = ({ steps }) => {
 
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
-                <Button type="submit" disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>
+                <Button type="submit" onClick={() => { handleSaveChanges() }} disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>
             </div>
         </div>
     )
