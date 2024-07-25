@@ -70,7 +70,8 @@ const Products = () => {
         setCampaignNegKeywordData,
         setProductTargetingExpression,
         setCampaignProductCount,
-        setTargetingStrategy
+        setTargetingStrategy,
+        setKeywordTargetingData
     } = useCampaignsStore()
     const [pending, setPending] = useState(false);
 
@@ -97,13 +98,14 @@ const Products = () => {
                 campaign_data.product_targeting_expression && setProductTargetingExpression(campaign_data.product_targeting_expression);
                 campaign_data.campaign_products_count && setCampaignProductCount(campaign_data.campaign_products_count);
                 campaign_data.targeting_strategy && setTargetingStrategy(campaign_data.targeting_strategy);
+                campaign_data.keyword_targeting_data && setKeywordTargetingData(campaign_data.keyword_targeting_data);
             }
             setPending(false)
         } catch (error) {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setCampaignProductCount, setNegKeywordData, setProductTargetingExpression, setSkus, setTargetingStrategy, setTargetingType])
+    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setCampaignProductCount, setKeywordTargetingData, setNegKeywordData, setProductTargetingExpression, setSkus, setTargetingStrategy, setTargetingType])
 
     useEffect(() => {
         // Get campaign template and campaign data

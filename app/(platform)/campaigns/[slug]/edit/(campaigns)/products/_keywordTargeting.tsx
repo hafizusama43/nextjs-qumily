@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,6 +15,9 @@ import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
 import { Spin } from '@/components/ui/spin'
 import { RenderInput } from '../_renderInput'
+import { toast } from '@/components/ui/use-toast'
+import axios from 'axios'
+import { useParams } from 'next/navigation'
 
 
 const FormSchema = z.object({
@@ -27,7 +30,24 @@ const FormSchema = z.object({
 
 
 const KeywordTargeting = ({ steps }) => {
-    const { pendingSave, setCampaignData, setNextStep, currentStep, setPrevStep, keywordTargetingData, setKeywordTargetingData } = useCampaignsStore()
+    const { pendingSave,
+        setCampaignData,
+        currentStep,
+        setPrevStep,
+        keywordTargetingData,
+        setKeywordTargetingData,
+        setPendingSave,
+        campaignData,
+        targetingType,
+        biddingData,
+        skus,
+        negKeywordData,
+        campaignNegKeywordData,
+        campaignProductsCount,
+        targetingStrategy
+    } = useCampaignsStore()
+    const [triggerSave, setTriggerSave] = useState(false)
+    const params = useParams<{ slug: string }>();
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -73,9 +93,50 @@ const KeywordTargeting = ({ steps }) => {
     const handleSaveChanges = () => {
         if (keywordTargetingData.length > 0) {
             var entity: string = getStepName(steps[currentStep]);
-            console.log(entity)
         }
+
+        // Doing this because we have added/updated another object in campaignData so we get updated state when sending axios.post
+        setTriggerSave(true)
     }
+
+    useEffect(() => {
+        console.log(`Saving ${targetingType} : ${targetingStrategy} strategy campaign.`)
+        if (triggerSave) {
+            setTriggerSave(false)
+            setPendingSave(true);
+
+            const handleSaveChanges = async () => {
+                try {
+                    await axios.post('/api/campaigns/campaign-data',
+                        {
+                            campaignData,
+                            targetingType,
+                            biddingData,
+                            skus,
+                            slug: params.slug,
+                            negKeywordData,
+                            campaignNegKeywordData,
+                            campaignProductsCount,
+                            targetingStrategy,
+                            keywordTargetingData
+                        },
+                        {
+                            headers: {
+                                "Accept": "application/json"
+                            }
+                        }
+                    );
+                    toast({ description: 'Changes saved successfully!' })
+                    setPendingSave(false);
+                } catch (error) {
+                    setPendingSave(false);
+                    console.log(error)
+                }
+            }
+            handleSaveChanges()
+        }
+    }, [biddingData, campaignData, campaignNegKeywordData, campaignProductsCount, keywordTargetingData, negKeywordData, params.slug, setPendingSave, skus, targetingStrategy, targetingType, triggerSave])
+
 
     return (
         <div>

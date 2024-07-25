@@ -1,5 +1,5 @@
 // import { getSpecificKeyValues } from "@/lib/helpers";
-import { MONTH_NAMES } from "@/lib/helpers";
+import { formatDateToYYYYMMDD, MONTH_NAMES } from "@/lib/helpers";
 import { SponsoredProductsInterface } from "@/lib/interfaces";
 import queryDatabase from "@/lib/queryHelper";
 import { NextRequest, NextResponse } from "next/server";
@@ -59,7 +59,8 @@ export async function POST(request: NextRequest) {
         campaignNegKeywordData,
         productTargetingExpression,
         campaignProductsCount,
-        targetingStrategy
+        targetingStrategy,
+        keywordTargetingData
     } = body;
     // console.log(body)
 
@@ -120,12 +121,16 @@ export async function POST(request: NextRequest) {
     // Insert product_targeting_expression
     campaignProductsCount >= 0 && await queryDatabase(query, [campaign_id, 'campaign_products_count', campaignProductsCount]);
 
-    // Insert campaign-template-data
-    insertTemplateData(campaignData, campaign_id);
-
     // Insert product_targeting_expression
     targetingStrategy = stringify(targetingStrategy);
     targetingStrategy && await queryDatabase(query, [campaign_id, 'targeting_strategy', targetingStrategy]);
+
+    // Insert product_targeting_expression
+    keywordTargetingData = stringify(keywordTargetingData);
+    keywordTargetingData && await queryDatabase(query, [campaign_id, 'keyword_targeting_data', keywordTargetingData]);
+
+    // Insert campaign-template-data
+    insertTemplateData(campaignData, campaign_id);
 
     try {
         return NextResponse.json({ success: true, message: 'Campaign updated successfully.', data: [] }, { status: 200 })
@@ -206,8 +211,15 @@ function parseValues(data) {
 
 function createCampaignData(campaign_template_data: SponsoredProductsInterface[], campaign_data) {
     // Split products into array
-    const products: string[] = (campaign_data.skus as string).split(',');
-    // console.info('Total products : ', products.length)
+    var products: string[] = [];
+    if ((campaign_data.skus as string).includes(",")) {
+        products = (campaign_data.skus as string).split(',')
+    } else if ((campaign_data.skus as string).includes("\n")) {
+        products = (campaign_data.skus as string).split('\n')
+    } else {
+        products = (campaign_data.skus as string).split(' ')
+    }
+    products = products.filter(item => item !== '')
 
     // Default campaign number
     var numberOfCampaigns: number = 1;
@@ -218,6 +230,7 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
     }
     const campaigns = [];
     // Replace values for keys like bidding_data, skus, neg_keyword_data, product_targeting_expression
+
     // Replace bidding_data
     if (campaign_data.bidding_data && campaign_data.bidding_data.length > 0) {
         var biddingAdjustmentObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "bidding adjustment");
@@ -284,7 +297,12 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
         campaign_template_data.splice(campaign_template_data.length, 0, ...results);
     }
 
-    // return campaign_template_data
+    // Update start date format to yyyyMMdd eg. date April 1, 2024 would be 20240401. 
+    const campaignObj = campaign_template_data.find(obj => obj.entity === "Campaign");
+    if (campaignObj) { 
+        console.log(campaignObj.start_date)
+        campaignObj.start_date = formatDateToYYYYMMDD(campaignObj.start_date as string);
+    }
 
     // Replace campaign id and ad-group id for now temp
     var campaignIdTemp: string = `SP | ${campaign_data.targeting_type} - (${new Date().getFullYear()} - ${MONTH_NAMES[new Date().getMonth()]}) - %campaignNumber%`;
