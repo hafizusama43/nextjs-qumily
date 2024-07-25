@@ -97,6 +97,7 @@ const STEPS_CAMPAIGN_MANUAL = {
     2: "Bidding Adjustment (Optional)",
     3: "Ad Group (Required)",
     4: "Product Ad (Required)",
+    5: "Campaign negative keyword (Optional)",
 }
 
 
@@ -111,14 +112,14 @@ export const GET_STEPS = (condition: string, targeting: string) => {
         if (targeting === 'keyword') {
             stepsManual = {
                 ...STEPS_CAMPAIGN_MANUAL,
-                5: "Negative keyword (Optional)",
-                6: "Keyword (Required)"
+                6: "Negative keyword (Optional)",
+                7: "Keyword (Required)"
             };
         } else {
             stepsManual = {
                 ...STEPS_CAMPAIGN_MANUAL,
-                5: "Product targeting (Required)",
-                6: "Negative product targeting (Optional)"
+                6: "Product targeting (Required)",
+                7: "Negative product targeting (Optional)"
             };
         }
         return stepsManual;

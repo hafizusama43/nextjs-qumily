@@ -93,6 +93,36 @@ const KeywordTargeting = ({ steps }) => {
     const handleSaveChanges = () => {
         if (keywordTargetingData.length > 0) {
             var entity: string = getStepName(steps[currentStep]);
+
+            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
+            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
+            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
+
+            if (objExists.length > 0) {
+                console.info(`Object "${entity}" found : Updating`)
+                const updatedObj = {
+                    ...initialState,
+                    ...adGroupObjValues,
+                    'entity': entity,
+                    ['keyword_text']: '%keyword_text%',
+                    ['match_type']: '%match_type%',
+                    ['bid']: '%bid%',
+                };
+                const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+                setCampaignData(arr)
+            } else {
+                console.info(`Object "${entity}" not found : Creating`)
+                const updatedObj = {
+                    ...initialState,
+                    ...adGroupObjValues,
+                    'entity': entity,
+                    ['keyword_text']: '%keyword_text%',
+                    ['match_type']: '%match_type%',
+                    ['bid']: '%bid%',
+                };
+                campaignData.push(updatedObj);
+                setCampaignData(campaignData);
+            }
         }
 
         // Doing this because we have added/updated another object in campaignData so we get updated state when sending axios.post
@@ -135,7 +165,9 @@ const KeywordTargeting = ({ steps }) => {
             }
             handleSaveChanges()
         }
-    }, [biddingData, campaignData, campaignNegKeywordData, campaignProductsCount, keywordTargetingData, negKeywordData, params.slug, setPendingSave, skus, targetingStrategy, targetingType, triggerSave])
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [triggerSave])
 
 
     return (

@@ -77,6 +77,8 @@ const Products = () => {
 
     useEffect(() => {
         setSteps(GET_STEPS(targetingType, targetingStrategy));
+
+        console.log(GET_STEPS(targetingType, targetingStrategy))
     }, [targetingStrategy, targetingType])
 
 

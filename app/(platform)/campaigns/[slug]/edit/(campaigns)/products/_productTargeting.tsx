@@ -26,7 +26,7 @@ const ProductTargeting = ({ steps }) => {
             </Select>
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
-                <Button disabled={currentStep >= 6} onClick={() => { setNextStep(); }}>{currentStep < 6 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                <Button disabled={currentStep >= 7} onClick={() => { setNextStep(); }}>{currentStep < 7 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
             </div>
         </div>
     )
