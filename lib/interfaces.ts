@@ -51,6 +51,13 @@ export interface KeywordTargetingData {
     id: string
 }
 
+export interface ProductTargetingData {
+    // match_type: string;÷
+    product_targeting_expression: string;
+    bid: number;
+    id: string
+}
+
 export interface ProductTargetingExpressionData {
     state: string;
     bid: number;
