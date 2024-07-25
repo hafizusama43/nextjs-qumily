@@ -35,7 +35,10 @@ export async function GET(request: NextRequest) {
         campaignTemplateData = campaignTemplateData.rows.length > 0 ? campaignTemplateData.rows : []
 
         if (mode && mode === 'view') {
+            // Benchmarking original implementation
+            console.time('Original Implementation');
             campaignTemplateData = createCampaignData(campaignTemplateData, campaign_data);
+            console.timeEnd('Original Implementation');
         }
         var campaign_template_data: SponsoredProductsInterface[] = campaignTemplateData ? campaignTemplateData : []
 
@@ -299,48 +302,100 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
 
     // Update start date format to yyyyMMdd eg. date April 1, 2024 would be 20240401. 
     const campaignObj = campaign_template_data.find(obj => obj.entity === "Campaign");
-    if (campaignObj) { 
+    if (campaignObj) {
         console.log(campaignObj.start_date)
         campaignObj.start_date = formatDateToYYYYMMDD(campaignObj.start_date as string);
     }
 
     // Replace campaign id and ad-group id for now temp
-    var campaignIdTemp: string = `SP | ${campaign_data.targeting_type} - (${new Date().getFullYear()} - ${MONTH_NAMES[new Date().getMonth()]}) - %campaignNumber%`;
+    // var campaignIdTemp: string = `SP | ${campaign_data.targeting_type} - (${new Date().getFullYear()} - ${MONTH_NAMES[new Date().getMonth()]}) - %campaignNumber%`;
 
 
     // const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['campaign_id', 'ad_group_id']);
 
-    for (let i = 0; i < numberOfCampaigns; i++) {
-        console.log('Campaign number : ', i)
-        var campaignId = campaignIdTemp.replace('%campaignNumber%', (i + 1).toString());;
-        var adGroupId = campaignId;
+    // for (let i = 0; i < numberOfCampaigns; i++) {
+    //     console.log('Campaign number : ', i)
+    //     var campaignId = campaignIdTemp.replace('%campaignNumber%', (i + 1).toString());;
+    //     var adGroupId = campaignId;
 
-        // Copy base template and replace campaign id and ad group id
-        let campaign = campaign_template_data.map(item => ({
-            ...item,
-            campaign_id: campaignId,
-            ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad" || item.entity === "Negative keyword" || item.entity === "Negative product targeting" ? adGroupId : item.ad_group_id
-        }));
+    //     // Copy base template and replace campaign id and ad group id
+    //     let campaign = campaign_template_data.map(item => ({
+    //         ...item,
+    //         campaign_id: campaignId,
+    //         ad_group_id: item.entity === "Ad Group" || item.entity === "Product Ad" || item.entity === "Negative keyword" || item.entity === "Negative product targeting" ? adGroupId : item.ad_group_id
+    //     }));
 
-        // Find the index of the "Product Ad" row
-        const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad");
-        // Remove the "Product Ad (Required)" row from the template
-        campaign.splice(productAdIndex, 1);
-        // Insert the appropriate "Product Ad" rows at the found index
-        for (let j = 0; j < campaign_data.campaign_products_count; j++) {
-            const productIndex = i * campaign_data.campaign_products_count + j;
-            if (productIndex < products.length) {
-                const productAd = {
-                    ...campaign_template_data.find(item => item.entity === "Product Ad"),
-                    campaign_id: campaignId,
-                    ad_group_id: adGroupId,
-                    sku: products[productIndex]
-                };
-                campaign.splice(productAdIndex + j, 0, productAd);
-            }
-        }
-        campaigns.push(campaign);
-    }
+    //     // Find the index of the "Product Ad" row
+    //     const productAdIndex = campaign.findIndex(item => item.entity === "Product Ad");
+    //     // Remove the "Product Ad (Required)" row from the template
+    //     campaign.splice(productAdIndex, 1);
+    //     // Insert the appropriate "Product Ad" rows at the found index
+    //     for (let j = 0; j < campaign_data.campaign_products_count; j++) {
+    //         const productIndex = i * campaign_data.campaign_products_count + j;
+    //         if (productIndex < products.length) {
+    //             const productAd = {
+    //                 ...campaign_template_data.find(item => item.entity === "Product Ad"),
+    //                 campaign_id: campaignId,
+    //                 ad_group_id: adGroupId,
+    //                 sku: products[productIndex]
+    //             };
+    //             campaign.splice(productAdIndex + j, 0, productAd);
+    //         }
+    //     }
+    //     campaigns.push(campaign);
+    // }
 
     return campaigns.flat();
+}
+
+function refactoredUpdateCampaignData(campaign_template_data, campaign_data) {
+    // Refactored code goes here
+    const findEntity = (entityName) => {
+        const index = campaign_template_data.findIndex(item => item.entity.toLowerCase() === entityName.toLowerCase());
+        return index !== -1 ? { index, obj: campaign_template_data[index] } : null;
+    };
+
+    const replaceData = (entityName, dataArray, mappingFn) => {
+        const entity = findEntity(entityName);
+        if (entity) {
+            campaign_template_data.splice(entity.index, 1);
+            const results = dataArray.map(mappingFn.bind(null, entity.obj));
+            const insertIndex = campaign_template_data.findIndex(item => item.entity === 'Campaign');
+            campaign_template_data.splice(insertIndex + 1, 0, ...results);
+        }
+    };
+
+    if (campaign_data.bidding_data && campaign_data.bidding_data.length > 0) {
+        replaceData("bidding adjustment", campaign_data.bidding_data, (entityObj, data) => ({
+            ...entityObj,
+            placement: data.placement,
+            percentage: data.percentage
+        }));
+    }
+
+    if (campaign_data.neg_keyword_data && campaign_data.neg_keyword_data.length > 0) {
+        replaceData("negative keyword", campaign_data.neg_keyword_data, (entityObj, data) => ({
+            ...entityObj,
+            keyword_text: data.keyword_text,
+            match_type: data.match_type
+        }));
+    }
+
+    if (campaign_data.campaign_neg_keyword_data && campaign_data.campaign_neg_keyword_data.length > 0) {
+        replaceData("campaign negative keyword", campaign_data.campaign_neg_keyword_data, (entityObj, data) => ({
+            ...entityObj,
+            keyword_text: data.keyword_text,
+            match_type: data.match_type
+        }));
+    }
+
+    if (campaign_data.product_targeting_expression && campaign_data.product_targeting_expression.length > 0) {
+        let arrayExpressions = campaign_data.product_targeting_expression.split(",").filter(item => item !== '');
+        if (arrayExpressions.length > 0) {
+            replaceData("negative product targeting", arrayExpressions, (entityObj, data) => ({
+                ...entityObj,
+                product_targeting_expression: 'asin=' + data,
+            }));
+        }
+    }
 }
