@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './button'
+import { LinkedinIcon } from 'lucide-react'
 
 const Footer = () => {
     return (
@@ -16,7 +17,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='text-center bg-black text-white'>
-                <small>Copyright &copy; {new Date().getFullYear()} | Created by : <Link target="_blank" passHref={true} href={"https://www.linkedin.com/in/abdur-rehman-7a8324169"}>Abdur Rehman</Link></small>
+                <small className='flex flex-row items-center justify-center w-full py-2'>Copyright &copy; {new Date().getFullYear()} | Created by : <Link target="_blank" passHref={true} href={"https://www.linkedin.com/in/abdur-rehman-7a8324169"}>Abdur Rehman | <LinkedinIcon size={16} className='inline' /> </Link></small>
             </div>
         </div>
     )
