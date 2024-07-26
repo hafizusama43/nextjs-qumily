@@ -66,8 +66,8 @@ const NegKeyword = ({ steps }) => {
 
     const handleNextStepClick = () => {
         // Bidding adjustments is optional if not added any then skip 
+        var entity: string = getStepName(steps[currentStep]);
         if (negKeywordData.length > 0) {
-            var entity: string = getStepName(steps[currentStep]);
             // Get existing campaign object to retain values in next object
             var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
             const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
@@ -93,6 +93,12 @@ const NegKeyword = ({ steps }) => {
                     ['match_type']: '%match_type%',
                 };
                 campaignData.push(updatedObj);
+                setCampaignData(campaignData);
+            }
+        } else {
+            var entityObjIndex = campaignData.findIndex((item) => item.entity.toLowerCase() === entity.toLowerCase());
+            if (entityObjIndex !== -1) {
+                campaignData.splice(entityObjIndex, 1);
                 setCampaignData(campaignData);
             }
         }

@@ -54,9 +54,9 @@ const BiddingAdjustment = ({ steps }) => {
             // Get existing campaign object to retain values in next object
             var campaignObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
             const campaignObjValues = getSpecificKeyValues(campaignObjExists[0], ['product', 'operation', 'campaign_id', 'state', 'bidding_strategy']);
-            var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "bidding adjustment");
+            var biddingObjExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
 
-            if (objExists.length > 0) {
+            if (biddingObjExists.length > 0) {
                 console.info(`Object "${entity}" found : Updating`)
                 const updatedObj = {
                     ...initialState,
@@ -77,6 +77,12 @@ const BiddingAdjustment = ({ steps }) => {
                     ['percentage']: '%percentage%'
                 };
                 campaignData.push(updatedObj);
+                setCampaignData(campaignData);
+            }
+        } else {
+            var entityObjIndex = campaignData.findIndex((item) => item.entity.toLowerCase() === entity.toLowerCase());
+            if (entityObjIndex !== -1) {
+                campaignData.splice(entityObjIndex, 1);
                 setCampaignData(campaignData);
             }
         }
