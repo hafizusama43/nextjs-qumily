@@ -71,10 +71,9 @@ export const SPONSORED_PRODUCTS_CAMPAIGNS = {
 
 const STEPS_DEFAULT = {
     1: "Campaign (Required)",
-    2: "Bidding Adjustment (Required)",
+    2: "Bidding Adjustment (Optional)",
     3: "Ad Group (Required)",
     4: "Product Ad (Required)",
-    5: "Product Targeting (Required)",
 };
 
 const STEPS_CAMPAIGN_AUTO = {
@@ -124,7 +123,7 @@ export const GET_STEPS = (condition: string, targeting: string) => {
         }
         return stepsManual;
     } else {
-        return {}; // Default steps object if condition is neither 'auto' nor 'manual'
+        return STEPS_DEFAULT; // Default steps object if condition is neither 'auto' nor 'manual'
     }
 };
 

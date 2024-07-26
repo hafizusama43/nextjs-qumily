@@ -24,7 +24,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                     <>
                         <div className="flex items-center">
                             <Link href="/" className='flex items-center'>
-                                <Image src="/logoNew.png" width={55} height={55} alt='asda logo'></Image>
+                                <Image src="/logoNew.png" width={55} height={55} alt='Qumily logo'></Image>
                             </Link>
                             <Button><Plus /></Button>
                         </div>
@@ -36,8 +36,8 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                     </> :
                     <>
                         <Link href="/" className='flex items-center'>
-                            <Image src="/logoNew.png" width={50} height={50} alt='Taskify logo'></Image>
-                            <span className='font-bold'>Taskify</span>
+                            <Image src="/logoNew.png" width={50} height={50} alt='Qumily logo'></Image>
+                            <span className='font-bold'>Qumily</span>
                         </Link>
                         <div className="flex items-center">
                             {mounted && <div className="flex items-center mr-4">
@@ -45,7 +45,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                             </div>}
                             {!isSignedIn && <>
                                 <Link href="/sign-in"><Button className='mr-4' variant="secondary">Login</Button></Link>
-                                <Link href="join-taskify"><Button className=''>Get Taskify for free</Button></Link>
+                                <Link href="join-qumily"><Button className=''>Get Qumily for free</Button></Link>
                             </>
                             }
                             {isSignedIn && process.env.NEXT_ENV === 'development' && <Link href="/templates"><Button className='mr-4' variant="secondary">Templates</Button></Link>}

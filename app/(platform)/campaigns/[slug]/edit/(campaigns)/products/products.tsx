@@ -76,10 +76,9 @@ const Products = () => {
     } = useCampaignsStore()
     const [pending, setPending] = useState(false);
 
+    // Update steps based on targetingStrategy, targetingType
     useEffect(() => {
         setSteps(GET_STEPS(targetingType, targetingStrategy));
-
-        console.log(GET_STEPS(targetingType, targetingStrategy))
     }, [targetingStrategy, targetingType])
 
 

@@ -1,4 +1,4 @@
 export const siteConfig = {
-    title: "Taskify",
+    title: "Qumily",
     description: "Help collaborate and manage your projects"
 }

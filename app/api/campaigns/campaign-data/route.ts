@@ -34,6 +34,8 @@ export async function GET(request: NextRequest) {
         var campaignTemplateData = await queryDatabase(query, [campaign_id]);
         campaignTemplateData = campaignTemplateData.rows.length > 0 ? campaignTemplateData.rows : []
 
+        console.log(campaignTemplateData)
+
         if (mode && mode === 'view') {
             // Benchmarking original implementation
             console.time('Original Implementation');
@@ -139,7 +141,7 @@ export async function POST(request: NextRequest) {
 
     // Insert campaign-template-data
     if (targetingType === "Auto") {
-        campaignData = campaignData.filter(item => item.entity !== "Keyword" && item.entity !== "Product Targeting");
+        campaignData = campaignData.filter(item => item.entity !== "Keyword" && item.entity !== "Product targeting");
     } else {
         if (targetingStrategy === "keyword") {
             campaignData = campaignData.filter(item => item.entity !== "Product Targeting" && item.entity !== "Negative product targeting");
@@ -147,6 +149,8 @@ export async function POST(request: NextRequest) {
             campaignData = campaignData.filter(item => item.entity !== "Keyword" && item.entity !== "Negative keyword");
         }
     }
+
+    console.log(campaignData)
     insertTemplateData(campaignData, campaign_id);
 
     try {
@@ -363,20 +367,15 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
         campaignObj.start_date = formatDateToYYYYMMDD(campaignObj.start_date as string);
     }
 
-    // Replace campaign id and ad-group id for now temp
-    var campaignIdTemp: string = `SP | ${campaign_data.targeting_type} - (${new Date().getFullYear()} - ${MONTH_NAMES[new Date().getMonth()]}) - %campaignNumber%`;
+    var entityArr: string[] = ["Ad Group", "Product Ad", "Negative keyword", "Negative product targeting", "Keyword"]
 
     for (let i = 0; i < numberOfCampaigns; i++) {
         console.log('Campaign number : ', i)
-        var campaignId = campaignIdTemp.replace('%campaignNumber%', (i + 1).toString());;
-        var adGroupId = campaignId;
-
-        var entityArr: string[] = ["Ad Group", "Product Ad", "Negative keyword", "Negative product targeting", "Keyword"]
         // Copy base template and replace campaign id and ad group id
         let campaign = campaign_template_data.map(item => ({
             ...item,
-            campaign_id: campaignId,
-            ad_group_id: entityArr.includes(item.entity) ? adGroupId : item.ad_group_id
+            campaign_id: item.campaign_id + " " + (i + 1),
+            ad_group_id: entityArr.includes(item.entity) ? item.ad_group_id + " " + (i + 1) : item.ad_group_id
         }));
 
         // Find the index of the "Product Ad" row
@@ -386,11 +385,12 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
         // Insert the appropriate "Product Ad" rows at the found index
         for (let j = 0; j < campaign_data.campaign_products_count; j++) {
             const productIndex = i * campaign_data.campaign_products_count + j;
+            const prodObj = campaign_template_data.find(item => item.entity === "Product Ad")
             if (productIndex < products.length) {
                 const productAd = {
-                    ...campaign_template_data.find(item => item.entity === "Product Ad"),
-                    campaign_id: campaignId,
-                    ad_group_id: adGroupId,
+                    ...prodObj,
+                    campaign_id: prodObj.campaign_id + " " + (i + 1),
+                    ad_group_id: prodObj.ad_group_id + " " + (i + 1),
                     sku: products[productIndex]
                 };
                 campaign.splice(productAdIndex + j, 0, productAd);

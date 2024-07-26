@@ -5,7 +5,7 @@ import React from 'react'
 
 export const metadata: Metadata = {
   title: 'Sign up',
-  description: 'Sign up into Taskify',
+  description: 'Sign up into Qumily',
 };
 
 
