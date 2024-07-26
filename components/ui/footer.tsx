@@ -17,7 +17,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='text-center bg-black text-white'>
-                <small className='flex flex-row items-center justify-center w-full py-2'>Copyright &copy; {new Date().getFullYear()} | Created by : <Link target="_blank" passHref={true} href={"https://www.linkedin.com/in/abdur-rehman-7a8324169"}>Abdur Rehman | <LinkedinIcon size={16} className='inline' /> </Link></small>
+                <small className='flex flex-row items-center justify-center w-full py-2'>Copyright &copy; {new Date().getFullYear()} | Created by : <Link target="_blank" passHref={true} href={"https://www.linkedin.com/in/abdur-rehman-7a8324169"}> &nbsp;Abdur Rehman | <LinkedinIcon size={15} className='inline' /> </Link></small>
             </div>
         </div>
     )
