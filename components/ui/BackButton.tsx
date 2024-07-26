@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 const BackButton = () => {
     const router = useRouter();
     return (
-        <Button className='w-full' onClick={() => { router.back() }}>Go Back</Button>
+        <Button className='w-full' onClick={() => { router.replace("/") }}>Go Back</Button>
     )
 }
 
