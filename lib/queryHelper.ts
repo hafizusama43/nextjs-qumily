@@ -23,7 +23,7 @@ const queryDatabase = async (query: string, params: any[], keepAlive = false) =>
         }
         else {
             // 'sql' already uses vercel pool no need to production environment
-            const newLocal = result = await sql.query(query, params);
+            result = await sql.query(query, params);
         }
         return result;
 

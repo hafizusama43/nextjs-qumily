@@ -27,7 +27,7 @@ export default function BaseLayout({ children, }: Readonly<{ children: React.Rea
       <nav>
         <Navbar />
       </nav>
-      <main className="mt-40 md:mt-40 mx-auto max-w-7xl">
+      <main className="mt-[6rem] mb-40 md:mt-40 mx-auto max-w-7xl">
         {children}
       </main>
       <footer>

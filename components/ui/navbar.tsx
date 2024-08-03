@@ -18,7 +18,7 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
     useEffect(() => setMounted(true), [])
 
     return (
-        <div className='border-b-2 border-b-gray-200 fixed top-0 w-full backdrop-blur z-10'>
+        <div className='border-b-2 border-b-gray-200 fixed top-0 w-full backdrop-blur z-20'>
             <div className='px-2 py-2 md:py-4 mx-auto max-w-7xl flex flex-row items-center justify-between relative'>
                 {org_dashboard ?
                     <>
@@ -45,11 +45,11 @@ const Navbar = ({ org_dashboard = false }: { org_dashboard?: boolean }) => {
                             </div>}
                             {!isSignedIn && <>
                                 <Link href="/sign-in"><Button className='mr-4' variant="secondary">Login</Button></Link>
-                                <Link href="join-qumily"><Button className=''>Get Qumily for free</Button></Link>
+                                <Link href="join-qumily"><Button className='hidden md:block'>Get Qumily for free</Button></Link>
                             </>
                             }
                             {isSignedIn && process.env.NEXT_ENV === 'development' && <Link href="/templates"><Button className='mr-4' variant="secondary">Templates</Button></Link>}
-                            {isSignedIn && process.env.NEXT_ENV === 'development' && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organisations</Button></Link>}
+                            {isSignedIn && process.env.NEXT_ENV === 'development' && <Link href="/organizations"><Button className='mr-4' variant="secondary">Organizations</Button></Link>}
                             {isSignedIn && <Link href="/campaigns"><Button className='mr-4' variant="secondary">Campaigns</Button></Link>}
                             {isSignedIn && <span className="ml-2 flex items-center"><UserButton afterSignOutUrl="/" userProfileMode="navigation" userProfileUrl="/user-profile"></UserButton></span>}
                         </div>
