@@ -10,7 +10,7 @@ import { RenderInput } from '../_renderInput'
 import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
@@ -115,14 +115,14 @@ const ProductAd = ({ steps }) => {
                             <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
                         </div>
                         <div className='w-1/2'>
-                            {form.getValues('sku') && <Card className='mt-8'>
+                            <Card className='mt-8'>
                                 <CardHeader >
                                     <CardDescription>Product SKU&apos;s.</CardDescription>
                                     <CardContent className='p-0'>
-                                        {printNumberedProducts()}
+                                        {form.getValues('sku') ? printNumberedProducts() : <small>Please add SKU&apos;S in the textarea.</small>}
                                     </CardContent>
                                 </CardHeader>
-                            </Card>}
+                            </Card>
                         </div>
                     </div>
                     <div className='w-1/2'>

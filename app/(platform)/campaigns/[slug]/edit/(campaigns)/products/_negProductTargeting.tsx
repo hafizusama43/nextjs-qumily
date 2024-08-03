@@ -5,15 +5,16 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
-import { CircleArrowLeft, SaveIcon } from 'lucide-react'
+import { AlertTriangle, CircleArrowLeft, SaveIcon } from 'lucide-react'
 import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
-import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
 import axios from 'axios'
 import { toast } from '@/components/ui/use-toast'
 import { useParams } from 'next/navigation'
 import { Spin } from '@/components/ui/spin'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const FormSchema = z.object({
     product_targeting_expression: z.string().optional(),
@@ -120,6 +121,13 @@ const NegProductTargeting = ({ steps }) => {
 
     return (
         <div>
+            <Alert className="my-5">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Heads up!</AlertTitle>
+                <AlertDescription>
+                    You can add <b>multiples product targeting expression&apos;s</b> at once, <b>after adding an targeting expression press enter to go to next line</b> and then repeat same for multiple, either they should be comma separated <b>eg. asin1 asin2 asin3....</b> they should be separated by space eg. <b>asin1 asin2 asin3....</b>.
+                </AlertDescription>
+            </Alert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className="w-full">

@@ -13,7 +13,7 @@ import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
 

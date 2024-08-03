@@ -11,7 +11,7 @@ import { Separator } from '@/components/ui/separator'
 import { RenderInput } from '../_renderInput'
 import { RenderDatePicker } from '../_renderDatePicker'
 import { RenderSelect } from '../_renderSelect'
-import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
 import { initialState } from './products'
 
 const FormSchema = z.object({
