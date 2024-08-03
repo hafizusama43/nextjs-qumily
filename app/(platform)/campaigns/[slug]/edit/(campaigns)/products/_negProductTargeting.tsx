@@ -1,20 +1,21 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
-import { AlertTriangle, CircleArrowLeft, SaveIcon } from 'lucide-react'
+import { AlertTriangle, CheckCircle2Icon, CircleArrowLeft, SaveIcon } from 'lucide-react'
 import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
 import axios from 'axios'
 import { toast } from '@/components/ui/use-toast'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Spin } from '@/components/ui/spin'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import Link from 'next/link'
 
 const FormSchema = z.object({
     product_targeting_expression: z.string().optional(),
@@ -23,6 +24,9 @@ const FormSchema = z.object({
 
 const NegProductTargeting = ({ steps }) => {
     const params = useParams<{ slug: string }>();
+    const searchParams = useSearchParams()
+    const category = searchParams.get('category')
+    const [changesSaved, setChangesSaved] = useState(false)
     const { campaignData,
         setCampaignData,
         currentStep,
@@ -113,6 +117,7 @@ const NegProductTargeting = ({ steps }) => {
             );
             toast({ description: 'Changes saved successfully!' })
             setPendingSave(false);
+            setChangesSaved(true)
         } catch (error) {
             setPendingSave(false);
             console.log(error)
@@ -133,6 +138,16 @@ const NegProductTargeting = ({ steps }) => {
                     <div className="w-full">
                         <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
                     </div>
+                    {changesSaved &&
+                        <Alert className="my-10">
+                            <CheckCircle2Icon className="h-4 w-4" />
+                            <AlertTitle>Campaign updated!</AlertTitle>
+                            <AlertDescription>
+                                {/* Sample url to view campaign : https://nextjs-qumily-xi.vercel.app/campaigns/sp-manual-pt?category=sponsored-products-campaigns */}
+                                Campaign changes saved successfully. Click <Link target="_blank" href={`/campaigns/${params.slug}?category=${category}`}><b className='hover:underline'>here</b></Link> to view the campaign.
+                            </AlertDescription>
+                        </Alert>
+                    }
                     <div className='flex justify-end gap-4 mt-5'>
                         <Button type="button" disabled={currentStep < 2 || pendingSave} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                         <Button type="submit" disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>
