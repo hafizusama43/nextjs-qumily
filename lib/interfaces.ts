@@ -63,3 +63,12 @@ export interface ProductTargetingExpressionData {
     bid: number;
     product_targeting_expression: string
 }
+
+export interface CreatedCampaignType {
+    campaign_id: number;
+    campaign_name: string;
+    slug: string;
+    campaign_category: string;
+    created_by: string;
+    created_at: string;
+}
