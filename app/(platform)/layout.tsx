@@ -25,7 +25,7 @@ export default function RootLayout({
       <nav>
         <Navbar />
       </nav>
-      <main className={clsx('pt-20 px-5 mx-auto', {
+      <main className={clsx('pt-20 mb-20 md:mb-0 px-5 mx-auto', {
         '': params.slug,
         'max-w-7xl': !params.slug || pathname.includes(`${params.slug}/create-campaign`) || pathname.includes(`campaigns/create/${params.slug}`) || pathname.includes(`campaigns/${params.slug}/edit`)
       })}>
@@ -33,7 +33,7 @@ export default function RootLayout({
         {children}
       </main>
       <footer className={clsx('block', {
-        'hidden': params.slug || pathname.includes(`sign-up`) || pathname.includes(`sign-in`),
+        'hidden': params.slug || pathname.includes(`sign-up`) || pathname.includes(`sign-in`) || pathname.includes(`campaigns`),
       })}>
         <Footer />
       </footer>
