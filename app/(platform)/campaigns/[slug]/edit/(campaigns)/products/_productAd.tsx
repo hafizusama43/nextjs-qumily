@@ -101,9 +101,9 @@ const ProductAd = ({ steps }) => {
 
     return (
         <div>
-            <Alert className="my-5">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Heads up!</AlertTitle>
+            <Alert className="my-5 border-blue-600 dark:border-blue-500">
+                <AlertTriangle className="h-4 w-4  text-blue-600 dark:text-blue-500" color='#2563eb' />
+                <AlertTitle className='text-blue-600 dark:text-blue-500'>Heads up!</AlertTitle>
                 <AlertDescription>
                     You can add <b>multiples SKU&apos;S</b> at once, <b>after adding an SKU press enter to go to next line</b> and then repeat same for all SKU&pos;s either they should be comma separated <b>eg. sku1, sku2, sku2....</b> they should be separated by space eg. <b>sku1 sku2 sku2....</b>.
                 </AlertDescription>

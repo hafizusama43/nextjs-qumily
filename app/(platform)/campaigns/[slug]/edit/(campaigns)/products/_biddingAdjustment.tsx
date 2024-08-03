@@ -112,9 +112,9 @@ const BiddingAdjustment = ({ steps }) => {
                     </Form>
                 </div>
                 <div className='basis-1/2'>
-                    <Alert className="mt-8 mb-5">
-                        <AlertTriangle className="h-4 w-4" />
-                        <AlertTitle>Heads up!</AlertTitle>
+                    <Alert className="mt-8 mb-5 border-blue-600 dark:border-blue-500">
+                        <AlertTriangle className="h-4 w-4  text-blue-600 dark:text-blue-500" color='#2563eb' />
+                        <AlertTitle className='text-blue-600 dark:text-blue-500'>Heads up!</AlertTitle>
                         <AlertDescription>
                             The placements you add will appear in table below. Each placement will be added as a seprate row when creating campaign.
                         </AlertDescription>

@@ -61,9 +61,9 @@ const CreateCampaign = () => {
                 <Link href="/campaigns"><Button size='sm'>All campaigns</Button></Link>
             </TemplateHeader>
             <div className='border border-gray-300 p-5 rounded-lg'>
-                <Alert className="mb-5">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertTitle>Heads up!</AlertTitle>
+                <Alert className="mb-5 border-blue-600 dark:border-blue-500">
+                    <AlertTriangle className="h-4 w-4  text-blue-600 dark:text-blue-500" color='#2563eb' />
+                    <AlertTitle className='text-blue-600 dark:text-blue-500'>Heads up!</AlertTitle>
                     <AlertDescription>
                         Campaign template name is not campaign name.
                         Campaign template name should not contain any special characters like <b>{disallowedChars.toString()}</b> .It can be something like this <b>Sponsored product campaign {new Date().getDate().toString() + " " + MONTH_NAMES[new Date().getMonth()] + ", " + new Date().getFullYear()} </b> or more suitable and understand because it will be unique identifier for every campaign template.
@@ -120,9 +120,9 @@ const CreateCampaign = () => {
                     </form>
                 </Form>
                 {createdRow && createdRow.campaign_id &&
-                    <Alert className="my-10">
-                        <CheckCircle2Icon className="h-4 w-4" />
-                        <AlertTitle>Campaign created!</AlertTitle>
+                    <Alert className="my-10 border-green-600 dark:border-green-500">
+                        <CheckCircle2Icon className="h-4 w-4 text-green-600 dark:text-green-500" color='#16a34a' />
+                        <AlertTitle className='text-green-600 dark:text-green-500'>Campaign updated!</AlertTitle>
                         <AlertDescription>
                             {/* Sample url to edit campaign : https://nextjs-qumily-xi.vercel.app/campaigns/sp-manual-pt/edit?category=sponsored-products-campaigns */}
                             Campaign &quot;<b>{createdRow.campaign_name}</b>&quot; is created successfully. Click <Link href={`/campaigns/${createdRow.slug}/edit?category=${createdRow.campaign_category}`}><b>here</b></Link> to edit the campaign.
