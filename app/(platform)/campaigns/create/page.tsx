@@ -3,6 +3,7 @@
 import TemplateHeader from '@/components/ui/_header'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
+import CustomAlert from '@/components/ui/CustomAlert'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -61,14 +62,10 @@ const CreateCampaign = () => {
                 <Link href="/campaigns"><Button size='sm'>All campaigns</Button></Link>
             </TemplateHeader>
             <div className='border border-gray-300 p-5 rounded-lg'>
-                <Alert className="mb-5 border-blue-600 dark:border-blue-500">
-                    <AlertTriangle className="h-4 w-4  text-blue-600 dark:text-blue-500" color='#2563eb' />
-                    <AlertTitle className='text-blue-600 dark:text-blue-500'>Heads up!</AlertTitle>
-                    <AlertDescription>
-                        Campaign template name is not campaign name.
-                        Campaign template name should not contain any special characters like <b>{disallowedChars.toString()}</b> .It can be something like this <b>Sponsored product campaign {new Date().getDate().toString() + " " + MONTH_NAMES[new Date().getMonth()] + ", " + new Date().getFullYear()} </b> or more suitable and understand because it will be unique identifier for every campaign template.
-                    </AlertDescription>
-                </Alert>
+                <CustomAlert iconName={"triangle-alert"} title='Heads up!' variant='info'>
+                    Campaign template name is not campaign name.
+                    Campaign template name should not contain any special characters like <b>{disallowedChars.toString()}</b> .It can be something like this <b>Sponsored product campaign {new Date().getDate().toString() + " " + MONTH_NAMES[new Date().getMonth()] + ", " + new Date().getFullYear()} </b> or more suitable and understand because it will be unique identifier for every campaign template.
+                </CustomAlert>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                         <div className="block md:flex gap-5">

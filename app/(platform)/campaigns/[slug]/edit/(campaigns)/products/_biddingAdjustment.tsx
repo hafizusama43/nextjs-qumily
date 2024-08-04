@@ -16,6 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
+import CustomAlert from '@/components/ui/CustomAlert'
 
 const FormSchema = z.object({
     placement: z.string().min(1, { message: "Placement is required" }).default('Placement Top'),
@@ -112,13 +113,9 @@ const BiddingAdjustment = ({ steps }) => {
                     </Form>
                 </div>
                 <div className='basis-1/2'>
-                    <Alert className="mt-8 mb-5 border-blue-600 dark:border-blue-500">
-                        <AlertTriangle className="h-4 w-4  text-blue-600 dark:text-blue-500" color='#2563eb' />
-                        <AlertTitle className='text-blue-600 dark:text-blue-500'>Heads up!</AlertTitle>
-                        <AlertDescription>
-                            The placements you add will appear in table below. Each placement will be added as a seprate row when creating campaign.
-                        </AlertDescription>
-                    </Alert>
+                    <CustomAlert iconName={"triangle-alert"} title='Heads up!' variant='info'>
+                        The placements you add will appear in table below. Each placement will be added as a separate row when creating campaign.
+                    </CustomAlert>
                     <Card>
                         <Table className='' id='placements_table'>
                             <TableHeader>

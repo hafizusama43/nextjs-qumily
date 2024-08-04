@@ -3,10 +3,26 @@
 // https://lucide.dev/icons/
 
 // import dynamic from 'next/dynamic'
-import { CircleCheck, CircleX, Download, Info, LucideProps, Save, SaveAll } from 'lucide-react';
-
+import {
+  AlertTriangle,
+  CircleCheck,
+  CircleX,
+  Download,
+  Eye,
+  EyeOff,
+  Info,
+  LucideProps,
+  NotebookPen,
+  Pencil,
+  PencilLine,
+  PenSquare,
+  Save,
+  SaveAll,
+  Trash2,
+  X
+} from 'lucide-react';
 // import dynamicIconImports from 'lucide-react/dynamicIconImports';
-import { AlertTriangle, CheckCircle2Icon } from 'lucide-react'
+
 // interface IconProps extends LucideProps {
 //   name: keyof typeof dynamicIconImports;
 // }
@@ -18,7 +34,15 @@ const IconsMap = {
   'save-all': SaveAll,
   'save': Save,
   'download': Download,
-  'circle-check': CircleCheck
+  'circle-check': CircleCheck,
+  'trash-2': Trash2,
+  'eye': Eye,
+  'eye-off': EyeOff,
+  'square-pen': PenSquare,
+  'notebook-pen': NotebookPen,
+  'pencil-line': PencilLine,
+  'pencil': Pencil,
+  'x': X
 }
 
 

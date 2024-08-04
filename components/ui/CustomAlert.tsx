@@ -41,20 +41,21 @@ const alertTextVariants = cva(
 )
 
 interface CustomAlertProps extends VariantProps<typeof alertVariants> {
-    description?: string;
+    children?: React.ReactNode
     title: string;
     iconName: any | string
 }
 
 
-const CustomAlert = ({ description = "", title, iconName, variant }: CustomAlertProps) => {
-    const descriptionHtml = { __html: description };
+const CustomAlert = ({ children, title, iconName, variant }: CustomAlertProps) => {
     return (
         <React.Fragment>
             <Alert className={cn(alertVariants({ variant }), 'my-3')}>
                 <DynamicLucideIcon className={cn('h-4 w-4', alertTextVariants({ variant }))} name={iconName}></DynamicLucideIcon>
                 <AlertTitle className={cn(alertTextVariants({ variant }))}>{title}</AlertTitle>
-                {description && <AlertDescription dangerouslySetInnerHTML={descriptionHtml}></AlertDescription>}
+                {children && <AlertDescription >
+                    {children}
+                </AlertDescription>}
             </Alert>
         </React.Fragment>
     )

@@ -127,14 +127,18 @@ const NegProductTargeting = ({ steps }) => {
 
     return (
         <div>
-            <CustomAlert iconName={"triangle-alert"} title='Heads up!' variant='info' description={'You can add <b>multiples product targeting expression&apos;s</b> at once, <b>after adding an targeting expression press enter to go to next line</b> and then repeat same for multiple, either they should be comma separated <b>eg. asin1 asin2 asin3....</b> they should be separated by space eg. <b>asin1 asin2 asin3....</b>.'}></CustomAlert>
+            <CustomAlert iconName={"triangle-alert"} title='Heads up!' variant='info'>
+                You can add <b>multiples product targeting expression&apos;s</b> at once, <b>after adding an targeting expression press enter to go to next line</b> and then repeat same for multiple, either they should be comma separated <b>eg. asin1 asin2 asin3....</b> they should be separated by space eg. <b>asin1 asin2 asin3....</b>.
+            </CustomAlert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className="w-full">
                         <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
                     </div>
                     {changesSaved &&
-                        <CustomAlert iconName={"triangle-alert"} title='Campaign updated!' variant='success' description={"Campaign changes saved successfully. Click <Link target='_blank' href={`/campaigns/${params.slug}?category=${category}`}><b className='hover:underline'>here</b></Link> to view the campaign."}></CustomAlert>
+                        <CustomAlert iconName={"triangle-alert"} title='Campaign updated!' variant='success'>
+                            Campaign changes saved successfully. Click <Link target='_blank' href={`/campaigns/${params.slug}?category=${category}`}><b className='hover:underline'>here</b></Link> to view the campaign.
+                        </CustomAlert>
                     }
                     <div className='flex justify-end gap-4 mt-5'>
                         <Button type="button" disabled={currentStep < 2 || pendingSave} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
