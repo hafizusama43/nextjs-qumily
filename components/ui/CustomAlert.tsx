@@ -28,10 +28,10 @@ const alertTextVariants = cva(
         variants: {
             variant: {
                 default: "",
-                error: "text-red-600 dark:text-red-500",
-                success: "text-green-600 dark:text-green-500",
-                danger: "text-orange-400 dark:text-orange-400",
-                info: "text-blue-600 dark:text-blue-500",
+                error: "!text-red-600 dark:text-red-500",
+                success: "!text-green-600 dark:text-green-500",
+                danger: "!text-orange-400 dark:text-orange-400",
+                info: "!text-blue-600 dark:text-blue-500",
             },
         },
         defaultVariants: {
@@ -48,14 +48,13 @@ interface CustomAlertProps extends VariantProps<typeof alertVariants> {
 
 
 const CustomAlert = ({ description = "", title, iconName, variant }: CustomAlertProps) => {
+    const descriptionHtml = { __html: description };
     return (
         <React.Fragment>
-            <Alert className={cn(alertVariants({ variant }))}>
+            <Alert className={cn(alertVariants({ variant }), 'my-3')}>
                 <DynamicLucideIcon className={cn('h-4 w-4', alertTextVariants({ variant }))} name={iconName}></DynamicLucideIcon>
                 <AlertTitle className={cn(alertTextVariants({ variant }))}>{title}</AlertTitle>
-                {description && <AlertDescription>
-                    {description}
-                </AlertDescription>}
+                {description && <AlertDescription dangerouslySetInnerHTML={descriptionHtml}></AlertDescription>}
             </Alert>
         </React.Fragment>
     )

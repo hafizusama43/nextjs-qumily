@@ -127,30 +127,15 @@ const NegProductTargeting = ({ steps }) => {
 
     return (
         <div>
-            <Alert className="my-5 border-red dark:border-blue-500">
-                <AlertTriangle className="h-4 w-4  text-blue-600 dark:text-blue-500" color='#2563eb' />
-                <AlertTitle className='text-orange-400 dark:text-blue-500'>Heads up!</AlertTitle>
-                <AlertDescription>
-                    You can add <b>multiples product targeting expression&apos;s</b> at once, <b>after adding an targeting expression press enter to go to next line</b> and then repeat same for multiple, either they should be comma separated <b>eg. asin1 asin2 asin3....</b> they should be separated by space eg. <b>asin1 asin2 asin3....</b>.
-                </AlertDescription>
-            </Alert>
+            <CustomAlert iconName={"triangle-alert"} title='Heads up!' variant='info' description={'You can add <b>multiples product targeting expression&apos;s</b> at once, <b>after adding an targeting expression press enter to go to next line</b> and then repeat same for multiple, either they should be comma separated <b>eg. asin1 asin2 asin3....</b> they should be separated by space eg. <b>asin1 asin2 asin3....</b>.'}></CustomAlert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className="w-full">
                         <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
                     </div>
                     {changesSaved &&
-                        <Alert className="my-10 border-green-600 dark:border-green-500">
-                            <CheckCircle2Icon className="h-4 w-4 text-green-600 dark:text-green-500" color='#16a34a' />
-                            <AlertTitle className='text-green-600 dark:text-green-500'>Campaign updated!</AlertTitle>
-                            <AlertDescription>
-                                {/* Sample url to view campaign : https://nextjs-qumily-xi.vercel.app/campaigns/sp-manual-pt?category=sponsored-products-campaigns */}
-                                Campaign changes saved successfully. Click <Link target="_blank" href={`/campaigns/${params.slug}?category=${category}`}><b className='hover:underline'>here</b></Link> to view the campaign.
-                            </AlertDescription>
-                        </Alert>
+                        <CustomAlert iconName={"triangle-alert"} title='Campaign updated!' variant='success' description={"Campaign changes saved successfully. Click <Link target='_blank' href={`/campaigns/${params.slug}?category=${category}`}><b className='hover:underline'>here</b></Link> to view the campaign."}></CustomAlert>
                     }
-
-                    <CustomAlert title='Test title' iconName="info" description='Tesrlkdjsakljdakldj Tesrlkdjsakljdakldj Tesrlkdjsakljdakldj Tesrlkdjsakljdakldj' variant='error' />
                     <div className='flex justify-end gap-4 mt-5'>
                         <Button type="button" disabled={currentStep < 2 || pendingSave} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                         <Button type="submit" disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>
