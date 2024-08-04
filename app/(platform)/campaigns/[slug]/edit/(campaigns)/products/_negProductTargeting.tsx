@@ -16,6 +16,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { Spin } from '@/components/ui/spin'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import Link from 'next/link'
+import CustomAlert from '@/components/ui/CustomAlert'
 
 const FormSchema = z.object({
     product_targeting_expression: z.string().optional(),
@@ -126,9 +127,9 @@ const NegProductTargeting = ({ steps }) => {
 
     return (
         <div>
-            <Alert className="my-5 border-blue-600 dark:border-blue-500">
+            <Alert className="my-5 border-red dark:border-blue-500">
                 <AlertTriangle className="h-4 w-4  text-blue-600 dark:text-blue-500" color='#2563eb' />
-                <AlertTitle className='text-blue-600 dark:text-blue-500'>Heads up!</AlertTitle>
+                <AlertTitle className='text-orange-400 dark:text-blue-500'>Heads up!</AlertTitle>
                 <AlertDescription>
                     You can add <b>multiples product targeting expression&apos;s</b> at once, <b>after adding an targeting expression press enter to go to next line</b> and then repeat same for multiple, either they should be comma separated <b>eg. asin1 asin2 asin3....</b> they should be separated by space eg. <b>asin1 asin2 asin3....</b>.
                 </AlertDescription>
@@ -148,6 +149,8 @@ const NegProductTargeting = ({ steps }) => {
                             </AlertDescription>
                         </Alert>
                     }
+
+                    <CustomAlert title='Test title' iconName="info" description='Tesrlkdjsakljdakldj Tesrlkdjsakljdakldj Tesrlkdjsakljdakldj Tesrlkdjsakljdakldj' variant='error' />
                     <div className='flex justify-end gap-4 mt-5'>
                         <Button type="button" disabled={currentStep < 2 || pendingSave} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                         <Button type="submit" disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>
