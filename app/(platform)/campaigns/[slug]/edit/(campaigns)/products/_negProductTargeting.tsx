@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CheckCircle2Icon, CircleArrowLeft, SaveIcon } from 'lucide-react'
-import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
@@ -133,7 +133,7 @@ const NegProductTargeting = ({ steps }) => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className="w-full">
-                        <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
+                        <RenderTextArea helpText={HELP_TEXT.asin} name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
                     </div>
                     {changesSaved &&
                         <CustomAlert iconName={"triangle-alert"} title='Campaign updated!' variant='success'>

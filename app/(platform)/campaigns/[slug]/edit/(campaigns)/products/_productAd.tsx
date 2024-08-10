@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { Form } from '@/components/ui/form'
 import { AlertTriangle, CircleArrowLeft, CircleArrowRight, X } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
@@ -109,7 +109,7 @@ const ProductAd = ({ steps }) => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className='flex gap-3'>
                         <div className='w-1/2'>
-                            <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
+                            <RenderTextArea name={"sku"} helpText={HELP_TEXT.sku} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
                         </div>
                         <div className='w-1/2'>
                             <Card className='mt-8'>

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import React, { useEffect } from 'react'
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
-import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -79,16 +79,16 @@ const AdGroup = ({ steps }) => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className="block md:flex gap-5">
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"ad_group_id"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.ad_group_id}></RenderInput>
+                            <RenderInput name={"ad_group_id"} helpText={HELP_TEXT.ad_group_id} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.ad_group_id}></RenderInput>
                         </div>
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"ad_group_name"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.ad_group_name}></RenderInput>
+                            <RenderInput name={"ad_group_name"} helpText={HELP_TEXT.ad_group_name} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.ad_group_name}></RenderInput>
                         </div>
                     </div>
 
                     <div className="block md:flex gap-5">
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"ad_group_default_bid"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.ad_group_default_bid} type={"number"}></RenderInput>
+                            <RenderInput name={"ad_group_default_bid"} helpText={HELP_TEXT.ad_group_default_bid} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.ad_group_default_bid} type={"number"}></RenderInput>
                         </div>
                     </div>
                     <Separator className='my-3'></Separator>
