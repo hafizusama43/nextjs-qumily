@@ -99,6 +99,16 @@ const STEPS_CAMPAIGN_MANUAL = {
     5: "Campaign negative keyword (Optional)",
 }
 
+export const HELP_TEXT = {
+    'campaign_id': "For new campaigns, you should type a text-based name to identify your campaign. You will enter this exact Campaign ID for each entity you create underneath this parent campaign. NOTE: When you upload your bulksheets file, the Campaign ID will become the actual unique identifier associated with the campaign and all of its \"child\" entities. So if you want to update this campaign later, you would enter the actual Campaign ID into this field.",
+    'campaign_name': "Enter the same campaign name that you entered in the \"Campaign ID\" column.",
+    'start_date': " You can start on today's date or a future date, but the date cannot be in the past. So if you set the date for today, be sure you create and upload the file on today's date. If you leave this field blank, the start date will be set for today's date",
+    'end_date': "You can leave this field blank if you don't want to set an end date. Otherwise, the format must be yyyyMMdd.",
+    'state': "Options are enabled or paused. Enter enabled to create a new campaign.",
+    "budget": "Do not include symbols such as dollar signs. For example, a daily budget of $100 would be written as 100. If the figure isn't a whole number, use a decimal point and not a comma",
+    "bidding_strategy": "Similar to what you'd see in the UI, you can choose a bidding strategy: Enter Dynamic bids - down only, Dynamic bids - up and down, or Fixed bid.",
+}
+
 
 // Function to get the appropriate steps object based on a condition
 export const GET_STEPS = (condition: string, targeting: string) => {
