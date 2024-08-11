@@ -9,6 +9,11 @@ export const TARGETING_TYPE = {
     "Auto": "Auto",
 }
 
+export const TARGETING_EXPRESSION_TYPE = {
+    "Enabled": "Enabled",
+    "Paused": "Paused",
+}
+
 export const CAMPAIGN_STATE = {
     "Enabled": "Enabled",
     "Disabled": "Disabled",

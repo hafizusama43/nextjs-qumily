@@ -1,12 +1,44 @@
 import { Button } from '@/components/ui/button';
-import { useCampaignsStore } from '@/hooks/useSponseedProductsStore';
-import { getStepName } from '@/lib/helpers';
+import { Form } from '@/components/ui/form';
+import { useCampaignsStore } from '@/hooks/useSponseredProductsStore';
+import { getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_EXPRESSION_TYPE } from '@/lib/helpers';
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react';
 import React from 'react'
+import { RenderInput } from '../_renderInput';
+import { Separator } from '@/components/ui/separator';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { RenderSelect } from '../_renderSelect';
+
+
+const targetingSchema = z.object({
+    state: z.string().default('Enabled'),  // String, defaulting to 'enabled'
+    bid: z.coerce.number().min(0),             // Number, with a minimum value of 0.01
+    expression: z.enum(['close-match', 'loose-match', 'substitutes', 'complements']),  // Enum with the allowed values
+});
+
+const FormSchema = z.object({
+    data: z.array(targetingSchema).length(4),  // Array of 4 objects, each matching the targetingSchema
+});
+
+
 
 const ProductTargetingAuto = ({ steps }) => {
     const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, negKeywordData, setNegKeywordData } = useCampaignsStore()
     // console.log(steps)
+
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            data: [
+                { state: 'Enabled', bid: 0.1, expression: 'close-match' },
+                { state: 'Enabled', bid: 0.2, expression: 'loose-match' },
+                { state: 'Enabled', bid: 0.3, expression: 'substitutes' },
+                { state: 'Enabled', bid: 0.4, expression: 'complements' },
+            ],
+        },
+    })
 
     const handleNextStepClick = () => {
         // Bidding adjustments is optional if not added any then skip 
@@ -49,12 +81,40 @@ const ProductTargetingAuto = ({ steps }) => {
         setNextStep();
     }
 
+    function onSubmit(data: z.infer<typeof FormSchema>) {
+        var entity: string = getStepName(steps[currentStep]);
+        console.log(entity)
+
+        // setNextStep();
+    }
+
     return (
         <div>
             <div className='flex justify-end gap-4 mt-5'>
-                <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
-                {/* <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button> */}
-                <Button onClick={handleNextStepClick} disabled={currentStep >= 7}>{currentStep < 7 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+                        {['close-match', 'loose-match', 'substitutes', 'complements'].map((expression, index) => (
+                            <div className="block md:flex gap-5" key={index}>
+                                <div className='basis-1/2 w-full'>
+                                    <RenderInput name={`data[${index}].expression`} disabled form={form} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderInput>
+                                </div>
+                                <div className='basis-1/2 w-full'>
+                                    <RenderInput name={`data[${index}].bid`} form={form} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.bid} type={"number"}></RenderInput>
+                                </div>
+                                <div className='basis-1/2 w-full'>
+                                    <RenderSelect name={`data[${index}].state`} form={form} options={TARGETING_EXPRESSION_TYPE} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.state}></RenderSelect>
+                                </div>
+                            </div>
+                        ))}
+
+
+                        <Separator className='my-3'></Separator>
+                        <div className='flex justify-end gap-4 mt-10'>
+                            <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
+                            <Button disabled={currentStep >= 7}>{currentStep < 7 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                        </div>
+                    </form>
+                </Form>
             </div>
         </div>
     )

@@ -9,7 +9,7 @@ import { CircleArrowLeft, CircleArrowRight, SaveIcon, Trash2 } from 'lucide-reac
 import { getSpecificKeyValues, getStepName, MATCH_TYPE, MATCH_TYPE_KEYWORD_TARGETING, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'

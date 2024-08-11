@@ -3,18 +3,18 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { CircleHelp } from "lucide-react"
 
-export const RenderSelect = ({ form, name, label, options, helpText = "" }) => {
+export const RenderSelect = ({ form, name, label = "", options, helpText = "" }) => {
     return (
         <FormField
             control={form.control}
             name={name}
             render={({ field }) => (
                 <FormItem>
-                    <FormLabel>{label}&nbsp;
+                    {label && <FormLabel>{label}&nbsp;
                         {helpText && <TemplateTooltip title={helpText}>
                             <CircleHelp className="inline !text-blue-600 h-3 w-3 mb-[2px] cursor-pointer" />
                         </TemplateTooltip>}
-                    </FormLabel>
+                    </FormLabel>}
                     <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                             <SelectTrigger>

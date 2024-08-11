@@ -2,7 +2,7 @@
 import { Separator } from '@/components/ui/separator'
 import React, { useCallback, useEffect, useState } from 'react'
 import { capitalizeFirstLetter, GET_STEPS } from '@/lib/helpers'
-import { useCampaignsStore } from '@/hooks/useSponseedProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import TemplateHeader from '@/components/ui/_header'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -152,7 +152,6 @@ const COMPONENT_MAP = {
 };
 
 const StepRenderer = ({ currentStep, steps, targetingType }) => {
-    console.log(targetingType)
     const stepName: string = steps[currentStep];
     const StepComponent = COMPONENT_MAP[stepName];
     if (stepName === "Product targeting (Required)") {
