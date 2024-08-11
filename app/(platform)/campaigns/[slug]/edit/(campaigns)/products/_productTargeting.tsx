@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { CircleArrowLeft, CircleArrowRight, SaveIcon, Trash2 } from 'lucide-react'
-import { getSpecificKeyValues, getStepName, MATCH_TYPE, MATCH_TYPE_KEYWORD_TARGETING, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
-import { Separator } from '@/components/ui/separator'
+import { Form } from '@/components/ui/form'
+import { CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
+import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
-import { Spin } from '@/components/ui/spin'
 import { RenderInput } from '../_renderInput'
-import { toast } from '@/components/ui/use-toast'
-import axios from 'axios'
-import { useParams } from 'next/navigation'
 
 
 const FormSchema = z.object({
@@ -27,7 +22,7 @@ const FormSchema = z.object({
 
 
 const ProductTargeting = ({ steps }) => {
-    const { pendingSave,
+    const {
         setCampaignData,
         currentStep,
         setPrevStep,
@@ -35,7 +30,6 @@ const ProductTargeting = ({ steps }) => {
         setProductTargetingData,
         setNextStep,
         campaignData,
-        targetingStrategy
     } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -173,4 +167,3 @@ const ProductTargeting = ({ steps }) => {
 }
 
 export default ProductTargeting
-

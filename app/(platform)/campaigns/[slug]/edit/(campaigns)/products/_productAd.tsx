@@ -5,11 +5,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
-import { AlertTriangle, CircleArrowLeft, CircleArrowRight, X } from 'lucide-react'
+import { CircleArrowLeft, CircleArrowRight, X } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
 import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
@@ -23,7 +22,7 @@ const FormSchema = z.object({
 });
 
 const ProductAd = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setSkus, skus, setCampaignProductCount, campaignProductsCount } = useCampaignsStore()
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, setSkus, skus, setCampaignProductCount, campaignProductsCount } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
