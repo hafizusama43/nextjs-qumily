@@ -38,9 +38,9 @@ export async function GET(request: NextRequest) {
 
         if (mode && mode === 'view') {
             // Benchmarking original implementation
-            console.time('Original Implementation');
+            // console.time('Original Implementation');
             campaignTemplateData = createCampaignData(campaignTemplateData, campaign_data);
-            console.timeEnd('Original Implementation');
+            // console.timeEnd('Original Implementation');
         }
         var campaign_template_data: SponsoredProductsInterface[] = campaignTemplateData ? campaignTemplateData : []
 
