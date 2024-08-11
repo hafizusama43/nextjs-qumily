@@ -1,92 +1,87 @@
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useCampaignsStore } from '@/hooks/useSponseredProductsStore';
-import { getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_EXPRESSION_TYPE } from '@/lib/helpers';
+import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_EXPRESSION_TYPE } from '@/lib/helpers';
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { RenderInput } from '../_renderInput';
 import { Separator } from '@/components/ui/separator';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { RenderSelect } from '../_renderSelect';
+import { initialState } from './products';
 
 
 const targetingSchema = z.object({
-    state: z.string().default('Enabled'),  // String, defaulting to 'enabled'
+    state: z.string().min(1, { message: "" }).default('Enabled'),  // String, defaulting to 'enabled'
     bid: z.coerce.number().min(0),             // Number, with a minimum value of 0.01
-    expression: z.enum(['close-match', 'loose-match', 'substitutes', 'complements']),  // Enum with the allowed values
+    product_targeting_expression: z.enum(['close-match', 'loose-match', 'substitutes', 'complements']),  // Enum with the allowed values
 });
 
 const FormSchema = z.object({
     data: z.array(targetingSchema).length(4),  // Array of 4 objects, each matching the targetingSchema
 });
 
-
-
 const ProductTargetingAuto = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, negKeywordData, setNegKeywordData } = useCampaignsStore()
-    // console.log(steps)
-
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, setProductTargetingDataAuto, productTargetingDataAuto } = useCampaignsStore()
+    const [isReady, setIsReady] = useState(false);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             data: [
-                { state: 'Enabled', bid: 0.1, expression: 'close-match' },
-                { state: 'Enabled', bid: 0.2, expression: 'loose-match' },
-                { state: 'Enabled', bid: 0.3, expression: 'substitutes' },
-                { state: 'Enabled', bid: 0.4, expression: 'complements' },
+                { state: 'Enabled', bid: 0.1, product_targeting_expression: 'close-match' },
+                { state: 'Enabled', bid: 0.2, product_targeting_expression: 'loose-match' },
+                { state: 'Enabled', bid: 0.3, product_targeting_expression: 'substitutes' },
+                { state: 'Enabled', bid: 0.4, product_targeting_expression: 'complements' },
             ],
         },
     })
 
-    const handleNextStepClick = () => {
-        // Bidding adjustments is optional if not added any then skip 
-        var entity: string = getStepName(steps[currentStep]);
-        // if (negKeywordData.length > 0) {
-        //     // Get existing campaign object to retain values in next object
-        //     var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
-        //     const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
-        //     var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
-        //     if (objExists.length > 0) {
-        //         console.info(`Object "${entity}" found : Updating`)
-        //         const updatedObj = {
-        //             ...initialState,
-        //             ...adGroupObjValues,
-        //             'entity': entity,
-        //             ['keyword_text']: '%keyword_text%',
-        //             ['match_type']: '%match_type%',
-        //         };
-        //         const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
-        //         setCampaignData(arr)
-        //     } else {
-        //         console.info(`Object "${entity}" not found : Creating`)
-        //         const updatedObj = {
-        //             ...initialState,
-        //             ...adGroupObjValues,
-        //             'entity': entity,
-        //             ['keyword_text']: '%keyword_text%',
-        //             ['match_type']: '%match_type%',
-        //         };
-        //         campaignData.push(updatedObj);
-        //         setCampaignData(campaignData);
-        //     }
-        // } else {
-        //     var entityObjIndex = campaignData.findIndex((item) => item.entity.toLowerCase() === entity.toLowerCase());
-        //     if (entityObjIndex !== -1) {
-        //         campaignData.splice(entityObjIndex, 1);
-        //         setCampaignData(campaignData);
-        //     }
-        // }
-        setNextStep();
-    }
+    useEffect(() => {
+        console.info(`Setting "${steps[currentStep]}" form state`)
+        form.setValue('data', productTargetingDataAuto);
+    }, [])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         var entity: string = getStepName(steps[currentStep]);
-        console.log(entity)
-
-        // setNextStep();
+        setProductTargetingDataAuto(data.data)
+        var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
+        const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id']);
+        var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
+        if (objExists.length > 0) {
+            console.info(`Object "${entity}" found : Updating`)
+            const updatedObj = {
+                ...initialState,
+                ...adGroupObjValues,
+                'entity': entity,
+                ['state']: '%state%',
+                ['bid']: '%bid%',
+                ['product_targeting_expression']: '%product_targeting_expression%',
+            };
+            const arr = campaignData.map(item => item.entity.toLocaleLowerCase() === updatedObj.entity.toLocaleLowerCase() ? updatedObj : item)
+            setCampaignData(arr)
+        } else {
+            console.info(`Object "${entity}" not found : Creating`)
+            const updatedObj = {
+                ...initialState,
+                ...adGroupObjValues,
+                'entity': entity,
+                ['state']: '%state%',
+                ['bid']: '%bid%',
+                ['product_targeting_expression']: '%product_targeting_expression%',
+            };
+            campaignData.push(updatedObj);
+            setCampaignData(campaignData);
+        }
+        setNextStep();
     }
+
+    useEffect(() => {
+        // Trigger re-render when form values are set to populate dropdowns
+        setIsReady(true);
+    }, []);
+    if (!isReady) return null;
 
     return (
         <div>
@@ -96,7 +91,7 @@ const ProductTargetingAuto = ({ steps }) => {
                         {['close-match', 'loose-match', 'substitutes', 'complements'].map((expression, index) => (
                             <div className="block md:flex gap-5" key={index}>
                                 <div className='basis-1/2 w-full'>
-                                    <RenderInput name={`data[${index}].expression`} disabled form={form} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderInput>
+                                    <RenderInput name={`data[${index}].product_targeting_expression`} disabled form={form} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderInput>
                                 </div>
                                 <div className='basis-1/2 w-full'>
                                     <RenderInput name={`data[${index}].bid`} form={form} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.bid} type={"number"}></RenderInput>
@@ -106,7 +101,6 @@ const ProductTargetingAuto = ({ steps }) => {
                                 </div>
                             </div>
                         ))}
-
 
                         <Separator className='my-3'></Separator>
                         <div className='flex justify-end gap-4 mt-10'>

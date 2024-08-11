@@ -43,7 +43,8 @@ const NegProductTargeting = ({ steps }) => {
         pendingSave,
         campaignProductsCount,
         targetingStrategy,
-        productTargetingData
+        productTargetingData,
+        productTargetingDataAuto
     } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -108,7 +109,8 @@ const NegProductTargeting = ({ steps }) => {
                     productTargetingExpression: data.product_targeting_expression,
                     campaignProductsCount,
                     targetingStrategy,
-                    productTargetingData
+                    productTargetingData,
+                    productTargetingDataAuto
                 },
                 {
                     headers: {
