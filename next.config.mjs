@@ -18,7 +18,8 @@ const nextConfig = {
                 hostname: 'img.clerk.com',
             }
         ]
-    }
+    },
+    transpilePackages: ['lucide-react'] // added this to dynamic import lucide icons 
 };
 
 export default nextConfig;

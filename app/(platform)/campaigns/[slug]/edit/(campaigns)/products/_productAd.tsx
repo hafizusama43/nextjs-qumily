@@ -5,16 +5,16 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
-import { AlertTriangle, CircleArrowLeft, CircleArrowRight, X } from 'lucide-react'
+import { CircleArrowLeft, CircleArrowRight, X } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import CustomAlert from '@/components/ui/CustomAlert'
 
 const FormSchema = z.object({
     sku: z.string().min(1, { message: "Products SKU'S are required" }),
@@ -22,7 +22,7 @@ const FormSchema = z.object({
 });
 
 const ProductAd = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, biddingData, setSkus, skus, setCampaignProductCount, campaignProductsCount } = useCampaignsStore()
+    const { campaignData, setCampaignData, setNextStep, currentStep, setPrevStep, setSkus, skus, setCampaignProductCount, campaignProductsCount } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -101,28 +101,24 @@ const ProductAd = ({ steps }) => {
 
     return (
         <div>
-            <Alert className="my-5">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Heads up!</AlertTitle>
-                <AlertDescription>
-                    You can add <b>multiples SKU&apos;S</b> at once, <b>after adding an SKU press enter to go to next line</b> and then repeat same for all SKU&pos;s either they should be comma separated <b>eg. sku1, sku2, sku2....</b> they should be separated by space eg. <b>sku1 sku2 sku2....</b>.
-                </AlertDescription>
-            </Alert>
+            <CustomAlert iconName={"triangle-alert"} title='Heads up!' variant='info'>
+                You can add <b>multiples SKU&apos;S</b> at once, <b>after adding an SKU press enter to go to next line</b> and then repeat same for all SKU&pos;s either they should be comma separated <b>eg. sku1, sku2, sku2....</b> they should be separated by space eg. <b>sku1 sku2 sku2....</b>.
+            </CustomAlert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className='flex gap-3'>
                         <div className='w-1/2'>
-                            <RenderTextArea name={"sku"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
+                            <RenderTextArea name={"sku"} helpText={HELP_TEXT.sku} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.sku}></RenderTextArea>
                         </div>
                         <div className='w-1/2'>
-                            {form.getValues('sku') && <Card className='mt-8'>
+                            <Card className='mt-8'>
                                 <CardHeader >
                                     <CardDescription>Product SKU&apos;s.</CardDescription>
                                     <CardContent className='p-0'>
-                                        {printNumberedProducts()}
+                                        {form.getValues('sku') ? printNumberedProducts() : <small>Please add SKU&apos;S in the textarea.</small>}
                                     </CardContent>
                                 </CardHeader>
-                            </Card>}
+                            </Card>
                         </div>
                     </div>
                     <div className='w-1/2'>

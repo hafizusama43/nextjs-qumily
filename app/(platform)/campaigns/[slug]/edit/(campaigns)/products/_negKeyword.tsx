@@ -10,7 +10,7 @@ import { CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
 import { getSpecificKeyValues, getStepName, MATCH_TYPE, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
@@ -201,7 +201,7 @@ const NegKeyword = ({ steps }) => {
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                 {/* <Button onClick={handleNextStepClick} type="button"><SaveIcon /> &nbsp; Save changes</Button> */}
-                <Button onClick={handleNextStepClick} disabled={currentStep >= 7}>{currentStep < 7 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
+                <Button onClick={handleNextStepClick} disabled={currentStep >= Object.keys(steps).length}>{steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
             </div>
         </div>
     )

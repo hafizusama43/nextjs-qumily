@@ -6,18 +6,23 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, CircleHelp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { format } from "date-fns"
+import TemplateTooltip from '@/components/ui/_tooltip'
 
-export const RenderDatePicker = ({ form, name, label, disabled = false }) => {
+export const RenderDatePicker = ({ form, name, label, disabled = false, helpText = "" }) => {
     return (
         <FormField
             control={form.control}
             name={name}
             render={({ field }) => (
                 <FormItem className="flex flex-col">
-                    <FormLabel>{label}</FormLabel>
+                    <FormLabel>{label}&nbsp;
+                        {helpText && <TemplateTooltip title={helpText}>
+                            <CircleHelp className="inline !text-blue-600 h-3 w-3 mb-[2px] cursor-pointer" />
+                        </TemplateTooltip>}
+                    </FormLabel>
                     <Popover>
                         <PopoverTrigger asChild>
                             <FormControl>

@@ -69,8 +69,8 @@ const Campaigns = () => {
             <TemplateHeader>
                 <Label>{params.slug && capitalizeFirstLetter(params.slug.split("-").join(" "))}</Label>
                 <div className=''>
-                    <Button size='sm' onClick={createExcelSheet}>Download excel</Button>
-                    <Link className='ml-2' href={`/campaigns/${params.slug}/edit?category=${category}`}><Button size='sm'>Edit campaign</Button></Link>
+                    <Button size='sm' className='block mb-2 md:inline md:mb-0' onClick={createExcelSheet}>Download excel</Button>
+                    <Link className='md:ml-2 block w-full md:inline md:mb-0' href={`/campaigns/${params.slug}/edit?category=${category}`}><Button size='sm' className='max-md:w-full'>Edit campaign</Button></Link>
                 </div>
             </TemplateHeader>
             <ZoomControl />

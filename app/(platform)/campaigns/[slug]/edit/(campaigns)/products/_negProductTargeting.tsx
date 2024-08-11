@@ -1,19 +1,21 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
 import { CircleArrowLeft, SaveIcon } from 'lucide-react'
-import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
-import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import { initialState } from './products'
 import { RenderTextArea } from '../_renderTextInput'
 import axios from 'axios'
 import { toast } from '@/components/ui/use-toast'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Spin } from '@/components/ui/spin'
+import Link from 'next/link'
+import CustomAlert from '@/components/ui/CustomAlert'
 
 const FormSchema = z.object({
     product_targeting_expression: z.string().optional(),
@@ -22,6 +24,9 @@ const FormSchema = z.object({
 
 const NegProductTargeting = ({ steps }) => {
     const params = useParams<{ slug: string }>();
+    const searchParams = useSearchParams()
+    const category = searchParams.get('category')
+    const [changesSaved, setChangesSaved] = useState(false)
     const { campaignData,
         setCampaignData,
         currentStep,
@@ -37,7 +42,8 @@ const NegProductTargeting = ({ steps }) => {
         pendingSave,
         campaignProductsCount,
         targetingStrategy,
-        productTargetingData
+        productTargetingData,
+        productTargetingDataAuto
     } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -102,7 +108,8 @@ const NegProductTargeting = ({ steps }) => {
                     productTargetingExpression: data.product_targeting_expression,
                     campaignProductsCount,
                     targetingStrategy,
-                    productTargetingData
+                    productTargetingData,
+                    productTargetingDataAuto
                 },
                 {
                     headers: {
@@ -112,6 +119,7 @@ const NegProductTargeting = ({ steps }) => {
             );
             toast({ description: 'Changes saved successfully!' })
             setPendingSave(false);
+            setChangesSaved(true)
         } catch (error) {
             setPendingSave(false);
             console.log(error)
@@ -120,11 +128,19 @@ const NegProductTargeting = ({ steps }) => {
 
     return (
         <div>
+            <CustomAlert iconName={"triangle-alert"} title='Heads up!' variant='info'>
+                You can add <b>multiples product targeting expression&apos;s</b> at once, <b>after adding an targeting expression press enter to go to next line</b> and then repeat same for multiple, either they should be comma separated <b>eg. asin1 asin2 asin3....</b> they should be separated by space eg. <b>asin1 asin2 asin3....</b>.
+            </CustomAlert>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                     <div className="w-full">
-                        <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
+                        <RenderTextArea helpText={HELP_TEXT.asin} name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
                     </div>
+                    {changesSaved &&
+                        <CustomAlert iconName={"triangle-alert"} title='Campaign updated!' variant='success'>
+                            Campaign changes saved successfully. Click <Link target='_blank' href={`/campaigns/${params.slug}?category=${category}`}><b className='hover:underline'>here</b></Link> to view the campaign.
+                        </CustomAlert>
+                    }
                     <div className='flex justify-end gap-4 mt-5'>
                         <Button type="button" disabled={currentStep < 2 || pendingSave} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                         <Button type="submit" disabled={pendingSave}>{pendingSave ? <Spin variant="light" size="sm"></Spin> : <SaveIcon />} &nbsp; Save changes</Button>

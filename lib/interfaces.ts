@@ -58,8 +58,23 @@ export interface ProductTargetingData {
     id: string
 }
 
+export interface ProductTargetingDataAuto {
+    state?: string | any;
+    product_targeting_expression?: 'close-match' | 'loose-match' | 'substitutes' | 'complements';
+    bid?: number;
+}
+
 export interface ProductTargetingExpressionData {
     state: string;
     bid: number;
     product_targeting_expression: string
+}
+
+export interface CreatedCampaignType {
+    campaign_id: number;
+    campaign_name: string;
+    slug: string;
+    campaign_category: string;
+    created_by: string;
+    created_at: string;
 }

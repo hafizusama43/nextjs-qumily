@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_STRATEGY, TARGETING_TYPE } from '@/lib/helpers'
+import { BIDDING_STRATEGY, CAMPAIGN_STATE, getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_STRATEGY, TARGETING_TYPE } from '@/lib/helpers'
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { RenderInput } from '../_renderInput'
 import { RenderDatePicker } from '../_renderDatePicker'
 import { RenderSelect } from '../_renderSelect'
-import { useCampaignsStore } from '@/hooks/useCampaignsStore'
+import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import { initialState } from './products'
 
 const FormSchema = z.object({
@@ -139,16 +139,16 @@ const Campaign = ({ steps }) => {
 
                     <div className="block md:flex gap-5">
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"campaign_id"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.campaign_id}></RenderInput>
+                            <RenderInput name={"campaign_id"} helpText={HELP_TEXT.campaign_id} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.campaign_id}></RenderInput>
                         </div>
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"campaign_name"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.campaign_name}></RenderInput>
+                            <RenderInput name={"campaign_name"} helpText={HELP_TEXT.campaign_name} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.campaign_name}></RenderInput>
                         </div>
                     </div>
 
                     <div className="block md:flex gap-5">
                         <div className='basis-1/2 w-full'>
-                            <RenderDatePicker name={"start_date"} label={SPONSORED_PRODUCTS_CAMPAIGNS.start_date} form={form}></RenderDatePicker>
+                            <RenderDatePicker name={"start_date"} helpText={HELP_TEXT.start_date} label={SPONSORED_PRODUCTS_CAMPAIGNS.start_date} form={form}></RenderDatePicker>
                         </div>
                         <div className='basis-1/2 w-full'>
                             <RenderDatePicker disabled name={"end_date"} label={SPONSORED_PRODUCTS_CAMPAIGNS.end_date} form={form}></RenderDatePicker>
@@ -160,16 +160,16 @@ const Campaign = ({ steps }) => {
                             <RenderSelect name={"targeting_type"} form={form} options={TARGETING_TYPE} label={SPONSORED_PRODUCTS_CAMPAIGNS.targeting_type}></RenderSelect>
                         </div>
                         <div className='basis-1/2 w-full'>
-                            <RenderSelect name={"state"} form={form} options={CAMPAIGN_STATE} label={SPONSORED_PRODUCTS_CAMPAIGNS.state}></RenderSelect>
+                            <RenderSelect name={"state"} helpText={HELP_TEXT.state} form={form} options={CAMPAIGN_STATE} label={SPONSORED_PRODUCTS_CAMPAIGNS.state}></RenderSelect>
                         </div>
                         <div className='basis-1/2 w-full'>
-                            <RenderInput name={"daily_budget"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.daily_budget} type={"number"}></RenderInput>
+                            <RenderInput name={"daily_budget"} helpText={HELP_TEXT.budget} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.daily_budget} type={"number"}></RenderInput>
                         </div>
                     </div>
 
                     <div className="block md:flex gap-5">
                         <div className='basis-1/2 w-full'>
-                            <RenderSelect name={"bidding_strategy"} form={form} options={BIDDING_STRATEGY} label={SPONSORED_PRODUCTS_CAMPAIGNS.bidding_strategy}></RenderSelect>
+                            <RenderSelect name={"bidding_strategy"} helpText={HELP_TEXT.bidding_strategy} form={form} options={BIDDING_STRATEGY} label={SPONSORED_PRODUCTS_CAMPAIGNS.bidding_strategy}></RenderSelect>
                         </div>
 
                         <div className='basis-1/2 w-full'>

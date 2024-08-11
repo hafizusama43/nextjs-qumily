@@ -1,4 +1,4 @@
-import { BiddingData, CampaignNegKeywordData, KeywordTargetingData, NegKeywordData, ProductTargetingData, ProductTargetingExpressionData, SponsoredProductsInterface } from '@/lib/interfaces';
+import { BiddingData, CampaignNegKeywordData, KeywordTargetingData, NegKeywordData, ProductTargetingData, ProductTargetingDataAuto, ProductTargetingExpressionData, SponsoredProductsInterface } from '@/lib/interfaces';
 import { create } from 'zustand'
 
 interface useCampaignsStoreProps {
@@ -13,6 +13,7 @@ interface useCampaignsStoreProps {
     negKeywordData: NegKeywordData[];
     keywordTargetingData: KeywordTargetingData[];
     productTargetingData: ProductTargetingData[];
+    productTargetingDataAuto: ProductTargetingDataAuto[];
     productTargetingExpression: string;
     campaignProductsCount: number;
     pendingSave: boolean;
@@ -21,6 +22,7 @@ interface useCampaignsStoreProps {
     setNegKeywordData: (data: NegKeywordData[]) => void;
     setKeywordTargetingData: (data: KeywordTargetingData[]) => void;
     setProductTargetingData: (data: ProductTargetingData[]) => void;
+    setProductTargetingDataAuto: (data: ProductTargetingDataAuto[]) => void;
     setNextStep: (step?: number) => void;
     setPrevStep: (step?: number) => void;
     setBiddingData: (data: BiddingData[]) => void;
@@ -40,6 +42,7 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     negKeywordData: [],
     keywordTargetingData: [],
     productTargetingData: [],
+    productTargetingDataAuto: [],
     currentStep: 1,
     skus: '',
     targetingType: '',
@@ -66,6 +69,9 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     }),
     setProductTargetingData: (data: ProductTargetingData[]) => set(() => {
         return { productTargetingData: data }
+    }),
+    setProductTargetingDataAuto: (data: ProductTargetingDataAuto[]) => set(() => {
+        return { productTargetingDataAuto: data }
     }),
     setBiddingData: (data: BiddingData[]) => set(() => {
         return { biddingData: data }
