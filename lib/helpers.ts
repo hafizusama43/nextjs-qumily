@@ -81,9 +81,10 @@ const STEPS_CAMPAIGN_AUTO = {
     2: "Bidding Adjustment (Optional)",
     3: "Ad Group (Required)",
     4: "Product Ad (Required)",
-    5: "Campaign negative keyword (Optional)",
-    6: "Negative keyword (Optional)",
-    7: "Negative product targeting (Optional)",
+    5: "Product targeting (Required)",
+    6: "Campaign negative keyword (Optional)",
+    7: "Negative keyword (Optional)",
+    8: "Negative product targeting (Optional)",
 }
 
 export const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",

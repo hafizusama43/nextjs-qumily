@@ -20,6 +20,7 @@ import NegProductTargeting from './_negProductTargeting'
 import Link from 'next/link'
 import KeywordTargeting from './_keywordTargeting'
 import ProductTargeting from './_productTargeting'
+import ProductTargetingAuto from './_productTargetingAuto'
 
 
 export const initialState = {
@@ -129,8 +130,9 @@ const Products = () => {
                 <Skeleton className="h-[400px] w-[100%] rounded-xl" /> :
                 <div className='border border-gray-300 p-5 rounded-lg'>
                     <strong><h5>{STEPS[currentStep]}</h5></strong>
+                    {process.env.NEXT_PUBLIC_ENV === 'development' && <span className='text-red-400'>[Current Step : {currentStep}, Targeting Type : {targetingType}]</span>}
                     <Separator className='mt-3 mb-3'></Separator>
-                    <StepRenderer currentStep={currentStep} steps={STEPS} />
+                    <StepRenderer targetingType={targetingType} currentStep={currentStep} steps={STEPS} />
                 </div>}
         </React.Fragment>
     )
@@ -149,9 +151,13 @@ const COMPONENT_MAP = {
     "Product targeting (Required)": ProductTargeting
 };
 
-const StepRenderer = ({ currentStep, steps }) => {
+const StepRenderer = ({ currentStep, steps, targetingType }) => {
+    console.log(targetingType)
     const stepName: string = steps[currentStep];
     const StepComponent = COMPONENT_MAP[stepName];
+    if (stepName === "Product targeting (Required)") {
+        return targetingType === "Auto" ? <ProductTargetingAuto steps={steps} /> : <ProductTargeting steps={steps} />;
+    }
     return StepComponent ? <StepComponent steps={steps} /> : null;
 };
 
