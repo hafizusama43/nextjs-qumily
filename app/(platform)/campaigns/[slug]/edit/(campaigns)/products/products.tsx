@@ -74,6 +74,7 @@ const Products = () => {
         setTargetingStrategy,
         setKeywordTargetingData,
         setProductTargetingData,
+        setProductTargetingType
     } = useCampaignsStore()
     const [pending, setPending] = useState(false);
 
@@ -103,13 +104,14 @@ const Products = () => {
                 campaign_data.targeting_strategy && setTargetingStrategy(campaign_data.targeting_strategy);
                 campaign_data.keyword_targeting_data && setKeywordTargetingData(campaign_data.keyword_targeting_data);
                 campaign_data.product_targeting_data && setProductTargetingData(campaign_data.product_targeting_data);
+                campaign_data.product_targeting_type && setProductTargetingType(campaign_data.product_targeting_type);
             }
             setPending(false)
         } catch (error) {
             setPending(false)
             toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
         }
-    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setCampaignProductCount, setKeywordTargetingData, setNegKeywordData, setProductTargetingData, setProductTargetingExpression, setSkus, setTargetingStrategy, setTargetingType])
+    }, [params.slug, setBiddingData, setCampaignData, setCampaignNegKeywordData, setCampaignProductCount, setKeywordTargetingData, setNegKeywordData, setProductTargetingData, setProductTargetingExpression, setProductTargetingType, setSkus, setTargetingStrategy, setTargetingType])
 
     useEffect(() => {
         // Get campaign template and campaign data
@@ -130,7 +132,7 @@ const Products = () => {
                 <Skeleton className="h-[400px] w-[100%] rounded-xl" /> :
                 <div className='border border-gray-300 p-5 rounded-lg'>
                     <strong><h5>{STEPS[currentStep]}</h5></strong>
-                    {process.env.NEXT_PUBLIC_ENV === 'development' && <span className='text-red-400'>[Current Step : {currentStep}, Targeting Type : {targetingType}]</span>}
+                    {process.env.NEXT_PUBLIC_ENV === 'development' && <span className='text-red-400'>[Current Step : {currentStep}, Targeting Type : {targetingType} {targetingType == "Manual" && ",Targeting Strategy : " + targetingStrategy}]</span>}
                     <Separator className='mt-3 mb-3'></Separator>
                     <StepRenderer targetingType={targetingType} currentStep={currentStep} steps={STEPS} />
                 </div>}

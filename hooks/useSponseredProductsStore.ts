@@ -17,7 +17,9 @@ interface useCampaignsStoreProps {
     productTargetingExpression: string;
     campaignProductsCount: number;
     pendingSave: boolean;
+    productTargetingType: string;
     setCampaignData: (data: SponsoredProductsInterface[]) => void;
+    setProductTargetingType: (data?: string) => void;
     setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => void;
     setNegKeywordData: (data: NegKeywordData[]) => void;
     setKeywordTargetingData: (data: KeywordTargetingData[]) => void;
@@ -46,9 +48,13 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     currentStep: 1,
     skus: '',
     targetingType: '',
+    productTargetingType: 'individual',
     targetingStrategy: "",
     productTargetingExpressionData: [],
     productTargetingExpression: '',
+    setProductTargetingType: (data: string) => set(() => {
+        return { productTargetingType: data }
+    }),
     setPendingSave: (data: boolean) => set(() => {
         return { pendingSave: data }
     }),

@@ -41,6 +41,11 @@ export const TARGETING_STRATEGY = {
     "product": "Product targeting",
 }
 
+export const PRODUCT_TARGETING_CATEGORY = {
+    "individual": "Individual products",
+    "categories": "Categories",
+}
+
 export const PLACEMENT = {
     "Placement Product Page": "Placement Product Page",
     "Placement Top": "Placement Top",

@@ -67,7 +67,8 @@ export async function POST(request: NextRequest) {
         targetingStrategy,
         keywordTargetingData,
         productTargetingData,
-        productTargetingDataAuto
+        productTargetingDataAuto,
+        productTargetingType
     } = body;
 
     // Get campaign_id from campaigns
@@ -143,6 +144,9 @@ export async function POST(request: NextRequest) {
     productTargetingDataAuto = stringify(productTargetingDataAuto);
     productTargetingDataAuto && await queryDatabase(query, [campaign_id, 'product_targeting_data_auto', productTargetingDataAuto]);
 
+    // Insert product_targeting_type
+    productTargetingType = stringify(productTargetingType);
+    productTargetingType && await queryDatabase(query, [campaign_id, 'product_targeting_type', productTargetingType]);
 
     // Insert campaign-template-data
     if (targetingType === "Auto") {
@@ -166,12 +170,25 @@ export async function POST(request: NextRequest) {
     }
 }
 
+/**
+ * @param any data 
+ * @author Abdur Rehman <hafizusama43@gmail.com>
+ * 
+ * @returns string
+ */
 function stringify(data: any): string {
     const isArray = Array.isArray(data);
     const dataText = isArray && data.length > 0 ? JSON.stringify(data) : data;
     return dataText ? dataText.toString() : ''
 }
 
+/**
+ * @param data 
+ * @param campaign_id 
+ * @author Abdur Rehman <hafizusama43@gmail.com>
+ * 
+ * @returns void
+ */
 async function insertTemplateData(data: any, campaign_id: number) {
     // This function inserts template data make sure to data should have equal object length as no of cols inserted! Cols as listed below
     // product, entity, operation, campaign_id, ad_group_id, portfolio_id, ad_id, keyword_id, product_targeting_id, campaign_name, ad_group_name, start_date, end_date, targeting_type, state, daily_budget, sku, ad_group_default_bid, bid, keyword_text, match_type, bidding_strategy, placement, percentage, product_targeting_expression
@@ -199,6 +216,12 @@ async function insertTemplateData(data: any, campaign_id: number) {
     queryDatabase(insert_str, [])
 }
 
+/**
+ * This method returns query string with cols to insert in campaign_templates_data
+ * @author Abdur Rehman <hafizusama43@gmail.com>
+ * 
+ * @returns string 
+ */
 async function getCols() {
     let query_str = 'INSERT INTO campaign_templates_data (';
     const cols = await queryDatabase(`SELECT *
@@ -218,6 +241,14 @@ async function getCols() {
     return query_str;
 }
 
+/**
+ * Returns the object for campaign_data in in key pair form.
+ * 
+ * @param data 
+ * @author Abdur Rehman <hafizusama43@gmail.com>
+ * 
+ * @returns object 
+ */
 function parseValues(data) {
     const result = {};
 
@@ -235,6 +266,13 @@ function parseValues(data) {
     return result;
 }
 
+/**
+ * @param array campaign_template_data
+ * @param object campaign_data 
+ * @author Abdur Rehman <hafizusama43@gmail.com>
+ * 
+ * @returns array - Created array of campaign data using provided params
+ */
 function createCampaignData(campaign_template_data: SponsoredProductsInterface[], campaign_data) {
     // Split products into array
     var products: string[] = [];

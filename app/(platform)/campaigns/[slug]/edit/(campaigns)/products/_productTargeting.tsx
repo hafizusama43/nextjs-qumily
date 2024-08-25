@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
-import { CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
-import { getSpecificKeyValues, getStepName, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { CircleArrowLeft, CircleArrowRight, CircleHelp, Trash2 } from 'lucide-react'
+import { getSpecificKeyValues, getStepName, PRODUCT_TARGETING_CATEGORY, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
 import { RenderInput } from '../_renderInput'
+import { Separator } from '@/components/ui/separator'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
+import TemplateTooltip from '@/components/ui/_tooltip'
 
 
 const FormSchema = z.object({
@@ -30,6 +34,8 @@ const ProductTargeting = ({ steps }) => {
         setProductTargetingData,
         setNextStep,
         campaignData,
+        productTargetingType,
+        setProductTargetingType
     } = useCampaignsStore()
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -38,6 +44,8 @@ const ProductTargeting = ({ steps }) => {
             bid: 0
         },
     })
+
+    const [isReady, setIsReady] = useState(false);
 
     const onSubmit = (data) => {
         const id = uuidv4();
@@ -108,8 +116,39 @@ const ProductTargeting = ({ steps }) => {
         setNextStep()
     }
 
+    useEffect(() => {
+        // Trigger re-render when form values are set to populate dropdowns
+        setIsReady(true);
+    }, []);
+    if (!isReady) return null;
+
     return (
         <div>
+            <div className='flex flex-row gap-5 mb-5'>
+                <div className='basis-1/2 space-y-2'>
+                    <Label className='mb-2'>Product Targeting type &nbsp;
+                        <TemplateTooltip title={'Product Targeting type'}>
+                            <CircleHelp className="inline !text-blue-600 h-3 w-3 mb-[2px] cursor-pointer" />
+                        </TemplateTooltip>
+                    </Label>
+                    <Select onValueChange={(e) => { setProductTargetingType(e) }} value={productTargetingType}>
+
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a campaign category" />
+                        </SelectTrigger>
+
+                        <SelectContent className='mt-2'>
+                            {Object.keys(PRODUCT_TARGETING_CATEGORY).map((item, index) => <SelectItem
+                                key={index}
+                                value={item}>
+                                {PRODUCT_TARGETING_CATEGORY[item]}
+                            </SelectItem>
+                            )}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className='basis-1/2'></div>
+            </div>
             <div className='flex flex-row gap-5 mb-5'>
                 <div className='basis-1/2'>
                     <Form {...form}>
@@ -157,7 +196,7 @@ const ProductTargeting = ({ steps }) => {
                     </Card>
                 </div>
             </div>
-
+            <Separator></Separator>
             <div className='flex justify-end gap-4 mt-5'>
                 <Button type="button" disabled={currentStep < 2} onClick={() => { setPrevStep() }}><CircleArrowLeft /> &nbsp; {currentStep > 1 && steps[currentStep - 1]}</Button>
                 <Button onClick={handleNextStepClick} disabled={currentStep >= 7}>{currentStep < 7 && steps[currentStep + 1]} &nbsp; <CircleArrowRight /></Button>
