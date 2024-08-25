@@ -97,7 +97,7 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     setTargetingStrategy: (data: string) => set(() => {
         return { targetingStrategy: data }
     }),
-    setNextStep: (step: number) => set((state) => {
+    setNextStep: (step: number) => set((state) => { 
         return { currentStep: state.currentStep + 1 }
     }),
     setPrevStep: (step: number) => set((state) => {

@@ -17,11 +17,19 @@ import { Separator } from '@/components/ui/separator'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import TemplateTooltip from '@/components/ui/_tooltip'
+import { RenderSlider } from '../_renderSlider'
 
 
 const FormSchema = z.object({
     product_targeting_expression: z.string().min(1, { message: "Targeting expression is required" }),
     bid: z.coerce.number().min(0.1, 'Bid must be at least 0.1'),
+});
+
+const FormSchemaCategory = z.object({
+    category_id: z.string().min(1, { message: "Category id is required" }),
+    bid: z.coerce.number().min(0.1, 'Bid must be at least 0.1'),
+    rating: z.coerce.number().array().min(0.1, 'Rating must be at least 1'),
+    price: z.coerce.number().array().min(0.1, 'Price must be at least 1'),
 });
 
 
@@ -41,6 +49,16 @@ const ProductTargeting = ({ steps }) => {
         resolver: zodResolver(FormSchema),
         defaultValues: {
             product_targeting_expression: '',
+            bid: 0
+        },
+    })
+
+    const formCategories = useForm<z.infer<typeof FormSchemaCategory>>({
+        resolver: zodResolver(FormSchemaCategory),
+        defaultValues: {
+            category_id: '',
+            rating: [0, 5],
+            price: [0, 50],
             bid: 0
         },
     })
@@ -69,6 +87,37 @@ const ProductTargeting = ({ steps }) => {
             }
         });
         form.reset();
+    }
+
+    const onSubmitCategory = (data) => {
+        var pteStr: string = `category = ${data.category_id} `;
+        const id = uuidv4();
+        console.log(data)
+        if (data.rating[0] > 0 && data.rating[1] < 5) {
+            pteStr += `rating ${data.rating[0]} - ${data.rating[1]} `
+        }
+        else if (data.rating[0] > 0) {
+            pteStr += `rating > ${data.rating[0]} `
+        }
+        else if (data.rating[1] < 5) {
+            pteStr += `rating < ${data.rating[1]} `
+        }
+
+        if (data.price[0] > 0 && data.price[1] < 50) {
+            pteStr += `price ${data.price[0]} - ${data.price[1]} `
+        }
+        else if (data.price[0] > 0) {
+            pteStr += `price > ${data.price[0]} `
+        }
+        else if (data.price[1] < 50) {
+            pteStr += `price < ${data.price[1]} `
+        }
+
+        productTargetingData.push({
+            id: uuidv4(),
+            product_targeting_expression: pteStr.trim(),
+            bid: data.bid
+        });
     }
 
     const handleDeleteBtn = (id: string) => {
@@ -137,7 +186,7 @@ const ProductTargeting = ({ steps }) => {
                             <SelectValue placeholder="Select a campaign category" />
                         </SelectTrigger>
 
-                        <SelectContent className='mt-2'>
+                        <SelectContent>
                             {Object.keys(PRODUCT_TARGETING_CATEGORY).map((item, index) => <SelectItem
                                 key={index}
                                 value={item}>
@@ -151,26 +200,47 @@ const ProductTargeting = ({ steps }) => {
             </div>
             <div className='flex flex-row gap-5 mb-5'>
                 <div className='basis-1/2'>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-                            <div className="w-full">
-                                <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
-                            </div>
-                            <div className='w-full'>
-                                <RenderInput type='number' name={"bid"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.bid}></RenderInput>
-                            </div>
-                            <div className='flex justify-end gap-4 mt-10'>
-                                <Button className='block w-full' >Add Keywords</Button>
-                            </div>
-                        </form>
-                    </Form>
+                    {productTargetingType === "individual" ?
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+                                <div className="w-full">
+                                    <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
+                                </div>
+                                <div className='w-full'>
+                                    <RenderInput type='number' name={"bid"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.bid}></RenderInput>
+                                </div>
+                                <div className='flex justify-end gap-4 mt-10'>
+                                    <Button className='block w-full' >Add Product</Button>
+                                </div>
+                            </form>
+                        </Form> :
+                        <Form {...formCategories}>
+                            <form onSubmit={formCategories.handleSubmit(onSubmitCategory)} className="w-full space-y-6">
+                                <div className="w-full">
+                                    <RenderInput name={"category_id"} form={formCategories} label={"Category Id"}></RenderInput>
+                                </div>
+                                <div className='w-full'>
+                                    <RenderInput type='number' name={"bid"} form={formCategories} label={SPONSORED_PRODUCTS_CAMPAIGNS.bid}></RenderInput>
+                                </div>
+                                <div className='w-full space-y-4'>
+                                    <RenderSlider max={5} name={"rating"} form={formCategories} label={"Rating Range"} helpText='If values not changed then rating will be excluded'></RenderSlider>
+                                </div>
+                                <div className='w-full space-y-4'>
+                                    <RenderSlider max={50} name={"price"} form={formCategories} label={"Price Range"} helpText='If values not changed then price will be excluded'></RenderSlider>
+                                </div>
+                                <div className='flex justify-end gap-4 mt-10'>
+                                    <Button className='block w-full' >Add Product</Button>
+                                </div>
+                            </form>
+                        </Form>
+                    }
                 </div>
                 <div className='basis-1/2'>
                     <Card className='mt-8'>
                         <Table className='' id='placements_table'>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Keyword text</TableHead>
+                                    <TableHead>Product Targeting Expression</TableHead>
                                     {/* <TableHead>Match type</TableHead> */}
                                     <TableHead>Bid</TableHead>
                                     <TableHead>Actions</TableHead>
@@ -189,7 +259,7 @@ const ProductTargeting = ({ steps }) => {
                                         </TableRow>
                                     )
                                 })}</> : <TableRow>
-                                    <TableCell colSpan={4}><p className='text-neutral-400 mt-5 m-auto'>No keywords added.</p></TableCell>
+                                    <TableCell colSpan={4}><p className='text-neutral-400 mt-5 m-auto'>No product targeting expression added.</p></TableCell>
                                 </TableRow>}
                             </TableBody>
                         </Table>
