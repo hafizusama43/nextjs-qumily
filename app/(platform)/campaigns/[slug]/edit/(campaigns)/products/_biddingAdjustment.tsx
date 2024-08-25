@@ -12,7 +12,7 @@ import { getSpecificKeyValues, getStepName, HELP_TEXT, PLACEMENT, SPONSORED_PROD
 import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
 import { initialState } from './products'
 import { Card } from '@/components/ui/card'
 import CustomAlert from '@/components/ui/CustomAlert'

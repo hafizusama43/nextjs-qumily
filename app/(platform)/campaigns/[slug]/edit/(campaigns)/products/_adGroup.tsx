@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import React, { useEffect } from 'react'
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
-import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
 import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'

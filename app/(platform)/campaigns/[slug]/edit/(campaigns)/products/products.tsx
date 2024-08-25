@@ -2,7 +2,7 @@
 import { Separator } from '@/components/ui/separator'
 import React, { useCallback, useEffect, useState } from 'react'
 import { capitalizeFirstLetter, GET_STEPS } from '@/lib/helpers'
-import { useCampaignsStore } from '@/hooks/useSponseredProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
 import TemplateHeader from '@/components/ui/_header'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'

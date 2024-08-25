@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { useCampaignsStore } from '@/hooks/useSponseredProductsStore';
+import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore';
 import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_EXPRESSION_TYPE } from '@/lib/helpers';
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
