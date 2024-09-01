@@ -27,7 +27,7 @@ const FormSchema = z.object({
 
 const FormSchemaCategory = z.object({
     category_id: z.string().min(1, { message: "Category id is required" }),
-    bid: z.coerce.number().min(0.1, 'Bid must be at least 0.1'),
+    category_bid: z.coerce.number().min(0.1, 'Bid must be at least 0.1'),
     rating: z.coerce.number().array().min(0.1, 'Rating must be at least 1'),
     price: z.coerce.number().array().min(0.1, 'Price must be at least 1'),
 });
@@ -59,7 +59,7 @@ const ProductTargeting = ({ steps }) => {
             category_id: '',
             rating: [0, 5],
             price: [0, 50],
-            bid: 0
+            category_bid: 0
         },
     })
 
@@ -81,7 +81,7 @@ const ProductTargeting = ({ steps }) => {
             if (!keywordExists(productTargetingData, targetingExpression)) {
                 productTargetingData.push({
                     id: uuidv4(),
-                    product_targeting_expression: targetingExpression,
+                    product_targeting_expression: "asin=" + "\"" + targetingExpression + "\"",
                     bid: data.bid
                 });
             }
@@ -90,7 +90,7 @@ const ProductTargeting = ({ steps }) => {
     }
 
     const onSubmitCategory = (data) => {
-        var pteStr: string = `category = ${data.category_id} `;
+        var pteStr: string = `category = "${data.category_id}" `;
         const id = uuidv4();
         console.log(data)
         if (data.rating[0] > 0 && data.rating[1] < 5) {
@@ -116,7 +116,7 @@ const ProductTargeting = ({ steps }) => {
         productTargetingData.push({
             id: uuidv4(),
             product_targeting_expression: pteStr.trim(),
-            bid: data.bid
+            bid: data.category_bid
         });
     }
 
@@ -180,7 +180,11 @@ const ProductTargeting = ({ steps }) => {
                             <CircleHelp className="inline !text-blue-600 h-3 w-3 mb-[2px] cursor-pointer" />
                         </TemplateTooltip>
                     </Label>
-                    <Select onValueChange={(e) => { setProductTargetingType(e) }} value={productTargetingType}>
+                    <Select onValueChange={(e) => {
+                        setProductTargetingType(e)
+                        form.reset();
+                        formCategories.reset();
+                    }} value={productTargetingType}>
 
                         <SelectTrigger>
                             <SelectValue placeholder="Select a campaign category" />
@@ -201,7 +205,7 @@ const ProductTargeting = ({ steps }) => {
             <div className='flex flex-row gap-5 mb-5'>
                 <div className='basis-1/2'>
                     {productTargetingType === "individual" ?
-                        <Form {...form}>
+                        <Form {...form} key="individual_form">
                             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                                 <div className="w-full">
                                     <RenderTextArea name={"product_targeting_expression"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderTextArea>
@@ -214,13 +218,13 @@ const ProductTargeting = ({ steps }) => {
                                 </div>
                             </form>
                         </Form> :
-                        <Form {...formCategories}>
+                        <Form {...formCategories} key="category_form">
                             <form onSubmit={formCategories.handleSubmit(onSubmitCategory)} className="w-full space-y-6">
                                 <div className="w-full">
                                     <RenderInput name={"category_id"} form={formCategories} label={"Category Id"}></RenderInput>
                                 </div>
                                 <div className='w-full'>
-                                    <RenderInput type='number' name={"bid"} form={formCategories} label={SPONSORED_PRODUCTS_CAMPAIGNS.bid}></RenderInput>
+                                    <RenderInput type='number' name={"category_bid"} form={formCategories} label={SPONSORED_PRODUCTS_CAMPAIGNS.bid}></RenderInput>
                                 </div>
                                 <div className='w-full space-y-4'>
                                     <RenderSlider max={5} name={"rating"} form={formCategories} label={"Rating Range"} helpText='If values not changed then rating will be excluded'></RenderSlider>
