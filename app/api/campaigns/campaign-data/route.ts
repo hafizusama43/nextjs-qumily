@@ -360,7 +360,7 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
             const results = arrayExpressions.map(data => {
                 return {
                     ...negProductTargetingObj[0],
-                    product_targeting_expression: 'asin=' + data,
+                    product_targeting_expression: data,
                 };
             });
             campaign_template_data.splice(campaign_template_data.length, 0, ...results);
@@ -415,7 +415,7 @@ function createCampaignData(campaign_template_data: SponsoredProductsInterface[]
             const results = campaign_data.product_targeting_data.map(data => {
                 return {
                     ...productTargetingObj[0],
-                    product_targeting_expression: "asin=" + "\"" + data.product_targeting_expression + "\"",
+                    product_targeting_expression: data.product_targeting_expression,
                     bid: data.bid
                 };
             });
