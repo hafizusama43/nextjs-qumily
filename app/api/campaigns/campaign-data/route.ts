@@ -20,24 +20,30 @@ export async function GET(request: NextRequest) {
         const campaign_id = campaign.campaign_id;
         const campaign_category = campaign.campaign_category;
 
-        var query = '';
         var campaign_data = await getCampaignData(campaign_id);
+        var campaignTemplateData = await getCampaignTemplate(campaign_id, campaign_category);
 
-        query = `SELECT
-        product, entity, operation, campaign_id, ad_group_id, portfolio_id, ad_id, keyword_id, product_targeting_id, campaign_name, ad_group_name, start_date, end_date, targeting_type, state, daily_budget, sku, ad_group_default_bid, bid, keyword_text, match_type, bidding_strategy, placement, percentage, product_targeting_expression
-        FROM campaign_templates_data
-        WHERE campaign_templates_data.campaign_id_external = $1 ;`;
-        var campaignTemplateData = await queryDatabase(query, [campaign_id]);
-        campaignTemplateData = campaignTemplateData.rows.length > 0 ? campaignTemplateData.rows : []
-
-
-        if (mode && mode === 'view') {
+        if (mode && mode === 'view' && campaignTemplateData.length > 0) {
+            console.log(campaign_category)
             // Benchmarking original implementation
             // console.time('Original Implementation');
-            campaignTemplateData = createCampaignData(campaignTemplateData, campaign_data);
+            switch (campaign_category) {
+                case 'sponsored-products-campaigns':
+                    campaignTemplateData = createSponsoredCampaignData(campaignTemplateData, campaign_data);
+
+                    break;
+                // case 'sponsored-display-campaigns':
+                //     addSponsoredProductsCampData(body, campaignData, campaign_id, campaign_category)
+                //     break;
+                // case 'sponsored-brands-campaigns':
+                //     addSponsoredProductsCampData(body, campaignData, campaign_id, campaign_category)
+                //     break;
+                default:
+                    break;
+            }
             // console.timeEnd('Original Implementation');
         }
-        var campaign_template_data: SponsoredProductsInterface[] = campaignTemplateData ? campaignTemplateData : []
+        var campaign_template_data = campaignTemplateData ? campaignTemplateData : []
 
         return NextResponse.json({ success: true, message: 'Templates fetched successfully.', data: { campaign_data, campaign_template_data } }, { status: 200 })
     } catch (error) {
@@ -90,6 +96,27 @@ export async function POST(request: NextRequest) {
 
 
 /**
+ * Fetches campaign template data by external campaign ID.
+ * 
+ * @param externalCampaignId - The external campaign ID.
+ * @param campaign_category 
+ * @returns The campaign template data if found, otherwise an empty array.
+ */
+async function getCampaignTemplate(external_campaign_id: number, campaign_category: string): Promise<any[]> {
+    const query = `
+        SELECT
+            product, entity, operation, campaign_id, ad_group_id, portfolio_id, ad_id, keyword_id, product_targeting_id, campaign_name, ad_group_name, start_date, end_date, targeting_type, state, daily_budget, sku, ad_group_default_bid, bid, keyword_text, match_type, bidding_strategy, placement, percentage, product_targeting_expression
+        FROM campaign_templates_data
+        WHERE campaign_templates_data.campaign_id_external = $1;
+    `;
+    const result = await queryDatabase(query, [external_campaign_id]);
+
+    // Return the rows if found, otherwise return an empty array
+    return result.rows.length > 0 ? result.rows : [];
+}
+
+
+/**
  * Fetches campaign data by campaign ID.
  * 
  * @param campaign_id - The ID of the campaign.
@@ -117,7 +144,7 @@ async function getCampaignData(campaign_id: number): Promise<CampaignData> {
 async function getCampaign(slug: string): Promise<CreatedCampaignType | null> {
     const query = `
         SELECT
-            campaigns.campaign_id
+            campaigns.*
         FROM campaigns
         WHERE campaigns.slug = $1
         LIMIT 1;
@@ -233,7 +260,7 @@ function parseValues(data) {
  * 
  * @returns array - Created array of campaign data using provided params
  */
-function createCampaignData(campaign_template_data: SponsoredProductsInterface[], campaign_data) {
+function createSponsoredCampaignData(campaign_template_data: SponsoredProductsInterface[], campaign_data: CampaignData) {
     // Split products into array
     var products: string[] = [];
     if ((campaign_data.skus as string).includes(",")) {

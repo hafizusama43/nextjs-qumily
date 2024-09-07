@@ -78,3 +78,7 @@ export interface CreatedCampaignType {
     created_by: string;
     created_at: string;
 }
+
+export interface CampaignData {
+    [key: string]: any; // Adjust this based on the actual structure of your campaign_data table
+}
