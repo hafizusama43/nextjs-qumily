@@ -103,6 +103,12 @@ export async function POST(request: NextRequest) {
  * @returns The campaign template data if found, otherwise an empty array.
  */
 async function getCampaignTemplate(external_campaign_id: number, campaign_category: string): Promise<any[]> {
+    if (campaign_category !== 'sponsored-products-campaigns') {
+        // Convert data to json data after verifying using zod schema for each campaign
+        var query_str = 'SELECT * from  campaign_templates WHERE campaign_id = $1';
+        const result_s = await queryDatabase(query_str, [external_campaign_id])
+        return
+    }
     const query = `
         SELECT
             product, entity, operation, campaign_id, ad_group_id, portfolio_id, ad_id, keyword_id, product_targeting_id, campaign_name, ad_group_name, start_date, end_date, targeting_type, state, daily_budget, sku, ad_group_default_bid, bid, keyword_text, match_type, bidding_strategy, placement, percentage, product_targeting_expression
@@ -174,8 +180,11 @@ function stringify(data: any): string {
  * @returns void
  */
 async function insertTemplateData(data: any, campaign_id: number, campaign_category: string) {
-    if (campaign_category !== '') {
-
+    if (campaign_category !== 'sponsored-products-campaigns') {
+        // Convert data to json data after verifying using zod schema for each campaign
+        // var insert_str = 'INSERT INTO campaign_templates (campaign_id, json_data) VALUES ($1, $2)';
+        // await queryDatabase(insert_str, [campaign_id, data])
+        return
     }
     // This function inserts template data make sure to data should have equal object length as no of cols inserted! Cols as listed below
     // product, entity, operation, campaign_id, ad_group_id, portfolio_id, ad_id, keyword_id, product_targeting_id, campaign_name, ad_group_name, start_date, end_date, targeting_type, state, daily_budget, sku, ad_group_default_bid, bid, keyword_text, match_type, bidding_strategy, placement, percentage, product_targeting_expression
@@ -200,7 +209,7 @@ async function insertTemplateData(data: any, campaign_id: number, campaign_categ
         }
         insert_str += value_str;
     });
-    queryDatabase(insert_str, [])
+    await queryDatabase(insert_str, [])
 }
 
 /**
@@ -475,40 +484,40 @@ async function addSponsoredProductsCampData(campaign_template_data: any, campaig
     } = campaign_template_data;
 
     // Insert bidding_data
-    updateTemplateData(biddingData, 'bidding_data', campaign_id);
+    await updateTemplateData(biddingData, 'bidding_data', campaign_id);
 
     // Insert targeting_type
-    updateTemplateData(targetingType, 'targeting_type', campaign_id);
+    await updateTemplateData(targetingType, 'targeting_type', campaign_id);
 
     // Insert skus
-    updateTemplateData(skus, 'skus', campaign_id);
+    await updateTemplateData(skus, 'skus', campaign_id);
 
     // Insert neg_keyword_data
-    updateTemplateData(negKeywordData, 'neg_keyword_data', campaign_id);
+    await updateTemplateData(negKeywordData, 'neg_keyword_data', campaign_id);
 
     // Insert campaign_neg_keyword_data
-    updateTemplateData(campaignNegKeywordData, 'campaign_neg_keyword_data', campaign_id);
+    await updateTemplateData(campaignNegKeywordData, 'campaign_neg_keyword_data', campaign_id);
 
     // Insert product_targeting_expression
-    updateTemplateData(productTargetingExpression, 'product_targeting_expression', campaign_id);
+    await updateTemplateData(productTargetingExpression, 'product_targeting_expression', campaign_id);
 
     // Insert campaign_products_count
-    updateTemplateData(parseInt(campaignProductsCount), 'campaign_products_count', campaign_id);
+    await updateTemplateData(parseInt(campaignProductsCount), 'campaign_products_count', campaign_id);
 
     // Insert targeting_strategy
-    updateTemplateData(targetingStrategy, 'targeting_strategy', campaign_id);
+    await updateTemplateData(targetingStrategy, 'targeting_strategy', campaign_id);
 
     // Insert keyword_targeting_data
-    updateTemplateData(keywordTargetingData, 'keyword_targeting_data', campaign_id);
+    await updateTemplateData(keywordTargetingData, 'keyword_targeting_data', campaign_id);
 
     // Insert product_targeting_data
-    updateTemplateData(productTargetingData, 'product_targeting_data', campaign_id);
+    await updateTemplateData(productTargetingData, 'product_targeting_data', campaign_id);
 
     // Insert product_targeting_data_auto
-    updateTemplateData(productTargetingDataAuto, 'product_targeting_data_auto', campaign_id);
+    await updateTemplateData(productTargetingDataAuto, 'product_targeting_data_auto', campaign_id);
 
     // Insert product_targeting_type
-    updateTemplateData(productTargetingType, 'product_targeting_type', campaign_id);
+    await updateTemplateData(productTargetingType, 'product_targeting_type', campaign_id);
 
     // Insert campaign-template-data
     if (targetingType === "Auto") {
@@ -522,7 +531,7 @@ async function addSponsoredProductsCampData(campaign_template_data: any, campaig
     }
 
     console.log(campaign_template)
-    insertTemplateData(campaign_template, campaign_id, campaign_category);
+    await insertTemplateData(campaign_template, campaign_id, campaign_category);
 }
 
 /**
