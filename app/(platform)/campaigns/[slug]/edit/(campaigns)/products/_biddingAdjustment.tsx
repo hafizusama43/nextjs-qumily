@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Form } from '@/components/ui/form'
 import {  CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
 import { RenderInput } from '../_renderInput'
-import { getSpecificKeyValues, getStepName, HELP_TEXT, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
+import { getSpecificKeyValues, getStepName, SPC_HELP_TEXT, PLACEMENT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { RenderSelect } from '../_renderSelect'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -99,10 +99,10 @@ const BiddingAdjustment = ({ steps }) => {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                             <div className="block md:flex gap-5">
                                 <div className='basis-1/2 w-full'>
-                                    <RenderSelect name={"placement"} helpText={HELP_TEXT.placement} form={form} options={PLACEMENT} label={SPONSORED_PRODUCTS_CAMPAIGNS.placement}></RenderSelect>
+                                    <RenderSelect name={"placement"} helpText={SPC_HELP_TEXT.placement} form={form} options={PLACEMENT} label={SPONSORED_PRODUCTS_CAMPAIGNS.placement}></RenderSelect>
                                 </div>
                                 <div className='basis-1/2 w-full'>
-                                    <RenderInput type='number' helpText={HELP_TEXT.percentage} name={"percentage"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.percentage}></RenderInput>
+                                    <RenderInput type='number' helpText={SPC_HELP_TEXT.percentage} name={"percentage"} form={form} label={SPONSORED_PRODUCTS_CAMPAIGNS.percentage}></RenderInput>
                                 </div>
                             </div>
                             <div className='flex justify-end gap-4 mt-10'>

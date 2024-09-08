@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore';
-import { getSpecificKeyValues, getStepName, HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_EXPRESSION_TYPE } from '@/lib/helpers';
+import { getSpecificKeyValues, getStepName, SPC_HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS, TARGETING_EXPRESSION_TYPE } from '@/lib/helpers';
 import { CircleArrowLeft, CircleArrowRight } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { RenderInput } from '../_renderInput';
@@ -94,10 +94,10 @@ const ProductTargetingAuto = ({ steps }) => {
                                     <RenderInput name={`data[${index}].product_targeting_expression`} disabled form={form} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.product_targeting_expression}></RenderInput>
                                 </div>
                                 <div className='basis-1/2 w-full'>
-                                    <RenderInput name={`data[${index}].bid`} helpText={HELP_TEXT.pt_bid} form={form} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.bid} type={"number"}></RenderInput>
+                                    <RenderInput name={`data[${index}].bid`} helpText={SPC_HELP_TEXT.pt_bid} form={form} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.bid} type={"number"}></RenderInput>
                                 </div>
                                 <div className='basis-1/2 w-full'>
-                                    <RenderSelect name={`data[${index}].state`} helpText={HELP_TEXT.state} form={form} options={TARGETING_EXPRESSION_TYPE} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.state}></RenderSelect>
+                                    <RenderSelect name={`data[${index}].state`} helpText={SPC_HELP_TEXT.state} form={form} options={TARGETING_EXPRESSION_TYPE} label={index == 0 && SPONSORED_PRODUCTS_CAMPAIGNS.state}></RenderSelect>
                                 </div>
                             </div>
                         ))}
