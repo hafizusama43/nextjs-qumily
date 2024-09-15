@@ -41,6 +41,7 @@ const ProductTargetingAuto = ({ steps }) => {
     useEffect(() => {
         console.info(`Setting "${steps[currentStep]}" form state`)
         form.setValue('data', productTargetingDataAuto);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     function onSubmit(data: z.infer<typeof FormSchema>) {

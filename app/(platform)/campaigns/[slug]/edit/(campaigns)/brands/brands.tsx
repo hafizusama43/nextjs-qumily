@@ -16,35 +16,35 @@ import KeywordTargeting from './_keywordTargeting';
 import ProductTargeting from './_productTargeting';
 
 export const initialState = {
-  product: '',                            // Product
-  entity: '',                             // Entity
-  operation: '',                          // Operation
-  campaign_id: '',                        // Campaign Id
-  ad_group_id: '',                        // Draft Campaign Id (assuming it's for ad group)
-  portfolio_id: '',                       // Portfolio Id
-  campaign_name: '',                      // Campaign Name
-  start_date: '',                         // Start Date
-  end_date: '',                           // End Date
-  state: '',                              // State
-  daily_budget: 0,                        // Budget
-  ad_group_default_bid: 0,                // Bid (default for ad group)
-  bid: '',                                // Bid (custom bid)
-  keyword_text: '',                       // Keyword Text
-  match_type: '',                         // Match Type
-  product_targeting_expression: '',       // Product Targeting Expression
-  bidding_strategy: '',                   // Bid Optimization
-  percentage: '',                         // Bid Multiplier (percentage)
-  targeting_type: '',                     // Ad Format
-  landing_page_url: '',                   // Landing Page URL
-  landing_page_asins: [],                 // Landing Page asins (assuming array)
-  brand_entity_id: '',                    // Brand Entity Id
-  brand_name: '',                         // Brand Name
-  brand_logo_asset_id: '',                // Brand Logo Asset Id
-  brand_logo_url: '',                     // Brand Logo URL
-  creative_headline: '',                  // Creative Headline
-  creative_asins: [],                     // Creative asins (assuming array)
-  video_media_ids: [],                    // Video Media Ids (assuming array)
-  creative_type: ''                       // Creative Type
+  product: '',
+  entity: '',
+  operation: '',
+  campaign_id: '',
+  draft_campaign_id: '',
+  portfolio_id: '',
+  campaign_name: '',
+  start_date: '',
+  end_date: '',
+  state: '',
+  budget_type: '',
+  budget: '',
+  bid_optimization: '',
+  bid_multiplier: '',
+  bid: '',
+  keyword_text: '',
+  match_type: '',
+  product_targeting_expression: '',
+  ad_format: '',
+  landing_page_url: '',
+  landing_page_asins: '',
+  brand_entity_id: '',
+  brand_name: '',
+  brand_logo_asset_id: '',
+  brand_logo_url: '',
+  creative_headline: '',
+  creative_asins: '',
+  video_media_ids: '',
+  creative_type: ''
 };
 
 

@@ -11,7 +11,7 @@ import { Separator } from '@/components/ui/separator'
 import { RenderInput } from '../_renderInput'
 import { RenderDatePicker } from '../_renderDatePicker'
 import { RenderSelect } from '../_renderSelect'
-import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponsoredBrandsStore'
 import { initialState } from './brands'
 
 const FormSchema = z.object({
@@ -26,42 +26,67 @@ const FormSchema = z.object({
     end_date: z.date().default(new Date()).refine(date => date instanceof Date && !isNaN(date.getTime()), {
         message: 'End date must be a valid date',
     }).nullable(),
-    targeting_type: z.string().min(1, { message: "Targeting Type is required" }),
     state: z.string().min(1, { message: "State is required" }).default('Enabled'),
-    daily_budget: z.coerce.number().min(1, 'Daily Budget must be greater then 0'),
-    bidding_strategy: z.string().min(1, { message: "Bidding Strategy is required" }),
+    budget_type: z.string().min(1, { message: "Budget type is required" }),
+    budget: z.coerce.number().min(1, 'Daily Budget must be greater then 0'),
+    bid_optimization: z.string().min(1, { message: "Bid optimization is required" }),
+    bid_multiplier: z.coerce.number(),
+    ad_format: z.string().min(1, { message: "Ad format is required" }),
+    landing_page_url: z.string().min(1, { message: "landing page url is required" }),
+    brand_entity_id: z.string().min(1, { message: "Brand entity id is required" }),
+    brand_name: z.string().min(1, { message: "Brand Name is required" }),
+    brand_logo_asset_id: z.string(),
+    brand_logo_url: z.string(),
+    creative_headline: z.string(),
+    creative_asins: z.string(),
+    video_media_ids: z.string(),
+    creative_type: z.string(),
     targeting_strategy: z.string().default('keyword'),
 }).superRefine((values, context) => {
-    if (values.targeting_type === "Manual" && !values.targeting_strategy) {
+    if (values.bid_optimization === "manual") {
         context.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Targeting strategy is required",
-            path: ["targeting_strategy"],
+            path: ["bid_multiplier"],
         });
     }
 });
+
+
+
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 
 const Campaign = ({ steps }) => {
-    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep, setTargetingType, setTargetingStrategy, targetingStrategy } = useCampaignsStore()
+    const { campaignData, setCampaignData, setNextStep, setPrevStep, currentStep, setTargetingStrategy, targetingStrategy } = useCampaignsStore()
     const [isReady, setIsReady] = useState(false);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            product: 'Sponsored Products',
+            product: 'Sponsored Brands',
             entity: 'Campaign',
             operation: 'Create',
             campaign_id: '',
             campaign_name: '',
             start_date: new Date(),
             end_date: null,
-            targeting_type: '',
             state: '',
-            daily_budget: 10,
-            bidding_strategy: '',
+            budget_type: '',
+            budget: 10,
+            bid_optimization: '',
+            bid_multiplier: 0,
+            ad_format: '',
+            landing_page_url: '',
+            brand_entity_id: '',
+            brand_name: '',
+            brand_logo_asset_id: '',
+            brand_logo_url: '',
+            creative_headline: '',
+            creative_asins: '',
+            video_media_ids: '',
+            creative_type: '',
             targeting_strategy: ''
         },
     })
@@ -86,12 +111,6 @@ const Campaign = ({ steps }) => {
     function onSubmit(data: z.infer<typeof FormSchema>) {
         var entity: string = getStepName(steps[currentStep]);
 
-        setTargetingType(data.targeting_type)
-        if (data.targeting_type === 'Manual') {
-            setTargetingStrategy(data.targeting_strategy);
-        } else {
-            setTargetingStrategy('');
-        }
         delete data.targeting_strategy;
         var objExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
         if (objExists.length > 0) {
@@ -108,7 +127,7 @@ const Campaign = ({ steps }) => {
                 ...initialState,
                 ...data
             };
-            campaignData.push(updatedObj);
+            // campaignData.push(updatedObj);
             setCampaignData(campaignData);
         }
         setNextStep();
@@ -173,9 +192,7 @@ const Campaign = ({ steps }) => {
                         </div>
 
                         <div className='basis-1/2 w-full'>
-                            {form.getValues('targeting_type') && form.getValues('targeting_type') === "Manual" &&
-                                <RenderSelect name={"targeting_strategy"} form={form} options={TARGETING_STRATEGY} label={'Targeting Strategy'}></RenderSelect>
-                            }
+                            <RenderSelect name={"targeting_strategy"} form={form} options={TARGETING_STRATEGY} label={'Targeting Strategy'}></RenderSelect>
                         </div>
 
                     </div>
