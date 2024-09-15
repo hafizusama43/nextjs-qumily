@@ -1,7 +1,7 @@
 "use client"
 import { Separator } from '@/components/ui/separator'
 import React, { useCallback, useEffect, useState } from 'react'
-import { capitalizeFirstLetter, GET_STEPS } from '@/lib/helpers'
+import { capitalizeFirstLetter, GET_SP_STEPS } from '@/lib/helpers'
 import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
 import TemplateHeader from '@/components/ui/_header'
 import { Label } from '@/components/ui/label'
@@ -80,7 +80,7 @@ const Products = () => {
 
     // Update steps based on targetingStrategy, targetingType
     useEffect(() => {
-        setSteps(GET_STEPS(targetingType, targetingStrategy));
+        setSteps(GET_SP_STEPS(targetingType, targetingStrategy));
     }, [targetingStrategy, targetingType])
 
 

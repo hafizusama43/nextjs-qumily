@@ -7,7 +7,7 @@ interface useCampaignsStoreProps {
     currentStep: number;
     biddingData: BiddingData[];
     campaignNegKeywordData: CampaignNegKeywordData[];
-    targetingType: string;
+    // targetingType: string;
     targetingStrategy: string;
     productTargetingExpressionData: ProductTargetingExpressionData[];
     negKeywordData: NegKeywordData[];
@@ -30,7 +30,7 @@ interface useCampaignsStoreProps {
     setBiddingData: (data: BiddingData[]) => void;
     setSkus: (data: string) => void;
     setProductTargetingExpression: (data: string) => void;
-    setTargetingType: (data: string) => void;
+    // setTargetingType: (data: string) => void;
     setTargetingStrategy: (data: string) => void;
     setPendingSave: (data: boolean) => void;
     setCampaignProductCount: (data: number) => void;
@@ -47,7 +47,7 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     productTargetingDataAuto: [],
     currentStep: 1,
     skus: '',
-    targetingType: '',
+    // targetingType: '',
     productTargetingType: 'individual',
     targetingStrategy: "",
     productTargetingExpressionData: [],
@@ -91,9 +91,9 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     setProductTargetingExpression: (data: string) => set(() => {
         return { productTargetingExpression: data }
     }),
-    setTargetingType: (data: string) => set(() => {
-        return { targetingType: data }
-    }),
+    // setTargetingType: (data: string) => set(() => {
+    //     return { targetingType: data }
+    // }),
     setTargetingStrategy: (data: string) => set(() => {
         return { targetingStrategy: data }
     }),

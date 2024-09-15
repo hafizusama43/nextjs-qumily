@@ -132,7 +132,7 @@ export const SPC_HELP_TEXT = {
 
 
 // Function to get the appropriate steps object based on a condition
-export const GET_STEPS = (condition: string, targeting: string) => {
+export const GET_SP_STEPS = (condition: string, targeting: string) => {
     if (condition.toLocaleLowerCase() === 'auto') {
         return STEPS_CAMPAIGN_AUTO;
     } else if (condition.toLocaleLowerCase() === 'manual') {
@@ -158,6 +158,25 @@ export const GET_STEPS = (condition: string, targeting: string) => {
     }
 };
 
+export const GET_SB_STEPS = (targeting: string) => {
+    console.log(targeting)
+    // Build the steps dynamically for manual campaigns
+    var stepsManual = {}
+    if (targeting === 'keyword') {
+        stepsManual = {
+            ...STEPS_CAMPAIGN_MANUAL,
+            6: "Negative keyword (Optional)",
+            7: "Keyword (Required)"
+        };
+    } else {
+        stepsManual = {
+            ...STEPS_CAMPAIGN_MANUAL,
+            6: "Product targeting (Required)",
+            7: "Negative product targeting (Optional)"
+        };
+    }
+    return stepsManual;
+};
 
 
 // Helper function to capitalize the first letter of the string
