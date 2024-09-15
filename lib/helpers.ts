@@ -79,14 +79,53 @@ export const SPONSORED_PRODUCTS_CAMPAIGNS = {
     product_targeting_expression: 'Product Targeting Expression'
 };
 
-const STEPS_DEFAULT = {
+export const SPONSORED_BRANDS_CAMPAIGNS = {
+    product: 'Product',
+    entity: 'Entity',
+    operation: 'Operation',
+    campaign_id: 'Campaign Id',
+    ad_group_id: 'Ad Group Id',
+    portfolio_id: 'Portfolio Id',
+    ad_id: 'Ad Id',
+    keyword_id: 'Keyword Id',
+    product_targeting_id: 'Product Targeting Id',
+    campaign_name: 'Campaign Name',
+    ad_group_name: 'Ad Group Name',
+    start_date: 'Start Date',
+    end_date: 'End Date',
+    targeting_type: 'Targeting Type',
+    state: 'State',
+    daily_budget: 'Budget',
+    sku: 'SKU',
+    ad_group_default_bid: 'Bid',
+    bid: 'Bid',
+    keyword_text: 'Keyword Text',
+    match_type: 'Match Type',
+    bidding_strategy: 'Bid Optimization',
+    placement: 'Placement',
+    percentage: 'Bid Multiplier',
+    product_targeting_expression: 'Product Targeting Expression',
+    ad_format: 'Ad Format',
+    landing_page_url: 'Landing Page URL',
+    landing_page_asins: 'Landing Page asins',
+    brand_entity_id: 'Brand Entity Id',
+    brand_name: 'Brand Name',
+    brand_logo_asset_id: 'Brand Logo Asset Id',
+    brand_logo_url: 'Brand Logo URL',
+    creative_headline: 'Creative Headline',
+    creative_asins: 'Creative asins',
+    video_media_ids: 'Video Media Ids',
+    creative_type: 'Creative Type'
+};
+
+const STEPS_SP_DEFAULT = {
     1: "Campaign (Required)",
     2: "Bidding Adjustment (Optional)",
     3: "Ad Group (Required)",
     4: "Product Ad (Required)",
 };
 
-const STEPS_CAMPAIGN_AUTO = {
+const STEPS_SP_CAMPAIGN_AUTO = {
     1: "Campaign (Required)",
     2: "Bidding Adjustment (Optional)",
     3: "Ad Group (Required)",
@@ -97,18 +136,21 @@ const STEPS_CAMPAIGN_AUTO = {
     8: "Negative product targeting (Optional)",
 }
 
-export const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-];
-
-
-const STEPS_CAMPAIGN_MANUAL = {
+const STEPS_SP_CAMPAIGN_MANUAL = {
     1: "Campaign (Required)",
     2: "Bidding Adjustment (Optional)",
     3: "Ad Group (Required)",
     4: "Product Ad (Required)",
     5: "Campaign negative keyword (Optional)",
 }
+
+const STEPS_SB_DEFAULT = {
+    1: "Campaign (Required)"
+};
+
+export const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
 
 export const SPC_HELP_TEXT = {
     'campaign_id': "For new campaigns, you should type a text-based name to identify your campaign. You will enter this exact Campaign ID for each entity you create underneath this parent campaign. NOTE: When you upload your bulksheets file, the Campaign ID will become the actual unique identifier associated with the campaign and all of its \"child\" entities. So if you want to update this campaign later, you would enter the actual Campaign ID into this field.",
@@ -134,27 +176,27 @@ export const SPC_HELP_TEXT = {
 // Function to get the appropriate steps object based on a condition
 export const GET_SP_STEPS = (condition: string, targeting: string) => {
     if (condition.toLocaleLowerCase() === 'auto') {
-        return STEPS_CAMPAIGN_AUTO;
+        return STEPS_SP_CAMPAIGN_AUTO;
     } else if (condition.toLocaleLowerCase() === 'manual') {
         console.log(targeting)
         // Build the steps dynamically for manual campaigns
         var stepsManual = {}
         if (targeting === 'keyword') {
             stepsManual = {
-                ...STEPS_CAMPAIGN_MANUAL,
+                ...STEPS_SB_DEFAULT,
                 6: "Negative keyword (Optional)",
                 7: "Keyword (Required)"
             };
         } else {
             stepsManual = {
-                ...STEPS_CAMPAIGN_MANUAL,
+                ...STEPS_SP_CAMPAIGN_MANUAL,
                 6: "Product targeting (Required)",
                 7: "Negative product targeting (Optional)"
             };
         }
         return stepsManual;
     } else {
-        return STEPS_DEFAULT; // Default steps object if condition is neither 'auto' nor 'manual'
+        return STEPS_SP_DEFAULT; // Default steps object if condition is neither 'auto' nor 'manual'
     }
 };
 
@@ -164,15 +206,15 @@ export const GET_SB_STEPS = (targeting: string) => {
     var stepsManual = {}
     if (targeting === 'keyword') {
         stepsManual = {
-            ...STEPS_CAMPAIGN_MANUAL,
-            6: "Negative keyword (Optional)",
-            7: "Keyword (Required)"
+            ...STEPS_SB_DEFAULT,
+            2: "Keyword (Required)",
+            3: "Negative keyword (Optional)"
         };
     } else {
         stepsManual = {
-            ...STEPS_CAMPAIGN_MANUAL,
-            6: "Product targeting (Required)",
-            7: "Negative product targeting (Optional)"
+            ...STEPS_SB_DEFAULT,
+            2: "Product targeting (Required)",
+            3: "Negative product targeting (Optional)"
         };
     }
     return stepsManual;
