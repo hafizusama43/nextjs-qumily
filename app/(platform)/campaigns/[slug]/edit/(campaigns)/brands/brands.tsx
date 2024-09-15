@@ -9,6 +9,11 @@ import { Separator } from '@radix-ui/react-separator';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import Campaign from './_campaign';
+import NegKeyword from './_negKeyword';
+import NegProductTargeting from './_negProductTargeting';
+import KeywordTargeting from './_keywordTargeting';
+import ProductTargeting from './_productTargeting';
 
 export const initialState = {
   product: '',                            // Product
@@ -88,13 +93,28 @@ const Brands = () => {
         <Skeleton className="h-[400px] w-[100%] rounded-xl" /> :
         <div className='border border-gray-300 p-5 rounded-lg'>
           <strong><h5>{STEPS[currentStep]}</h5></strong>
-          {/* {process.env.NEXT_PUBLIC_ENV === 'development' && <span className='text-red-400'>[Current Step : {currentStep}, Targeting Type : {targetingType} {targetingType == "Manual" && ",Targeting Strategy : " + targetingStrategy}]</span>} */}
+          {process.env.NEXT_PUBLIC_ENV === 'development' && <span className='text-red-400'>[Current Step : {currentStep}, Targeting Strategy : {targetingStrategy}]</span>}
           <Separator className='mt-3 mb-3'></Separator>
-          {/* <StepRenderer targetingType={targetingType} currentStep={currentStep} steps={STEPS} /> */}
+          <StepRenderer currentStep={currentStep} steps={STEPS} />
         </div>
       }
     </React.Fragment>
   )
 }
+
+// Component mapping
+const COMPONENT_MAP = {
+  "Campaign (Required)": Campaign,
+  "Negative keyword (Optional)": NegKeyword,
+  "Negative product targeting (Optional)": NegProductTargeting,
+  "Keyword (Required)": KeywordTargeting,
+  "Product targeting (Required)": ProductTargeting
+};
+
+const StepRenderer = ({ currentStep, steps }) => {
+  const stepName: string = steps[currentStep];
+  const StepComponent = COMPONENT_MAP[stepName];
+  return StepComponent ? <StepComponent steps={steps} /> : null;
+};
 
 export default Brands
