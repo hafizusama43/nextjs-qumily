@@ -94,6 +94,66 @@ export const SPONSORED_PRODUCTS_CAMPAIGNS = {
     product_targeting_expression: 'Product Targeting Expression'
 };
 
+export const SB_INITIAL_STATE = {
+    product: '',
+    entity: '',
+    operation: '',
+    campaign_id: '',
+    draft_campaign_id: '',
+    portfolio_id: '',
+    campaign_name: '',
+    start_date: '',
+    end_date: '',
+    state: '',
+    budget_type: '',
+    budget: 0,
+    bid_optimization: '',
+    bid_multiplier: 0,
+    bid: '',
+    keyword_text: '',
+    match_type: '',
+    product_targeting_expression: '',
+    ad_format: '',
+    landing_page_url: '',
+    landing_page_asins: '',
+    brand_entity_id: '',
+    brand_name: '',
+    brand_logo_asset_id: '',
+    brand_logo_url: '',
+    creative_headline: '',
+    creative_asins: '',
+    video_media_ids: '',
+    creative_type: ''
+};
+
+export const SP_INITIAL_STATE = {
+    product: '',
+    entity: '',
+    operation: '',
+    campaign_id: '',
+    ad_group_id: '',
+    portfolio_id: '',
+    ad_id: '',
+    keyword_id: '',
+    product_targeting_id: '',
+    campaign_name: '',
+    ad_group_name: '',
+    start_date: '',
+    end_date: '',
+    targeting_type: '',
+    state: '',
+    daily_budget: 0,
+    sku: '',
+    ad_group_default_bid: 0,
+    bid: '',
+    keyword_text: '',
+    match_type: '',
+    bidding_strategy: '',
+    placement: '',
+    percentage: '',
+    product_targeting_expression: ''
+}
+
 export const SPONSORED_BRANDS_CAMPAIGNS = {
     product: 'Product',
     entity: 'Entity',

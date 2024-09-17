@@ -8,19 +8,27 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const TemplatesBreadcrumb = () => {
     const path = usePathname();
+    const urlParams = useSearchParams();
+
 
     useEffect(() => {
         const arr = path.split("/");
     }, [path]);
 
     const generateBreadcrumbs = () => {
+        console.log(path)
+        const category = urlParams.get('category')
         const pathArray = path.split('/').filter(item => item);
         return pathArray.map((item, index) => {
-            const href = '/' + pathArray.slice(0, index + 1).join('/');
+            var href = '';
+            href = '/' + pathArray.slice(0, index + 1).join('/');
+            if (index > 0 && category) {
+                href += '?category=' + category
+            }
             return (
                 <React.Fragment key={href}>
                     <BreadcrumbItem>

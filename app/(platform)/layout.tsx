@@ -20,7 +20,7 @@ export default function RootLayout({
       <nav>
         <Navbar />
       </nav>
-      <main className={clsx('pt-20 mb-20 px-5 mx-auto', {
+      <main className={clsx('pt-20 pt- mb-20 px-5 mx-auto', {
         '': params.slug,
         'max-w-7xl': !params.slug || pathname.includes(`${params.slug}/create-campaign`) || pathname.includes(`campaigns/create/${params.slug}`) || pathname.includes(`campaigns/${params.slug}/edit`)
       })}>
