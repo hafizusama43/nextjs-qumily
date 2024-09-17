@@ -3,7 +3,7 @@ import TemplateHeader from '@/components/ui/_header';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
-import { capitalizeFirstLetter, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers';
+import { capitalizeFirstLetter, SPONSORED_BRANDS_CAMPAIGNS, SPONSORED_PRODUCTS_CAMPAIGNS, TEMPLATE_CATEGORY } from '@/lib/helpers';
 import axios from 'axios';
 import Link from 'next/link';
 import {
@@ -20,6 +20,7 @@ import { Spin } from '@/components/ui/spin';
 import ZoomControl from './_zoom';
 import { cn } from '@/lib/utils';
 import * as XLSX from "xlsx";
+import { initialState } from './edit/(campaigns)/brands/brands';
 
 const Campaigns = () => {
     const searchParams = useSearchParams()
@@ -53,7 +54,14 @@ const Campaigns = () => {
             const mappedItem = {};
             for (const key in item) {
                 if (Object.prototype.hasOwnProperty.call(item, key)) {
-                    mappedItem[SPONSORED_PRODUCTS_CAMPAIGNS[key]] = item[key];
+                    if (category === 'sponsored-products-campaigns') {
+                        mappedItem[SPONSORED_PRODUCTS_CAMPAIGNS[key]] = item[key];
+                    } else if (category === 'sponsored-display-campaigns') {
+                        mappedItem[SPONSORED_PRODUCTS_CAMPAIGNS[key]] = item[key];
+                    }
+                    else if (category === 'sponsored-brands-campaigns') {
+                        mappedItem[SPONSORED_BRANDS_CAMPAIGNS[key]] = item[key];
+                    }
                 }
             }
             return mappedItem;
@@ -77,39 +85,50 @@ const Campaigns = () => {
             <Table className='border rounded custom-template-table'>
                 <TableHeader>
                     <TableRow>
-                        {Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
+                        {category === 'sponsored-products-campaigns' && Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
+                        {category === 'sponsored-brands-campaigns' && Object.keys(SPONSORED_BRANDS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_BRANDS_CAMPAIGNS[item]}</TableHead>)}
+                        {category === 'sponsored-display-campaigns' && Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {data.length > 0 ? <>{data.map((item, index) => {
                         return (
-                            <TableRow key={index} className={cn('', item.entity === "Campaign" && 'bg-slate-200 dark:bg-blue-700')}>
-                                <TableCell>{item.product}</TableCell>
-                                <TableCell>{item.entity}</TableCell>
-                                <TableCell>{item.operation}</TableCell>
-                                <TableCell>{item.campaign_id}</TableCell>
-                                <TableCell>{item.ad_group_id}</TableCell>
-                                <TableCell>{item.portfolio_id}</TableCell>
-                                <TableCell>{item.ad_id}</TableCell>
-                                <TableCell>{item.keyword_id}</TableCell>
-                                <TableCell>{item.product_targeting_id}</TableCell>
-                                <TableCell>{item.campaign_name}</TableCell>
-                                <TableCell>{item.ad_group_name}</TableCell>
-                                <TableCell>{item.start_date}</TableCell>
-                                <TableCell>{item.end_date}</TableCell>
-                                <TableCell>{item.targeting_type}</TableCell>
-                                <TableCell>{item.state}</TableCell>
-                                <TableCell>{item.daily_budget}</TableCell>
-                                <TableCell>{item.sku}</TableCell>
-                                <TableCell>{item.ad_group_default_bid}</TableCell>
-                                <TableCell>{item.bid}</TableCell>
-                                <TableCell>{item.keyword_text}</TableCell>
-                                <TableCell>{item.match_type}</TableCell>
-                                <TableCell>{item.bidding_strategy}</TableCell>
-                                <TableCell>{item.placement}</TableCell>
-                                <TableCell>{item.percentage}</TableCell>
-                                <TableCell>{item.product_targeting_expression}</TableCell>
-                            </TableRow>
+                            <>
+                                {category === 'sponsored-products-campaigns' ?
+                                    <TableRow key={index} className={cn('', item.entity === "Campaign" && 'bg-slate-200 dark:bg-blue-700')}>
+                                        <TableCell>{item.product}</TableCell>
+                                        <TableCell>{item.entity}</TableCell>
+                                        <TableCell>{item.operation}</TableCell>
+                                        <TableCell>{item.campaign_id}</TableCell>
+                                        <TableCell>{item.ad_group_id}</TableCell>
+                                        <TableCell>{item.portfolio_id}</TableCell>
+                                        <TableCell>{item.ad_id}</TableCell>
+                                        <TableCell>{item.keyword_id}</TableCell>
+                                        <TableCell>{item.product_targeting_id}</TableCell>
+                                        <TableCell>{item.campaign_name}</TableCell>
+                                        <TableCell>{item.ad_group_name}</TableCell>
+                                        <TableCell>{item.start_date}</TableCell>
+                                        <TableCell>{item.end_date}</TableCell>
+                                        <TableCell>{item.targeting_type}</TableCell>
+                                        <TableCell>{item.state}</TableCell>
+                                        <TableCell>{item.daily_budget}</TableCell>
+                                        <TableCell>{item.sku}</TableCell>
+                                        <TableCell>{item.ad_group_default_bid}</TableCell>
+                                        <TableCell>{item.bid}</TableCell>
+                                        <TableCell>{item.keyword_text}</TableCell>
+                                        <TableCell>{item.match_type}</TableCell>
+                                        <TableCell>{item.bidding_strategy}</TableCell>
+                                        <TableCell>{item.placement}</TableCell>
+                                        <TableCell>{item.percentage}</TableCell>
+                                        <TableCell>{item.product_targeting_expression}</TableCell>
+                                    </TableRow>
+                                    : <TableRow key={index} className={cn('', item.entity === "Campaign" && 'bg-slate-200 dark:bg-blue-700')}>
+                                        {Object.keys(initialState).map((key) => (
+                                            <TableCell key={key}>{String(item[key]) as React.ReactNode}</TableCell>
+                                        ))}
+                                    </TableRow>
+                                }
+                            </>
                         )
                     })}</> : <TableRow ><TableCell className="text-center" colSpan={Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).length}>
                         {pending ? <Spin className="m-auto" variant="light" size="default"></Spin> : 'No results.'}</TableCell></TableRow>}
