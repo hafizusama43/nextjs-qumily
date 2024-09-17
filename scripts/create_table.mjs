@@ -134,10 +134,10 @@ const createCampaignTemplateTable = async (client) => {
 
         // Create the index on template_id
         const createIndex = await client.query(`
-            CREATE INDEX IF NOT EXISTS idx_template_id ON campaign_templates(template_id);
+            CREATE INDEX IF NOT EXISTS idx_template_id ON campaign_templates(campaign_id);
         `);
 
-        console.log(`Created index on "template_id"`);
+        console.log(`Created index on "campaign_id"`);
 
         return createTable;
 
