@@ -556,6 +556,9 @@ async function addSponsoredBrandsCampData(campaign_template_data: any, campaign_
         negKeywordData,
         targetingStrategy,
         keywordTargetingData,
+        productTargetingExpression,
+        productTargetingType,
+        productTargetingData
     } = campaign_template_data;
 
     // Insert neg_keyword_data
@@ -566,6 +569,15 @@ async function addSponsoredBrandsCampData(campaign_template_data: any, campaign_
 
     // Insert keyword_targeting_data
     await updateTemplateData(keywordTargetingData, 'keyword_targeting_data', campaign_id);
+
+    // Insert product_targeting_expression
+    await updateTemplateData(productTargetingExpression, 'product_targeting_expression', campaign_id);
+
+    // Insert product_targeting_type
+    await updateTemplateData(productTargetingType, 'product_targeting_type', campaign_id);
+
+    // Insert product_targeting_data
+    await updateTemplateData(productTargetingData, 'product_targeting_data', campaign_id);
 
 
     if (targetingStrategy === "keyword") {

@@ -96,7 +96,7 @@ const Products = () => {
                 campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
                 campaign_data.bidding_data && setBiddingData(campaign_data.bidding_data);
                 campaign_data.skus && setSkus(campaign_data.skus);
-                campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
+                // campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
                 campaign_data.neg_keyword_data && setNegKeywordData(campaign_data.neg_keyword_data);
                 campaign_data.campaign_neg_keyword_data && setCampaignNegKeywordData(campaign_data.campaign_neg_keyword_data);
                 campaign_data.product_targeting_expression && setProductTargetingExpression(campaign_data.product_targeting_expression);
