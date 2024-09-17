@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { Form } from '@/components/ui/form'
 import { CircleArrowLeft, SaveIcon } from 'lucide-react'
 import { getSpecificKeyValues, getStepName, SPC_HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
-import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponsoredBrandsStore'
 import { initialState } from './brands'
 import { RenderTextArea } from '../_renderTextInput'
 import axios from 'axios'
@@ -36,7 +36,6 @@ const NegProductTargeting = ({ steps }) => {
         setPendingSave,
         negKeywordData,
         campaignNegKeywordData,
-        targetingType,
         biddingData,
         skus,
         pendingSave,
@@ -101,7 +100,6 @@ const NegProductTargeting = ({ steps }) => {
             await axios.post('/api/campaigns/campaign-data',
                 {
                     campaignData,
-                    targetingType,
                     biddingData,
                     skus,
                     slug: params.slug,
