@@ -5,6 +5,7 @@ import Navbar from "@/components/ui/navbar"
 import TemplatesBreadcrumb from "./_breadcrum"
 import clsx from "clsx"
 import { useParams, usePathname } from "next/navigation"
+import { Suspense } from "react"
 
 
 export default function RootLayout({
@@ -24,7 +25,9 @@ export default function RootLayout({
         '': params.slug,
         'max-w-7xl': !params.slug || pathname.includes(`${params.slug}/create-campaign`) || pathname.includes(`campaigns/create/${params.slug}`) || pathname.includes(`campaigns/${params.slug}/edit`)
       })}>
-        <TemplatesBreadcrumb />
+        <Suspense fallback="Loading...">
+          <TemplatesBreadcrumb />
+        </Suspense>
         {children}
       </main>
       {/* <footer className={clsx('hidden md:block', {
