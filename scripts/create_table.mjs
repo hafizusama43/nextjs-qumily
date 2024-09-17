@@ -124,7 +124,7 @@ const createCampaignTemplateTable = async (client) => {
         const createTable = await client.query(`
             CREATE TABLE IF NOT EXISTS campaign_templates (
                 campaign_template_id SERIAL PRIMARY KEY,
-                template_id INT, -- no longer references another table
+                campaign_id INT, -- no longer references another table
                 json_data JSONB NOT NULL, -- stores dynamic fields for the campaign in JSON format
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );

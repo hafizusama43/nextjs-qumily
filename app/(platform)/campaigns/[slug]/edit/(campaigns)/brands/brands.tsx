@@ -8,12 +8,14 @@ import { capitalizeFirstLetter, GET_SB_STEPS } from '@/lib/helpers';
 import { Separator } from '@radix-ui/react-separator';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Campaign from './_campaign';
 import NegKeyword from './_negKeyword';
 import NegProductTargeting from './_negProductTargeting';
 import KeywordTargeting from './_keywordTargeting';
 import ProductTargeting from './_productTargeting';
+import { toast } from '@/components/ui/use-toast';
+import axios from 'axios';
 
 export const initialState = {
   product: '',
@@ -61,23 +63,45 @@ const Brands = () => {
   const {
     currentStep,
     targetingStrategy,
-    // setCampaignData,
-    // setTargetingType,
-    // setBiddingData,
-    // setSkus,
-    // setNegKeywordData,
-    // setCampaignNegKeywordData,
-    // setProductTargetingExpression,
-    // setCampaignProductCount,
-    // setTargetingStrategy,
-    // setKeywordTargetingData,
-    // setProductTargetingData,
-    // setProductTargetingType
+    setCampaignData,
+    setNegKeywordData,
+    setTargetingStrategy,
+    setKeywordTargetingData,
+    setProductTargetingData,
+    setProductTargetingType
   } = useCampaignsStore()
 
   useEffect(() => {
     setSteps(GET_SB_STEPS(targetingStrategy));
   }, [targetingStrategy])
+
+
+  const getCampaignData = useCallback(async () => {
+    try {
+      console.log('Setting api response data in store.')
+      setPending(true)
+      const res = await axios.get(`/api/campaigns/campaign-data?slug=${params.slug}`);
+      if (res.data.success) {
+
+        const { campaign_template_data, campaign_data } = res.data.data
+        campaign_template_data && setCampaignData(campaign_template_data);
+        campaign_data.neg_keyword_data && setNegKeywordData(campaign_data.neg_keyword_data);
+        campaign_data.targeting_strategy && setTargetingStrategy(campaign_data.targeting_strategy);
+        campaign_data.keyword_targeting_data && setKeywordTargetingData(campaign_data.keyword_targeting_data);
+        campaign_data.product_targeting_data && setProductTargetingData(campaign_data.product_targeting_data);
+        campaign_data.product_targeting_type && setProductTargetingType(campaign_data.product_targeting_type);
+      }
+      setPending(false)
+    } catch (error) {
+      setPending(false)
+      toast({ title: "Something went wrong", description: error.response.data.message, variant: "destructive" })
+    }
+  }, [params.slug, setCampaignData, setKeywordTargetingData, setNegKeywordData, setProductTargetingData, setProductTargetingType, setTargetingStrategy])
+
+  useEffect(() => {
+    // Get campaign template and campaign data
+    getCampaignData()
+  }, [getCampaignData])
 
   return (
     <React.Fragment>

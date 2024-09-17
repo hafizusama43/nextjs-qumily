@@ -238,8 +238,8 @@ export const GET_SB_STEPS = (targeting: string) => {
     if (targeting === 'keyword') {
         stepsManual = {
             ...STEPS_SB_DEFAULT,
-            2: "Keyword (Required)",
-            3: "Negative keyword (Optional)"
+            2: "Negative keyword (Optional)",
+            3: "Keyword (Required)",
         };
     } else {
         stepsManual = {

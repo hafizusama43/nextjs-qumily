@@ -10,7 +10,7 @@ import { CircleArrowLeft, CircleArrowRight, Trash2 } from 'lucide-react'
 import { getSpecificKeyValues, getStepName, MATCH_TYPE, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponsoredBrandsStore'
 import { initialState } from './brands'
 import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
@@ -69,8 +69,8 @@ const NegKeyword = ({ steps }) => {
         var entity: string = getStepName(steps[currentStep]);
         if (negKeywordData.length > 0) {
             // Get existing campaign object to retain values in next object
-            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
-            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
+            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
             if (objExists.length > 0) {
                 console.info(`Object "${entity}" found : Updating`)

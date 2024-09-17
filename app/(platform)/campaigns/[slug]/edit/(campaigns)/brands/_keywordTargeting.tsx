@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { CircleArrowLeft, SaveIcon, Trash2 } from 'lucide-react'
 import { getSpecificKeyValues, getStepName, MATCH_TYPE_KEYWORD_TARGETING, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
+import { useCampaignsStore } from '@/hooks/useSponsoredBrandsStore'
 import { initialState } from './brands'
 import { Card } from '@/components/ui/card'
 import { RenderTextArea } from '../_renderTextInput'
@@ -37,7 +37,6 @@ const KeywordTargeting = ({ steps }) => {
         setKeywordTargetingData,
         setPendingSave,
         campaignData,
-        targetingType,
         biddingData,
         skus,
         negKeywordData,
@@ -92,8 +91,8 @@ const KeywordTargeting = ({ steps }) => {
     const handleSaveChanges = () => {
         var entity: string = getStepName(steps[currentStep]);
         if (keywordTargetingData.length > 0) {
-            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
-            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
+            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
 
             if (objExists.length > 0) {
@@ -134,23 +133,18 @@ const KeywordTargeting = ({ steps }) => {
     }
 
     useEffect(() => {
-        console.log(`Saving ${targetingType} : ${targetingStrategy} strategy campaign.`)
+        console.log(`Saving ${targetingStrategy} strategy campaign.`)
         if (triggerSave) {
             setTriggerSave(false)
-            setPendingSave(true);
+            // setPendingSave(true);
 
             const handleSaveChanges = async () => {
                 try {
                     await axios.post('/api/campaigns/campaign-data',
                         {
                             campaignData,
-                            targetingType,
-                            biddingData,
-                            skus,
                             slug: params.slug,
                             negKeywordData,
-                            campaignNegKeywordData,
-                            campaignProductsCount,
                             targetingStrategy,
                             keywordTargetingData
                         },
@@ -161,12 +155,14 @@ const KeywordTargeting = ({ steps }) => {
                         }
                     );
                     toast({ description: 'Changes saved successfully!' })
-                    setPendingSave(false);
+                    // setPendingSave(false);
                 } catch (error) {
                     setPendingSave(false);
                     console.log(error)
                 }
             }
+
+            console.log(campaignData)
             handleSaveChanges()
         }
 
