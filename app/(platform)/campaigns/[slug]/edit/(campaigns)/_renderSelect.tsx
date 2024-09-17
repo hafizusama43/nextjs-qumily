@@ -3,7 +3,18 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { CircleHelp } from "lucide-react"
 
-export const RenderSelect = ({ form, name, label = "", options, helpText = "" }) => {
+interface options {
+    [key: string]: string
+}
+interface RenderSelectProps {
+    form: any;
+    name: string;
+    label: string;
+    options: options;
+    helpText?: string;
+    placeholder?: string;
+}
+export const RenderSelect = ({ form, name, label = "", options, helpText = "", placeholder = "" }: RenderSelectProps) => {
     return (
         <FormField
             control={form.control}
@@ -18,7 +29,7 @@ export const RenderSelect = ({ form, name, label = "", options, helpText = "" })
                     <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a campaign category" />
+                                <SelectValue placeholder={placeholder ? placeholder : "Please select one of the options"} />
                             </SelectTrigger>
                         </FormControl>
                         <SelectContent>

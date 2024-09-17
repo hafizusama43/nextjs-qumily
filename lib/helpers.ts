@@ -9,9 +9,24 @@ export const TARGETING_TYPE = {
     "Auto": "Auto",
 }
 
+export const BID_OPTIMIZATION_TYPE = {
+    "manual": "Manual",
+    "auto": "Auto",
+}
+
+export const BUDGET_TYPE = {
+    "daily": "Daily",
+    "lifetime": "Lifetime",
+}
+
 export const TARGETING_EXPRESSION_TYPE = {
     "Enabled": "Enabled",
     "Paused": "Paused",
+}
+
+export const AD_FORMAT_TYPE = {
+    "productCollection": "Product Collection",
+    "video": "Video",
 }
 
 export const CAMPAIGN_STATE = {
@@ -163,6 +178,29 @@ export const SPC_HELP_TEXT = {
     "pt_state": "Enter enabled to create and bid on the product target. Enter paused if you don't want to bid on the product target.",
     "pt_bid": "Enter a value if you want to bid on the product targeting entity. Otherwise, the ad group default bid will apply. If you are setting the \"State\" to be paused, you can leave this field blank.",
     "pt_expression": "Enter a value—you'll need one row for each: close-match, loose-match, substitutes, complements"
+}
+
+export const SBC_HELP_TEXT = {
+    'campaign_id': "For new campaigns, you should type a text-based name to identify your campaign. You will enter this exact Campaign ID for each entity you create underneath this parent campaign. NOTE: When you upload your bulksheets file, the Campaign ID will become the actual unique identifier associated with the campaign and all of its \"child\" entities. So if you want to update this campaign later, you would enter the actual Campaign ID into this field.",
+    'campaign_name': "Enter the same campaign name that you entered in the \"Campaign ID\" column.",
+    'start_date': " You can start on today's date or a future date, but the date cannot be in the past. So if you set the date for today, be sure you create and upload the file on today's date. If you leave this field blank, the start date will be set for today's date",
+    'end_date': "You can leave this field blank if you don't want to set an end date. Otherwise, the format must be yyyyMMdd.",
+    'state': "Options are enabled or paused. Enter enabled to create a new campaign.",
+    "budget": "Do not include symbols such as dollar signs or commas. For example, a daily budget of $100 would be written as 100",
+    "budget_type": "Enter lifetime or daily.",
+    "bid_optimization": "Enter auto or manual. If you enter manual, you should enter a value in the \"Bid Multiplier\" column. ",
+    "bid_multiplier": "Enter a positive or negative percentage value to set a custom bid adjustment. For example, to set a 40 percent multiplier, enter 40%. Leave this field blank if you entered auto for \"Bid Optimization.\" ",
+    "ad_format": "Enter productCollection or video. If you select productCollection, you will also need to define the landing page details as well. For video ad format, you should leave all of the landing page fields blank. ",
+    "landing_page_url": "Enter a URL if you are using Amazon Store or Custom URL as your landing page type. Leave blank if you are creating a new landing page. In this case, you should instead enter the product asins in the \"Landing Page asins\" column, and Amazon will generate a new landing page for your product collection. ",
+    "landing_page_asins": "If you are creating a new landing page, enter between 3 and 100 asins you want to include in your product collection. You can select up to 3 of these to highlight in the \"Creative asins\" column. ",
+    "brand_entity_id": "You can find this value in the \"Brand Assets Tab\" when you download campaign data from the \"Bulk operations\" page. ",
+    "brand_name": "Enter your brand name.",
+    "brand_logo_asset_id": "If your ad format is productCollection, enter the brand logo asset ID. You can find this ID in the \"brand assets data\" tab when you download campaign data from the \"Bulk operations\" page. ",
+    "brand_logo_url": "Leave blank when you're creating a campaign. After you create a campaign, you will see this URL populated in a downloaded bulksheets file.",
+    "creative_headline": "If ad format is productCollection, you should enter any text value, up to 50 characters. In the UI, this is the headline you enter in the \"Creative\" section where you upload creative assets.",
+    "creative_asins": "Enter up to three asins for productCollection (separated by commas) or one asin if ad format is video. These are the products that will be featured on your landing page.",
+    "video_media_ids": "TIP: To locate the video asset ID, you can filter \"Asset Type\" (Column A) to show video assets. This might make it easier to find the ID in the \"Asset ID\" column (Column C)",
+    "creative_type": "Enter video if your ad format is video. Leave blank if ad format is productCollection."
 }
 
 
