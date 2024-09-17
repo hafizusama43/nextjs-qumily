@@ -7,8 +7,8 @@ import { z } from 'zod'
 import { Form } from '@/components/ui/form'
 import { CircleArrowLeft, SaveIcon } from 'lucide-react'
 import { getSpecificKeyValues, getStepName, SPC_HELP_TEXT, SPONSORED_PRODUCTS_CAMPAIGNS } from '@/lib/helpers'
-import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
-import { initialState } from './products'
+import { useCampaignsStore } from '@/hooks/useSponsoredBrandsStore'
+import { initialState } from './brands'
 import { RenderTextArea } from '../_renderTextInput'
 import axios from 'axios'
 import { toast } from '@/components/ui/use-toast'
@@ -36,7 +36,6 @@ const NegProductTargeting = ({ steps }) => {
         setPendingSave,
         negKeywordData,
         campaignNegKeywordData,
-        targetingType,
         biddingData,
         skus,
         pendingSave,
@@ -64,8 +63,8 @@ const NegProductTargeting = ({ steps }) => {
             setProductTargetingExpression(data.product_targeting_expression)
 
             // Get existing campaign object to retain values in next object
-            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
-            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'ad_group_id', 'campaign_id', 'state']);
+            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
+            const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
             if (objExists.length > 0) {
                 console.info(`Object "${entity}" found : Updating`)
@@ -101,7 +100,6 @@ const NegProductTargeting = ({ steps }) => {
             await axios.post('/api/campaigns/campaign-data',
                 {
                     campaignData,
-                    targetingType,
                     biddingData,
                     skus,
                     slug: params.slug,

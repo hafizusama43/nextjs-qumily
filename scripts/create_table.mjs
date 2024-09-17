@@ -1,27 +1,27 @@
-const createCampaignTemplateTable = async (client) => {
-    try {
+// const createCampaignTemplateTable = async (client) => {
+//     try {
 
-        // -- Create templates table
-        const createTable = await client.query(`
-        CREATE TABLE IF NOT EXISTS campaign_templates (
-            campaign_templates_id SERIAL PRIMARY KEY, 
-            template_name VARCHAR(255) NOT NULL,
-            template_category VARCHAR(255) NOT NULL,
-            slug VARCHAR(255) NOT NULL UNIQUE, 
-            created_by VARCHAR(255) NOT NULL,
-            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );`, []);
+//         // -- Create templates table
+//         const createTable = await client.query(`
+//         CREATE TABLE IF NOT EXISTS campaign_templates (
+//             campaign_templates_id SERIAL PRIMARY KEY, 
+//             template_name VARCHAR(255) NOT NULL,
+//             template_category VARCHAR(255) NOT NULL,
+//             slug VARCHAR(255) NOT NULL UNIQUE, 
+//             created_by VARCHAR(255) NOT NULL,
+//             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+//             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+//         );`, []);
 
-        console.log(`Created "campaign_templates" table`);
+//         console.log(`Created "campaign_templates" table`);
 
-        return createTable;
+//         return createTable;
 
-    } catch (error) {
-        console.error('Error creating "campaign_templates" table.:', error);
-        throw error;
-    }
-}
+//     } catch (error) {
+//         console.error('Error creating "campaign_templates" table.:', error);
+//         throw error;
+//     }
+// }
 
 const createCampaignTable = async (client) => {
     try {
@@ -117,6 +117,35 @@ const createCampaignDataTable = async (client) => {
         throw error;
     }
 }
+
+const createCampaignTemplateTable = async (client) => {
+    try {
+        // Create the table
+        const createTable = await client.query(`
+            CREATE TABLE IF NOT EXISTS campaign_templates (
+                campaign_template_id SERIAL PRIMARY KEY,
+                campaign_id INT, -- no longer references another table
+                json_data JSONB NOT NULL, -- stores dynamic fields for the campaign in JSON format
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+
+        console.log(`Created "campaign_templates" table`);
+
+        // Create the index on template_id
+        const createIndex = await client.query(`
+            CREATE INDEX IF NOT EXISTS idx_template_id ON campaign_templates(template_id);
+        `);
+
+        console.log(`Created index on "template_id"`);
+
+        return createTable;
+
+    } catch (error) {
+        console.error('Error creating "campaign_templates" table or index:', error);
+        throw error;
+    }
+};
 
 export {
     createCampaignTemplateTable,

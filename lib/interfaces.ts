@@ -26,6 +26,39 @@ export interface SponsoredProductsInterface {
     product_targeting_expression: string;
 }
 
+export interface SponsoredBrandsInterface {
+    product: string;
+    entity: string;
+    operation: string;
+    campaign_id: string;
+    draft_campaign_id: string;
+    portfolio_id: string;
+    campaign_name: string;
+    start_date: string | Date;
+    end_date: string | Date | null;
+    state: string;
+    budget_type: string;
+    budget: number;
+    bid_optimization: string;
+    bid_multiplier: number;
+    bid: string;
+    keyword_text: string;
+    match_type: string;
+    product_targeting_expression: string;
+    ad_format: string;
+    landing_page_url: string;
+    landing_page_asins: string;
+    brand_entity_id: string;
+    brand_name: string;
+    brand_logo_asset_id: string;
+    brand_logo_url: string;
+    creative_headline: string;
+    creative_asins: string;
+    video_media_ids: string;
+    creative_type: string;
+}
+
+
 export interface BiddingData {
     placement: string;
     percentage: number;

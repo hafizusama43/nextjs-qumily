@@ -1,12 +1,12 @@
-import { Client } from 'pg';
+import { Pool } from 'pg';
 import { db } from '@vercel/postgres'; // Import the Vercel Postgres client
 
 const DbConnect = async () => {
-    
+
 
     let client;
     if (process.env.NEXT_ENV === 'development') {
-        client = new Client({
+        client = new Pool({
             user: 'postgres',
             password: 'postgres',
             host: 'localhost',
@@ -25,7 +25,6 @@ const DbConnect = async () => {
     }
 
     try {
-        await client.connect();
         console.log(`\x1b[34mConnected to ${process.env.NEXT_ENV === 'development' ? 'local' : 'Vercel'} PostgreSQL database\x1b[0m`);
         return client;
     } catch (err) {

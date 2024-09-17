@@ -1,13 +1,13 @@
-import { BiddingData, CampaignNegKeywordData, KeywordTargetingData, NegKeywordData, ProductTargetingData, ProductTargetingDataAuto, ProductTargetingExpressionData, SponsoredProductsInterface } from '@/lib/interfaces';
+import { BiddingData, CampaignNegKeywordData, KeywordTargetingData, NegKeywordData, ProductTargetingData, ProductTargetingDataAuto, ProductTargetingExpressionData, SponsoredBrandsInterface } from '@/lib/interfaces';
 import { create } from 'zustand'
 
 interface useCampaignsStoreProps {
-    campaignData: SponsoredProductsInterface[];
+    campaignData: SponsoredBrandsInterface[];
     skus: string;
     currentStep: number;
     biddingData: BiddingData[];
     campaignNegKeywordData: CampaignNegKeywordData[];
-    targetingType: string;
+    // targetingType: string;
     targetingStrategy: string;
     productTargetingExpressionData: ProductTargetingExpressionData[];
     negKeywordData: NegKeywordData[];
@@ -18,7 +18,7 @@ interface useCampaignsStoreProps {
     campaignProductsCount: number;
     pendingSave: boolean;
     productTargetingType: string;
-    setCampaignData: (data: SponsoredProductsInterface[]) => void;
+    setCampaignData: (data: SponsoredBrandsInterface[]) => void;
     setProductTargetingType: (data?: string) => void;
     setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => void;
     setNegKeywordData: (data: NegKeywordData[]) => void;
@@ -30,7 +30,7 @@ interface useCampaignsStoreProps {
     setBiddingData: (data: BiddingData[]) => void;
     setSkus: (data: string) => void;
     setProductTargetingExpression: (data: string) => void;
-    setTargetingType: (data: string) => void;
+    // setTargetingType: (data: string) => void;
     setTargetingStrategy: (data: string) => void;
     setPendingSave: (data: boolean) => void;
     setCampaignProductCount: (data: number) => void;
@@ -47,7 +47,7 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     productTargetingDataAuto: [],
     currentStep: 1,
     skus: '',
-    targetingType: '',
+    // targetingType: '',
     productTargetingType: 'individual',
     targetingStrategy: "",
     productTargetingExpressionData: [],
@@ -61,7 +61,7 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     setCampaignProductCount: (data: number) => set(() => {
         return { campaignProductsCount: data }
     }),
-    setCampaignData: (data: SponsoredProductsInterface[]) => set(() => {
+    setCampaignData: (data: SponsoredBrandsInterface[]) => set(() => {
         return { campaignData: data }
     }),
     setCampaignNegKeywordData: (data: CampaignNegKeywordData[]) => set(() => {
@@ -91,9 +91,9 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     setProductTargetingExpression: (data: string) => set(() => {
         return { productTargetingExpression: data }
     }),
-    setTargetingType: (data: string) => set(() => {
-        return { targetingType: data }
-    }),
+    // setTargetingType: (data: string) => set(() => {
+    //     return { targetingType: data }
+    // }),
     setTargetingStrategy: (data: string) => set(() => {
         return { targetingStrategy: data }
     }),

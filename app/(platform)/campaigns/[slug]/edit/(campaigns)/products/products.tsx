@@ -1,7 +1,7 @@
 "use client"
 import { Separator } from '@/components/ui/separator'
 import React, { useCallback, useEffect, useState } from 'react'
-import { capitalizeFirstLetter, GET_STEPS } from '@/lib/helpers'
+import { capitalizeFirstLetter, GET_SP_STEPS } from '@/lib/helpers'
 import { useCampaignsStore } from '@/hooks/useSponsoredProductsStore'
 import TemplateHeader from '@/components/ui/_header'
 import { Label } from '@/components/ui/label'
@@ -80,7 +80,7 @@ const Products = () => {
 
     // Update steps based on targetingStrategy, targetingType
     useEffect(() => {
-        setSteps(GET_STEPS(targetingType, targetingStrategy));
+        setSteps(GET_SP_STEPS(targetingType, targetingStrategy));
     }, [targetingStrategy, targetingType])
 
 
@@ -96,7 +96,7 @@ const Products = () => {
                 campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
                 campaign_data.bidding_data && setBiddingData(campaign_data.bidding_data);
                 campaign_data.skus && setSkus(campaign_data.skus);
-                campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
+                // campaign_data.targeting_type && setTargetingType(campaign_data.targeting_type);
                 campaign_data.neg_keyword_data && setNegKeywordData(campaign_data.neg_keyword_data);
                 campaign_data.campaign_neg_keyword_data && setCampaignNegKeywordData(campaign_data.campaign_neg_keyword_data);
                 campaign_data.product_targeting_expression && setProductTargetingExpression(campaign_data.product_targeting_expression);
