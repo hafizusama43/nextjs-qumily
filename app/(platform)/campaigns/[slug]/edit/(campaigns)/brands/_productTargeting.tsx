@@ -128,7 +128,7 @@ const ProductTargeting = ({ steps }) => {
     const handleNextStepClick = () => {
         var entity: string = getStepName(steps[currentStep]);
         if (productTargetingData.length > 0) {
-            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "ad group");
+            var adGroupObjExists = campaignData.filter((item) => item.entity.toLowerCase() === "campaign");
             const adGroupObjValues = getSpecificKeyValues(adGroupObjExists[0], ['product', 'operation', 'campaign_id', 'state']);
             var objExists = campaignData.filter((item) => item.entity.toLowerCase() === entity.toLowerCase());
 
