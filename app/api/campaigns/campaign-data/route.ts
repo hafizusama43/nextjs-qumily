@@ -1,5 +1,5 @@
 import { formatDateToYYYYMMDD, SB_INITIAL_STATE } from "@/lib/helpers";
-import { CampaignData, CreatedCampaignType, SponsoredProductsInterface } from "@/lib/interfaces";
+import { CampaignData, CreatedCampaignType, SponsoredBrandsInterface, SponsoredProductsInterface } from "@/lib/interfaces";
 import queryDatabase from "@/lib/queryHelper";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,23 +21,22 @@ export async function GET(request: NextRequest) {
 
         var campaign_data = await getCampaignData(campaign_id);
         var campaignTemplateData = await getCampaignTemplate(campaign_id, campaign_category);
-        campaignTemplateData = validateSchema(campaignTemplateData, campaign_category)
 
         if (mode && mode === 'view' && campaignTemplateData.length > 0) {
-            console.log(campaign_category)
+            campaignTemplateData = validateSchema(campaignTemplateData, campaign_category)
+
             // Benchmarking original implementation
             // console.time('Original Implementation');
             switch (campaign_category) {
                 case 'sponsored-products-campaigns':
                     campaignTemplateData = createSponsoredCampaignData(campaignTemplateData, campaign_data);
-
                     break;
-                // case 'sponsored-display-campaigns':
-                //     addSponsoredProductsCampData(body, campaignData, campaign_id, campaign_category)
-                //     break;
-                // case 'sponsored-brands-campaigns':
-                //     addSponsoredProductsCampData(body, campaignData, campaign_id, campaign_category)
-                //     break;
+                case 'sponsored-display-campaigns':
+                    campaignTemplateData = []
+                    break;
+                case 'sponsored-brands-campaigns':
+                    campaignTemplateData = createSponsoredBrandsData(campaignTemplateData, campaign_data);
+                    break;
                 default:
                     break;
             }
@@ -461,6 +460,101 @@ function createSponsoredCampaignData(campaign_template_data: SponsoredProductsIn
 }
 
 /**
+ * @param array campaign_template_data
+ * @param object campaign_data 
+ * @author Abdur Rehman <hafizusama43@gmail.com>
+ * 
+ * @returns array - Created array of campaign data using provided params
+ */
+function createSponsoredBrandsData(campaign_template_data: SponsoredBrandsInterface[], campaign_data: CampaignData) {
+    console.log(campaign_data)
+    const campaigns = [];
+
+    // Replace keyword_targeting keyword data
+    if (campaign_data.keyword_targeting_data && campaign_data.keyword_targeting_data.length > 0) {
+        var keywordTargetingObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "keyword");
+        if (keywordTargetingObjIndex !== -1) {
+            // Make copy of object and remove from index
+            var keywordTargetingObj = campaign_template_data.filter((item) => item.entity.toLowerCase() === "keyword");
+            campaign_template_data.splice(keywordTargetingObjIndex, 1);
+            const results = campaign_data.keyword_targeting_data.map(data => {
+                return {
+                    ...keywordTargetingObj[0],
+                    keyword_text: data.keyword_text,
+                    match_type: data.match_type,
+                    bid: data.bid
+                };
+            });
+            campaign_template_data.splice(campaign_template_data.length, 0, ...results);
+        }
+    }
+
+    // Replace neg_keyword_data
+    if (campaign_data.neg_keyword_data && campaign_data.neg_keyword_data.length > 0) {
+        var negKeywordObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "negative keyword");
+        if (negKeywordObjIndex !== -1) {
+            // Make copy of object and remove from index
+            var negKeywordObj = campaign_template_data.filter((item) => item.entity.toLowerCase() === "negative keyword");
+            campaign_template_data.splice(negKeywordObjIndex, 1);
+            const results = campaign_data.neg_keyword_data.map(data => {
+                return {
+                    ...negKeywordObj[0],
+                    keyword_text: data.keyword_text,
+                    match_type: data.match_type
+                };
+            });
+            campaign_template_data.splice(campaign_template_data.length, 0, ...results);
+        }
+    }
+
+    // Replace product_targeting_data data
+    if (campaign_data.product_targeting_data && campaign_data.product_targeting_data.length > 0) {
+        var productTargetingObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "product targeting");
+        if (productTargetingObjIndex !== -1) {
+            // Make copy of object and remove from index
+            var productTargetingObj = campaign_template_data.filter((item) => item.entity.toLowerCase() === "product targeting");
+            campaign_template_data.splice(productTargetingObjIndex, 1);
+            const results = campaign_data.product_targeting_data.map(data => {
+                return {
+                    ...productTargetingObj[0],
+                    product_targeting_expression: data.product_targeting_expression,
+                    bid: data.bid
+                };
+            });
+            campaign_template_data.splice(campaign_template_data.length, 0, ...results);
+        }
+    }
+
+    // Replace product_targeting_expression
+    if (campaign_data.product_targeting_expression && campaign_data.product_targeting_expression.length > 0) {
+        var negProductTargetingObjIndex = campaign_template_data.findIndex((item) => item.entity.toLowerCase() === "negative product targeting");
+        if (negProductTargetingObjIndex !== -1) {
+            var arrayExpressions = campaign_data.product_targeting_expression.split(",")
+            arrayExpressions = arrayExpressions.filter(item => item !== '');
+            // Make copy of object and remove from index
+            var negProductTargetingObj = campaign_template_data.filter((item) => item.entity.toLowerCase() === "negative product targeting");
+            campaign_template_data.splice(negProductTargetingObjIndex, 1);
+            const results = arrayExpressions.map(data => {
+                return {
+                    ...negProductTargetingObj[0],
+                    product_targeting_expression: data,
+                };
+            });
+            campaign_template_data.splice(campaign_template_data.length, 0, ...results);
+        }
+    }
+
+    // Update start date format to yyyyMMdd eg. date April 1, 2024 would be 20240401. 
+    const campaignObj = campaign_template_data.find(obj => obj.entity === "Campaign");
+    if (campaignObj) {
+        campaignObj.start_date = formatDateToYYYYMMDD(campaignObj.start_date as string);
+    }
+
+
+    return campaign_template_data.flat();
+}
+
+/**
  * 
  * @param campaign_template_data 
  * @param campaign_template 
@@ -699,9 +793,9 @@ function validateSchema(campaign_template_data, campaign_category) {
     var sorted_campaign_template_data = []
     switch (campaign_category) {
 
-        // case 'sponsored-products-campaigns':
-
-        //     break;
+        case 'sponsored-products-campaigns':
+            sorted_campaign_template_data = campaign_template_data
+            break;
         // case 'sponsored-display-campaigns':
 
         //     break;
