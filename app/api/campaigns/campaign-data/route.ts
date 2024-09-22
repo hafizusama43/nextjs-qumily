@@ -1,4 +1,4 @@
-import { formatDateToYYYYMMDD } from "@/lib/helpers";
+import { formatDateToYYYYMMDD, SB_INITIAL_STATE } from "@/lib/helpers";
 import { CampaignData, CreatedCampaignType, SponsoredProductsInterface } from "@/lib/interfaces";
 import queryDatabase from "@/lib/queryHelper";
 import { NextRequest, NextResponse } from "next/server";
@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
 
         var campaign_data = await getCampaignData(campaign_id);
         var campaignTemplateData = await getCampaignTemplate(campaign_id, campaign_category);
+        campaignTemplateData = validateSchema(campaignTemplateData, campaign_category)
 
         if (mode && mode === 'view' && campaignTemplateData.length > 0) {
             console.log(campaign_category)
@@ -692,4 +693,33 @@ function refactoredUpdateCampaignData(campaign_template_data, campaign_data) {
             }));
         }
     }
+}
+
+function validateSchema(campaign_template_data, campaign_category) {
+    var sorted_campaign_template_data = []
+    switch (campaign_category) {
+
+        // case 'sponsored-products-campaigns':
+
+        //     break;
+        // case 'sponsored-display-campaigns':
+
+        //     break;
+        case 'sponsored-brands-campaigns':
+            sorted_campaign_template_data = campaign_template_data.map(item => {
+                const sortedItem = {};
+
+                // Reorder the object keys based on SB_INITIAL_STATE order
+                Object.keys(SB_INITIAL_STATE).forEach(key => {
+                    sortedItem[key] = item.hasOwnProperty(key) ? item[key] : SB_INITIAL_STATE[key];
+                });
+
+                return sortedItem;
+            });
+            break;
+
+        default:
+            break;
+    }
+    return sorted_campaign_template_data
 }
