@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         const campaign_id = campaign.campaign_id;
         const campaign_category = campaign.campaign_category;
 
-        deleteCampaignData(campaign_id);
+        await deleteCampaignData(campaign_id);
 
         switch (campaign_category) {
             case 'sponsored-products-campaigns':
@@ -586,8 +586,6 @@ async function addSponsoredBrandsCampData(campaign_template_data: any, campaign_
         campaign_template = campaign_template.filter(item => item.entity !== "Keyword" && item.entity !== "Negative keyword");
     }
 
-    console.log(campaign_template)
-    console.log(campaign_category)
     await insertTemplateData(campaign_template, campaign_id, campaign_category);
 }
 
@@ -635,6 +633,11 @@ async function deleteCampaignData(campaign_id: number) {
     var query = `DELETE
     FROM campaign_templates_data
     WHERE campaign_templates_data.campaign_id_external = $1 ;`;
+    await queryDatabase(query, [campaign_id]);
+
+    var query = `DELETE
+    FROM campaign_templates
+    WHERE campaign_templates.campaign_id = $1 ;`;
     await queryDatabase(query, [campaign_id]);
 }
 
