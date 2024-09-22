@@ -74,9 +74,16 @@ const Products = () => {
         setTargetingStrategy,
         setKeywordTargetingData,
         setProductTargetingData,
-        setProductTargetingType
+        setProductTargetingType,
+        setCurrentStep
     } = useCampaignsStore()
     const [pending, setPending] = useState(false);
+
+
+    useEffect(() => {
+        console.log('Setting step 1 into store.')
+        setCurrentStep(1)
+    }, [setCurrentStep])
 
     // Update steps based on targetingStrategy, targetingType
     useEffect(() => {

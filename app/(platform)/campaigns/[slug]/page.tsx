@@ -85,7 +85,7 @@ const Campaigns = () => {
             <Table className='border rounded custom-template-table'>
                 <TableHeader>
                     <TableRow>
-                        {category === 'sponsored-products-campaigns' && Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
+                        {category === 'sponsored-products-campaigns' && Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item, index) => <TableHead key={index}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
                         {category === 'sponsored-brands-campaigns' && Object.keys(SPONSORED_BRANDS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_BRANDS_CAMPAIGNS[item]}</TableHead>)}
                         {category === 'sponsored-display-campaigns' && Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).map((item) => <TableHead key={item}>{SPONSORED_PRODUCTS_CAMPAIGNS[item]}</TableHead>)}
                     </TableRow>
@@ -93,7 +93,7 @@ const Campaigns = () => {
                 <TableBody>
                     {data.length > 0 ? <>{data.map((item, index) => {
                         return (
-                            <>
+                            <React.Fragment key={index}>
                                 {category === 'sponsored-products-campaigns' ?
                                     <TableRow key={index} className={cn('', item.entity === "Campaign" && 'bg-slate-200 dark:bg-blue-700')}>
                                         <TableCell>{item.product}</TableCell>
@@ -123,12 +123,12 @@ const Campaigns = () => {
                                         <TableCell>{item.product_targeting_expression}</TableCell>
                                     </TableRow>
                                     : <TableRow key={index} className={cn('', item.entity === "Campaign" && 'bg-slate-200 dark:bg-blue-700')}>
-                                        {Object.keys(initialState).map((key) => (
-                                            <TableCell key={key}>{String(item[key]) as React.ReactNode}</TableCell>
+                                        {Object.keys(initialState).map((key, index) => (
+                                            <TableCell key={index}>{String(item[key]) as React.ReactNode}</TableCell>
                                         ))}
                                     </TableRow>
                                 }
-                            </>
+                            </React.Fragment>
                         )
                     })}</> : <TableRow ><TableCell className="text-center" colSpan={Object.keys(SPONSORED_PRODUCTS_CAMPAIGNS).length}>
                         {pending ? <Spin className="m-auto" variant="light" size="default"></Spin> : 'No results.'}</TableCell></TableRow>}

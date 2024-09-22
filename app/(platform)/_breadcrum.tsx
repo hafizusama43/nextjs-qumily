@@ -20,7 +20,6 @@ const TemplatesBreadcrumb = () => {
     }, [path]);
 
     const generateBreadcrumbs = () => {
-        console.log(path)
         const category = urlParams.get('category')
         const pathArray = path.split('/').filter(item => item);
         return pathArray.map((item, index) => {

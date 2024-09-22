@@ -27,6 +27,7 @@ interface useCampaignsStoreProps {
     setProductTargetingDataAuto: (data: ProductTargetingDataAuto[]) => void;
     setNextStep: (step?: number) => void;
     setPrevStep: (step?: number) => void;
+    setCurrentStep: (step?: number) => void;
     setBiddingData: (data: BiddingData[]) => void;
     setSkus: (data: string) => void;
     setProductTargetingExpression: (data: string) => void;
@@ -102,5 +103,8 @@ export const useCampaignsStore = create<useCampaignsStoreProps>(((set) => ({
     }),
     setPrevStep: (step: number) => set((state) => {
         return { currentStep: state.currentStep - 1 }
+    }),
+    setCurrentStep: (step: number) => set((state) => {
+        return { currentStep: step }
     })
 })))

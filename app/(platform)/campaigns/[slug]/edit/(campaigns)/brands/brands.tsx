@@ -69,8 +69,14 @@ const Brands = () => {
     setKeywordTargetingData,
     setProductTargetingData,
     setProductTargetingType,
-    setProductTargetingExpression
+    setProductTargetingExpression,
+    setCurrentStep
   } = useCampaignsStore()
+
+  useEffect(() => {
+    console.log('Setting step 1 into store.')
+    setCurrentStep(1)
+  }, [setCurrentStep])
 
   useEffect(() => {
     setSteps(GET_SB_STEPS(targetingStrategy));

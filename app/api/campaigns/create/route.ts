@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 
-    const { campaign_name, campaign_category } = await request.json();
+    const { campaign_name, campaign_category }: { campaign_name: string, campaign_category: string } = await request.json();
     const { userId } = auth();
 
     if (!campaign_name || !campaign_category) {
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     try {
         // TODO For now we have table for one category of template campings table we need to check based on template_category from which table to read 
         // default data from and in which to insert to make it generic to insert templates
-        const slug = campaign_name.toLowerCase().split(" ").join("-");
+        const slug = campaign_name.trim().toLowerCase().split(" ").join("-");
         // Check if already slug exists 
         var query = `SELECT
         *

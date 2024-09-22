@@ -269,12 +269,11 @@ export const GET_SP_STEPS = (condition: string, targeting: string) => {
     if (condition.toLocaleLowerCase() === 'auto') {
         return STEPS_SP_CAMPAIGN_AUTO;
     } else if (condition.toLocaleLowerCase() === 'manual') {
-        console.log(targeting)
         // Build the steps dynamically for manual campaigns
         var stepsManual = {}
         if (targeting === 'keyword') {
             stepsManual = {
-                ...STEPS_SB_DEFAULT,
+                ...STEPS_SP_DEFAULT,
                 6: "Negative keyword (Optional)",
                 7: "Keyword (Required)"
             };
